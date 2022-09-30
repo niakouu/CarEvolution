@@ -38,7 +38,18 @@ public class Matrix {
     }
     
     public int getRowPositionForWhichAdditionOfValuesIsHighest() {
-        double heighest = 0.0;
-        return 0;
+        double highest = 0.0;
+        double value;
+        int position = 0;
+        for (int i = 0; i < getNumberOfRows(); i++) {
+            for (int j = 0; j < getNumberOfColumns(); j++) {
+                value = getData()[i][j];
+                if (value > highest) {
+                    highest = value;
+                    position = j;
+                }
+            }
+        }
+        return position;
     }
 }

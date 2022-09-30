@@ -10,4 +10,13 @@ package edu.vanier.neuralNetwork;
  */
 public class MatrixManipulations {
     
+    public static Matrix transformToMatrix(int rows, int columns, double[] oneDimensional) {
+        double[][] weigths = new double[rows][columns];
+        int rowsCounter = 0;
+        int columnsCounter = 0;
+        for(double weight : oneDimensional) {
+            
+        }
+        return null;
+    }
 }

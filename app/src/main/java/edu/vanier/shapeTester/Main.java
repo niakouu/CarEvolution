@@ -1,4 +1,4 @@
-package ShapeTester;
+package edu.vanier.shapeTester;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

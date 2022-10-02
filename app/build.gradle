@@ -47,7 +47,7 @@ javafx {
 
 application {
     // Define the main class for the application.
-    mainClass = 'edu.vanier.main.App'
+    mainClass = 'edu.vanier.shapeTester.Main'
 }
 
 tasks.named('test') {

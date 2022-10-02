@@ -17,6 +17,7 @@ plugins {
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
@@ -47,7 +48,7 @@ javafx {
 
 application {
     // Define the main class for the application.
-    mainClass = 'ShapeTester.Main'
+    mainClass = 'edu.vanier.shapeTester.collisions.Main'
 }
 
 tasks.named('test') {

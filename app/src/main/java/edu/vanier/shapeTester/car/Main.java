@@ -1,4 +1,4 @@
-package ShapeTester2;
+package edu.vanier.shapeTester.car;
 
 import javafx.application.Application;
 import javafx.scene.Scene;

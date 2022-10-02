@@ -1,4 +1,4 @@
-package ShapeTester;
+package edu.vanier.shapeTester.collisions;
 
 import javafx.animation.AnimationTimer;
 import javafx.beans.binding.BooleanBinding;
@@ -14,8 +14,6 @@ import javafx.scene.shape.Rectangle;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Button;
 import javafx.scene.shape.CubicCurve;
 import javafx.scene.shape.Shape;

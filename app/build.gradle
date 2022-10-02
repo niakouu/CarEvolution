@@ -48,7 +48,6 @@ javafx {
 application {
     // Define the main class for the application.
     mainClass = 'ShapeTester.Main'
-}
 
 tasks.named('test') {
     // Use JUnit Platform for unit tests.

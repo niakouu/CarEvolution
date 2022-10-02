@@ -1,4 +1,4 @@
-package edu.vanier.shapeTester;
+package ShapeTester;
 
 import javafx.animation.AnimationTimer;
 import javafx.beans.binding.BooleanBinding;

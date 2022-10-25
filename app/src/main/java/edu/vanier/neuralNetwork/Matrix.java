@@ -52,4 +52,18 @@ public class Matrix {
         }
         return position;
     }
+    
+    public int getHighestValuePosition() {
+        double highest = 0.0;
+        int position = 0;
+            for (int i = 0; i < getNumberOfRows(); i++) {
+                for (int j = 0; j < getNumberOfColumns(); j++) {
+                    if (this.data[i][j] > highest) {
+                      highest = this.data[i][j];
+                      position = j;
+                    }
+                }
+            }
+        return position;
+    }
 }

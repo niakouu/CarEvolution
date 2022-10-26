@@ -50,8 +50,8 @@ public class Controller implements Initializable {
 
     @FXML
     void start(ActionEvent event) {
-        shape1.setLayoutY(200);
-        shape1.setLayoutX(280);
+        shape1.setLayoutY(50);
+        shape1.setLayoutX(20);
     }
 
     AnimationTimer timer = new AnimationTimer() {

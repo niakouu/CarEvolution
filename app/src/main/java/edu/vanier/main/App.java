@@ -5,6 +5,7 @@ package edu.vanier.main;
 
 import com.sun.prism.impl.DisposerManagedResource;
 import java.util.ArrayList;
+import java.util.Collections;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
@@ -65,22 +66,26 @@ public class App extends Application {
                 for (int i = 0; i < car1.sensors.length; i++) {
                     Sensor cSensor = car1.sensors[i];
                     boolean touched = false;
+                    ArrayList<Double> intersections = new ArrayList<>();
 
                     for (int j = 0; j < dangers.size(); j++) {
                         Shape shape = Shape.intersect(cSensor, dangers.get(j));
                         if (shape.getBoundsInParent().getWidth() != -1) {
-                            cSensor.setStroke(Color.RED);
-                            touched = true;
+
                             double projected = Math.sqrt(Math.pow((shape.getBoundsInParent().getCenterX() - car1.getCenterX()), 2) + Math.pow((shape.getBoundsInParent().getCenterY() - car1.getCenterY()), 2)) - car1.getRadius();
                             if (projected >= 0) {
-                                cSensor.projectedLength.setValue(projected);
-                            } else {
-                                cSensor.projectedLength.setValue(0);
-
-                            }
+                                cSensor.setStroke(Color.RED);
+                                touched = true;
+                                intersections.add(projected);
+                            } 
 
                         }
 
+                    }
+                    
+                    if(touched){
+                        Collections.sort(intersections);
+                        cSensor.projectedLength.setValue(intersections.get(0));
                     }
 
                     if (!touched) {

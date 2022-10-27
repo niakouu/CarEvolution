@@ -3,7 +3,6 @@
  */
 package edu.vanier.main;
 
-import com.sun.prism.impl.DisposerManagedResource;
 import java.util.ArrayList;
 import java.util.Collections;
 import javafx.animation.AnimationTimer;
@@ -33,13 +32,14 @@ public class App extends Application {
         primaryStage.show();
 
         //components in the map
-        ArrayList<Shape> dangers = dangers(root);
+        ArrayList<Shape> shapeDangers = dangers(root);
         ArrayList<Car> cars = new ArrayList<>();
 
         for (int i = 0; i < 5; i++) {
 
             Car car = new Car(root);
             cars.add(car);
+            car.setRotate(60 * i);
         }
 
         //Display Sensors length
@@ -56,21 +56,26 @@ public class App extends Application {
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                
 
                 for (int i = 0; i < cars.size(); i++) {
                     Car car = cars.get(i);
                     car.move();
                     randomMove(car);
-                    
-                    
-                    detectSensorsIntersection(car, dangers);
+
+                    //detect collision
+                    for (int j = 0; j < shapeDangers.size(); j++) {
+                        if (Shape.intersect(car, shapeDangers.get(j)).getBoundsInParent().getWidth() != -1) {
+                            cars.remove(car);
+                            for (int k = 0; k < car.sensors.length; k++) {
+                                root.getChildren().remove(car.sensors[k]);
+                            }
+                        }
+                    }
+                    detectSensorsIntersection(car, shapeDangers);
                 }
             }
         };
-
         timer.start();
-
     }
 
     //detect all shapes that represent dangers to the car.
@@ -116,17 +121,16 @@ public class App extends Application {
         }
     }
 
-    
-    public void randomMove(Car car){
+    public void randomMove(Car car) {
         double rand = Math.random();
-        if(rand<0.5){
+        if (rand < 0.5) {
             car.rotateLeft();
-        }
-        else{
+        } else {
             car.rotateRight();
         }
-        
+
     }
+
     public static void main(String[] args) {
         launch(args);
     }

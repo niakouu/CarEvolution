@@ -3,12 +3,96 @@
  */
 package edu.vanier.main;
 
-public class App {
-    public String getGreeting() {
-        return "Hello, Annie";
+import com.sun.prism.impl.DisposerManagedResource;
+import java.util.ArrayList;
+import javafx.animation.AnimationTimer;
+import javafx.application.Application;
+import javafx.beans.binding.Bindings;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Shape;
+import javafx.stage.Stage;
+
+public class App extends Application {
+
+    @Override
+    public void start(Stage primaryStage) throws Exception {
+
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Map.fxml"));
+        loader.setController(new FXMLController());
+        Pane root = loader.load();
+        Scene scene = new Scene(root, 1200, 900, Color.WHITE);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+        Car car1 = new Car(root);
+
+        ArrayList<Shape> dangers = new ArrayList<>();
+
+        for (int i = 0; i < root.getChildren().size(); i++) {
+
+            Node node = root.getChildren().get(i);
+            if (!Circle.class.isInstance(node) && !Sensor.class.isInstance(node)) {
+
+                dangers.add((Shape) root.getChildren().get(i));
+
+            }
+
+        }
+        VBox sensors = new VBox();
+
+        for (int i = 0; i < car1.sensors.length; i++) {
+            Label label = new Label();
+            double projected = car1.sensors[i].projectedLength.get();
+            label.textProperty().bind(Bindings.createStringBinding(() -> String.valueOf(projected), car1.sensors[i].projectedLength));
+            sensors.getChildren().add(label);
+
+        }
+
+        root.getChildren().add(sensors);
+
+        AnimationTimer timer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                
+                car1.setCenterX(car1.getCenterX() + 1);
+                
+                
+
+                for (int i = 0; i < car1.sensors.length; i++) {
+                    Sensor cSensor = car1.sensors[i];
+                    boolean touched = false;
+
+                    for (int j = 0; j < dangers.size(); j++) {
+                        Shape shape = Shape.intersect(cSensor, dangers.get(j));
+                        if (shape.getBoundsInParent().getWidth() != -1) {
+                            cSensor.setStroke(Color.RED);
+                            touched = true;
+                            cSensor.projectedLength.setValue(Math.sqrt(Math.pow((shape.getLayoutX() - car1.getCenterX()), 2) + Math.pow((shape.getLayoutY() - car1.getCenterY()), 2)) - car1.getRadius());
+
+                        }
+
+                    }
+
+                    if (!touched) {
+                        cSensor.setStroke(Color.GREEN);
+
+                    }
+                }
+            }
+        };
+
+        timer.start();
+
     }
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+        launch(args);
     }
+
 }

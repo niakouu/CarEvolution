@@ -48,8 +48,8 @@ public class App extends Application {
 
         for (int i = 0; i < car1.sensors.length; i++) {
             Label label = new Label();
-            double projected = car1.sensors[i].projectedLength.get();
-            label.textProperty().bind(Bindings.createStringBinding(() -> String.valueOf(projected), car1.sensors[i].projectedLength));
+            Sensor sensor = car1.sensors[i];
+            label.textProperty().bind(Bindings.createStringBinding(() -> String.valueOf(sensor.projectedLength.get()), car1.sensors[i].projectedLength));
             sensors.getChildren().add(label);
 
         }
@@ -59,10 +59,8 @@ public class App extends Application {
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                
-                car1.setCenterX(car1.getCenterX() + 1);
-                
-                
+
+                car1.setCenterX(car1.getCenterX() + 0.1);
 
                 for (int i = 0; i < car1.sensors.length; i++) {
                     Sensor cSensor = car1.sensors[i];
@@ -73,7 +71,13 @@ public class App extends Application {
                         if (shape.getBoundsInParent().getWidth() != -1) {
                             cSensor.setStroke(Color.RED);
                             touched = true;
-                            cSensor.projectedLength.setValue(Math.sqrt(Math.pow((shape.getLayoutX() - car1.getCenterX()), 2) + Math.pow((shape.getLayoutY() - car1.getCenterY()), 2)) - car1.getRadius());
+                            double projected = Math.sqrt(Math.pow((shape.getBoundsInParent().getCenterX() - car1.getCenterX()), 2) + Math.pow((shape.getBoundsInParent().getCenterY() - car1.getCenterY()), 2)) - car1.getRadius();
+                            if (projected >= 0) {
+                                cSensor.projectedLength.setValue(projected);
+                            } else {
+                                cSensor.projectedLength.setValue(0);
+
+                            }
 
                         }
 
@@ -81,6 +85,7 @@ public class App extends Application {
 
                     if (!touched) {
                         cSensor.setStroke(Color.GREEN);
+                        cSensor.projectedLength.setValue(cSensor.length - car1.getRadius());
 
                     }
                 }

@@ -31,68 +31,40 @@ public class App extends Application {
         Scene scene = new Scene(root, 1200, 900, Color.WHITE);
         primaryStage.setScene(scene);
         primaryStage.show();
-        Car car1 = new Car(root);
 
-        ArrayList<Shape> dangers = new ArrayList<>();
+        //components in the map
+        ArrayList<Shape> dangers = dangers(root);
+        ArrayList<Car> cars = new ArrayList<>();
 
-        for (int i = 0; i < root.getChildren().size(); i++) {
+        for (int i = 0; i < 5; i++) {
 
-            Node node = root.getChildren().get(i);
-            if (!Circle.class.isInstance(node) && !Sensor.class.isInstance(node)) {
-
-                dangers.add((Shape) root.getChildren().get(i));
-
-            }
-
+            Car car = new Car(root);
+            cars.add(car);
         }
+
+        //Display Sensors length
         VBox sensors = new VBox();
-
-        for (int i = 0; i < car1.sensors.length; i++) {
+        for (int i = 0; i < cars.get(0).sensors.length; i++) {
             Label label = new Label();
-            Sensor sensor = car1.sensors[i];
-            label.textProperty().bind(Bindings.createStringBinding(() -> String.valueOf(sensor.projectedLength.get()), car1.sensors[i].projectedLength));
+            Sensor sensor = cars.get(0).sensors[i];
+            label.textProperty().bind(Bindings.createStringBinding(() -> String.valueOf(sensor.projectedLength.get()), cars.get(0).sensors[i].projectedLength));
             sensors.getChildren().add(label);
-
         }
-
         root.getChildren().add(sensors);
 
+        //Behaviors at each frame.
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
+                
 
-                car1.setCenterX(car1.getCenterX() + 0.1);
-
-                for (int i = 0; i < car1.sensors.length; i++) {
-                    Sensor cSensor = car1.sensors[i];
-                    boolean touched = false;
-                    ArrayList<Double> intersections = new ArrayList<>();
-
-                    for (int j = 0; j < dangers.size(); j++) {
-                        Shape shape = Shape.intersect(cSensor, dangers.get(j));
-                        if (shape.getBoundsInParent().getWidth() != -1) {
-
-                            double projected = Math.sqrt(Math.pow((shape.getBoundsInParent().getCenterX() - car1.getCenterX()), 2) + Math.pow((shape.getBoundsInParent().getCenterY() - car1.getCenterY()), 2)) - car1.getRadius();
-                            if (projected >= 0) {
-                                cSensor.setStroke(Color.RED);
-                                touched = true;
-                                intersections.add(projected);
-                            } 
-
-                        }
-
-                    }
+                for (int i = 0; i < cars.size(); i++) {
+                    Car car = cars.get(i);
+                    car.move();
+                    randomMove(car);
                     
-                    if(touched){
-                        Collections.sort(intersections);
-                        cSensor.projectedLength.setValue(intersections.get(0));
-                    }
-
-                    if (!touched) {
-                        cSensor.setStroke(Color.GREEN);
-                        cSensor.projectedLength.setValue(cSensor.length - car1.getRadius());
-
-                    }
+                    
+                    detectSensorsIntersection(car, dangers);
                 }
             }
         };
@@ -101,6 +73,60 @@ public class App extends Application {
 
     }
 
+    //detect all shapes that represent dangers to the car.
+    private static ArrayList<Shape> dangers(Pane root) {
+
+        ArrayList<Shape> dangers = new ArrayList<>();
+        for (int i = 0; i < root.getChildren().size(); i++) {
+            Node node = root.getChildren().get(i);
+            if (!Circle.class.isInstance(node) && !Sensor.class.isInstance(node)) {
+                dangers.add((Shape) root.getChildren().get(i));
+            }
+        }
+
+        return dangers;
+    }
+
+    private static void detectSensorsIntersection(Car car1, ArrayList<Shape> dangers) {
+
+        for (int i = 0; i < car1.sensors.length; i++) {
+            Sensor cSensor = car1.sensors[i];
+            boolean touched = false;
+            ArrayList<Double> intersections = new ArrayList<>();
+            for (int j = 0; j < dangers.size(); j++) {
+                Shape shape = Shape.intersect(cSensor, dangers.get(j));
+                if (shape.getBoundsInParent().getWidth() != -1) {
+                    double projected = Math.sqrt(Math.pow((shape.getBoundsInParent().getCenterX() - car1.getCenterX()), 2) + Math.pow((shape.getBoundsInParent().getCenterY() - car1.getCenterY()), 2)) - car1.getRadius();
+                    if (projected >= 0) {
+                        cSensor.setStroke(Color.RED);
+                        touched = true;
+                        intersections.add(projected);
+                    }
+                }
+            }
+            if (touched) {
+                Collections.sort(intersections);
+                cSensor.projectedLength.setValue(intersections.get(0));
+            }
+            if (!touched) {
+                cSensor.setStroke(Color.GREEN);
+                cSensor.projectedLength.setValue(cSensor.length - car1.getRadius());
+
+            }
+        }
+    }
+
+    
+    public void randomMove(Car car){
+        double rand = Math.random();
+        if(rand<0.5){
+            car.rotateLeft();
+        }
+        else{
+            car.rotateRight();
+        }
+        
+    }
     public static void main(String[] args) {
         launch(args);
     }

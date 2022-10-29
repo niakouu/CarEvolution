@@ -15,9 +15,11 @@ import javafx.scene.shape.Circle;
 public class Car extends Circle {
 
     Sensor[] sensors = new Sensor[7];
+    double fitnessScore;  
 
     double velocity = 0.3;
     double angularVelocity = 2;
+    double timeElapsed;
 
     Color color = Color.GREEN;
 
@@ -46,6 +48,38 @@ public class Car extends Circle {
     }
     public void rotateLeft(){
         this.setRotate(this.getRotate() - this.angularVelocity);
+    }
+    
+     public double getFitnessScore() {
+        return fitnessScore;
+    }
+
+    public void setFitnessScore(double fitnessScore) {
+        this.fitnessScore = fitnessScore;
+    }
+
+    public double getVelocity() {
+        return velocity;
+    }
+
+    public void setVelocity(double velocity) {
+        this.velocity = velocity;
+    }
+
+    public double getAngularVelocity() {
+        return angularVelocity;
+    }
+
+    public void setAngularVelocity(double angularVelocity) {
+        this.angularVelocity = angularVelocity;
+    }
+    
+     public double getTimeElapsed() {
+        return timeElapsed;
+    }
+
+    public void setTimeElapsed(double timeElapsed) {
+        this.timeElapsed = timeElapsed;
     }
     
 

@@ -7,7 +7,6 @@ package edu.vanier.main;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
 /**

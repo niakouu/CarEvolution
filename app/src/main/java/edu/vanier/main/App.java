@@ -3,14 +3,14 @@
  */
 package edu.vanier.main;
 
+import edu.vanier.car.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Scene;
+import javafx.scene.*;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -29,7 +29,9 @@ public class App extends Application {
         Pane root = loader.load();
         Scene scene = new Scene(root, 1200, 900, Color.WHITE);
         primaryStage.setScene(scene);
+        primaryStage.setFullScreen(true);
         primaryStage.show();
+        
 
         //components in the map
         ArrayList<Shape> shapeDangers = dangers(root);
@@ -44,10 +46,10 @@ public class App extends Application {
 
         //Display Sensors length
         VBox sensors = new VBox();
-        for (int i = 0; i < cars.get(0).sensors.length; i++) {
+        for (int i = 0; i < cars.get(0).getSensors().length; i++) {
             Label label = new Label();
-            Sensor sensor = cars.get(0).sensors[i];
-            label.textProperty().bind(Bindings.createStringBinding(() -> String.valueOf(sensor.projectedLength.get()), cars.get(0).sensors[i].projectedLength));
+            Sensor sensor = cars.get(0).getSensors()[i];
+            label.textProperty().bind(Bindings.createStringBinding(() -> String.valueOf(sensor.getProjectedLength()), cars.get(0).getSensors()[i].getProjectedLength()));
             sensors.getChildren().add(label);
         }
         root.getChildren().add(sensors);
@@ -66,8 +68,8 @@ public class App extends Application {
                     for (int j = 0; j < shapeDangers.size(); j++) {
                         if (Shape.intersect(car, shapeDangers.get(j)).getBoundsInParent().getWidth() != -1) {
                             cars.remove(car);
-                            for (int k = 0; k < car.sensors.length; k++) {
-                                root.getChildren().remove(car.sensors[k]);
+                            for (int k = 0; k < car.getSensors().length; k++) {
+                                root.getChildren().remove(car.getSensors()[k]);
                             }
                         }
                     }
@@ -94,8 +96,8 @@ public class App extends Application {
 
     private static void detectSensorsIntersection(Car car1, ArrayList<Shape> dangers) {
 
-        for (int i = 0; i < car1.sensors.length; i++) {
-            Sensor cSensor = car1.sensors[i];
+        for (int i = 0; i < car1.getSensors().length; i++) {
+            Sensor cSensor = car1.getSensors()[i];
             boolean touched = false;
             ArrayList<Double> intersections = new ArrayList<>();
             for (int j = 0; j < dangers.size(); j++) {
@@ -111,11 +113,11 @@ public class App extends Application {
             }
             if (touched) {
                 Collections.sort(intersections);
-                cSensor.projectedLength.setValue(intersections.get(0));
+                cSensor.getProjectedLength().setValue(intersections.get(0));
             }
             if (!touched) {
                 cSensor.setStroke(Color.GREEN);
-                cSensor.projectedLength.setValue(cSensor.length - car1.getRadius());
+                cSensor.getProjectedLength().setValue(cSensor.getLength() - car1.getRadius());
 
             }
         }

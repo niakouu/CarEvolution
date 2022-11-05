@@ -2,8 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package edu.vanier.main;
+package edu.vanier.car;
 
+import edu.vanier.neuralNetwork.NeuralNetwork;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -14,25 +15,34 @@ import javafx.scene.shape.Circle;
  */
 public class Car extends Circle {
 
-    Sensor[] sensors = new Sensor[7];
+    private Sensor[] sensors = new Sensor[7];
 
-    double velocity = 0.3;
-    double angularVelocity = 2;
+    private double velocity;
+    private double angularVelocity;
+    private NeuralNetwork brain;
 
-    Color color = Color.GREEN;
+    private Color color;
 
     public Car(Pane root) {
-
+        this.velocity = 0.3;
+        this.angularVelocity = 2; 
+        this.color = Color.GREEN;
+        
         this.setRadius(15);
-        this.setCenterX(500);
-        this.setCenterY(500);
+        this.setCenterX(100);
+        this.setCenterY(90);
         this.setFill(color);
         for (int i = 0; i < sensors.length; i++) {
             sensors[i] = new Sensor(i, this);
             root.getChildren().add(sensors[i]);
         }
+        this.brain = new NeuralNetwork(7, 4, 2, 0.3f);
 
         root.getChildren().add(this);
+    }
+    
+    public void think() {
+        
     }
 
     public void move() {
@@ -46,7 +56,17 @@ public class Car extends Circle {
     }
     public void rotateLeft(){
         this.setRotate(this.getRotate() - this.angularVelocity);
-    }
-    
+    }   
 
+    public Sensor[] getSensors() {
+        return this.sensors;
+    }
+
+    public double getVelocity() {
+        return this.velocity;
+    }
+
+    public double getAngularVelocity() {
+        return this.angularVelocity;
+    }
 }

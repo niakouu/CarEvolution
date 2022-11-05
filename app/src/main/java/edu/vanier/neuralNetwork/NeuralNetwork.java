@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import edu.vanier.car.Sensor;
 
 /**
  *
@@ -47,27 +48,15 @@ public class NeuralNetwork {
       return "input nodes = " + inputNodes + "; hidden nodes = " + hiddenNodes + "; output nodes = "
           + outputNodes + "; learning rate = " + learningRate;
     }
-
-    public List<Matrix> query(Dataset data) {
-      List<Matrix> outputs = new ArrayList<>();
-      for (double[] input : data.getInputData()) {
-        Matrix inputs = getReformedInput(input);
-        Matrix output = getFinalOutput(inputs);
-        outputs.add(output);
-      }
-      return outputs;
-    }
-
-    public void trainData(Dataset data, int epochs) {
-      for (int i = 0; i < epochs; i++) {
-        int counter = 0;
-        for (double[] input : data.getInputs().getData()) {
-          Matrix inputs = getReformedInput(input);
-          int target = data.getHeaders().get(counter++);
-          Matrix targets = initialTargetsValues(this.outputNodes, target);
-          rescaleWeight(inputs, targets);
+    
+    public Matrix query(Sensor[] data) {
+      double[] sensorsData = new double[data.length];
+        for (int i = 0; i < data.length; i++) {
+            sensorsData[i] = data[i].getProjectedLength().get();
         }
-      }
+      Matrix inputs = getReformedInput(sensorsData);
+      Matrix outputs = getFinalOutput(inputs);
+      return outputs;
     }
 
     private Matrix getReformedInput(double[] input) {

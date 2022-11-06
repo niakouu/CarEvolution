@@ -4,9 +4,8 @@
  */
 package edu.vanier.neuralNetwork;
 
-import java.util.ArrayList;
+
 import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 import edu.vanier.car.Sensor;
 
@@ -52,7 +51,7 @@ public class NeuralNetwork {
     public Matrix query(Sensor[] data) {
       double[] sensorsData = new double[data.length];
         for (int i = 0; i < data.length; i++) {
-            sensorsData[i] = data[i].getProjectedLength().get();
+            sensorsData[i] = data[i].getLength();
         }
       Matrix inputs = getReformedInput(sensorsData);
       Matrix outputs = getFinalOutput(inputs);

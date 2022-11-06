@@ -56,12 +56,18 @@ public class App extends Application {
 
         //Behaviors at each frame.
         AnimationTimer timer = new AnimationTimer() {
+            private long cycles = 0;
+            private static long maxCycles = 100;
+            
             @Override
             public void handle(long now) {
-
+                if (this.cycles++ >= maxCycles) {
+                    maxCycles++;
+                    this.stop();
+                }
+                
                 for (int i = 0; i < cars.size(); i++) {
                     Car car = cars.get(i);
-                    car.move();
                     randomMove(car);
 
                     //detect collision
@@ -124,13 +130,16 @@ public class App extends Application {
     }
 
     public void randomMove(Car car) {
-        double rand = Math.random();
-        if (rand < 0.5) {
+        double[] outputs = car.think();
+        if (outputs[0] > outputs[1] && outputs[0] > outputs[2]) {
             car.rotateLeft();
+        }
+        else if (outputs[1] > outputs[0] && outputs[1] > outputs[2]){
+            car.move();
         } else {
             car.rotateRight();
         }
-
+        car.move();
     }
 
     public static void main(String[] args) {

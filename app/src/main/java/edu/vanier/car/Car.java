@@ -20,14 +20,14 @@ public class Car extends Circle {
     private double velocity;
     private double angularVelocity;
     private NeuralNetwork brain;
-
     private Color color;
+    private double direction;
 
     public Car(Pane root) {
         this.velocity = 0.3;
-        this.angularVelocity = 2; 
+        this.angularVelocity = 2;
         this.color = Color.GREEN;
-        
+
         this.setRadius(15);
         this.setCenterX(100);
         this.setCenterY(90);
@@ -36,27 +36,27 @@ public class Car extends Circle {
             sensors[i] = new Sensor(i, this);
             root.getChildren().add(sensors[i]);
         }
-        this.brain = new NeuralNetwork(7, 4, 2, 0.3f);
-
+        this.brain = new NeuralNetwork(7, 5, 3, 0.3f);
+        
         root.getChildren().add(this);
     }
-    
-    public void think() {
-        
+
+    public double[] think() {
+        return this.brain.query(sensors);
     }
 
     public void move() {
         this.setCenterX(this.getCenterX() + this.velocity * Math.cos(Math.toRadians(this.getRotate())));
         this.setCenterY(this.getCenterY() + this.velocity * Math.sin(Math.toRadians(this.getRotate())));
-
     }
-    
-    public void rotateRight(){
+
+    public void rotateRight() {
         this.setRotate(this.getRotate() + this.angularVelocity);
     }
-    public void rotateLeft(){
+
+    public void rotateLeft() {
         this.setRotate(this.getRotate() - this.angularVelocity);
-    }   
+    }
 
     public Sensor[] getSensors() {
         return this.sensors;
@@ -68,5 +68,9 @@ public class Car extends Circle {
 
     public double getAngularVelocity() {
         return this.angularVelocity;
+    }
+
+    public double getDirection() {
+        return this.direction;
     }
 }

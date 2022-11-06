@@ -9,11 +9,12 @@ package edu.vanier.neuralNetwork;
  * @author 2145013
  */
 public class Matrix {
+
     private final int numberOfColumns;
     private final int numberOfRows;
     private final double[][] data;
     private final double[] firstRow;
-    
+
     public Matrix(double[][] inputs) {
         this.numberOfColumns = inputs[0].length;
         this.numberOfRows = inputs.length;
@@ -36,7 +37,7 @@ public class Matrix {
     public double[] getFirstRow() {
         return this.firstRow;
     }
-    
+
     public int getRowPositionForWhichAdditionOfValuesIsHighest() {
         double highest = 0.0;
         double value;
@@ -52,18 +53,18 @@ public class Matrix {
         }
         return position;
     }
-    
+
     public int getHighestValuePosition() {
         double highest = 0.0;
         int position = 0;
-            for (int i = 0; i < getNumberOfRows(); i++) {
-                for (int j = 0; j < getNumberOfColumns(); j++) {
-                    if (this.data[i][j] > highest) {
-                      highest = this.data[i][j];
-                      position = j;
-                    }
+        for (int i = 0; i < getNumberOfRows(); i++) {
+            for (int j = 0; j < getNumberOfColumns(); j++) {
+                if (this.data[i][j] > highest) {
+                    highest = this.data[i][j];
+                    position = j;
                 }
             }
+        }
         return position;
     }
 }

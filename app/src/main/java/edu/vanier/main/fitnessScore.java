@@ -3,8 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.vanier.main;
-import edu.vanier.main.Car; 
+package edu.vanier.main; 
+import edu.vanier.car.Car;
 import java.util.HashMap;
 import javafx.scene.shape.Shape;
 

@@ -6,6 +6,7 @@ package edu.vanier.main;
 import edu.vanier.car.*;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
@@ -27,7 +28,7 @@ public class App extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Map.fxml"));
         loader.setController(new FXMLController());
         Pane root = loader.load();
-        Scene scene = new Scene(root, 1200, 900, Color.WHITE);
+        Scene scene = new Scene(root, 1200, 800, Color.WHITE);
         primaryStage.setScene(scene);
         primaryStage.setFullScreen(true);
         primaryStage.show();
@@ -36,6 +37,8 @@ public class App extends Application {
         //components in the map
         ArrayList<Shape> shapeDangers = dangers(root);
         ArrayList<Car> cars = new ArrayList<>();
+        HashMap<Car, Double> findBestCar = new HashMap<>();
+        // HashMap <Double, Car> findMaxX = new HashMap<>(); 
 
         for (int i = 0; i < 5; i++) {
 
@@ -56,6 +59,15 @@ public class App extends Application {
 
         //Behaviors at each frame.
         AnimationTimer timer = new AnimationTimer() {
+            /*entry.getKey().setTimeElapsed(timer)
+             long start = System.nanoTime();
+             // some time passes
+             long end = System.nanoTime();
+             long elapsedTime = end - start; 
+             each car must have their own timer to calculate the elapsed time... might be memory consuming 
+           
+             */
+
             private long cycles = 0;
             private static long maxCycles = 100;
             
@@ -74,6 +86,21 @@ public class App extends Application {
                     for (int j = 0; j < shapeDangers.size(); j++) {
                         if (Shape.intersect(car, shapeDangers.get(j)).getBoundsInParent().getWidth() != -1) {
                             cars.remove(car);
+
+                            findBestCar.put(car, shapeDangers.get(j).getLayoutX());
+                            double maxValueInMap = (Collections.max(findBestCar.values()));
+                            for (HashMap.Entry<Car, Double> entry : findBestCar.entrySet()) {
+                                entry.getKey().setFitnessScore((double) entry.getKey().getVelocity() * entry.getKey().getTimeElapsed());
+                            }
+                            for (HashMap.Entry<Car, Double> currentEntry : findBestCar.entrySet()) {
+
+                                if (currentEntry.getValue() == maxValueInMap) {
+                                    currentEntry.getKey().setFitnessScore(maxValueInMap);
+                                    // return currentEntry.getKey(); --> should be added to another function 
+                                }
+
+                            }
+
                             for (int k = 0; k < car.getSensors().length; k++) {
                                 root.getChildren().remove(car.getSensors()[k]);
                             }
@@ -84,6 +111,7 @@ public class App extends Application {
             }
         };
         timer.start();
+
     }
 
     //detect all shapes that represent dangers to the car.

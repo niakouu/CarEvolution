@@ -16,10 +16,12 @@ import javafx.scene.shape.Circle;
 public class Car extends Circle {
 
     private Sensor[] sensors = new Sensor[7];
+    double fitnessScore;  
 
     private double velocity;
     private double angularVelocity;
     private NeuralNetwork brain;
+    double timeElapsed;
     private Color color;
     private double direction;
 
@@ -58,7 +60,22 @@ public class Car extends Circle {
         this.setRotate(this.getRotate() - this.angularVelocity);
     }
 
-    public Sensor[] getSensors() {
+     public double getFitnessScore() {
+        return fitnessScore;
+    }
+
+    public void setFitnessScore(double fitnessScore) {
+        this.fitnessScore = fitnessScore;
+    }
+
+    public void setVelocity(double velocity) {
+        this.velocity = velocity;
+    }
+
+    public void setAngularVelocity(double angularVelocity) {
+        this.angularVelocity = angularVelocity;
+    }
+        public Sensor[] getSensors() {
         return this.sensors;
     }
 
@@ -68,6 +85,14 @@ public class Car extends Circle {
 
     public double getAngularVelocity() {
         return this.angularVelocity;
+    }
+
+     public double getTimeElapsed() {
+        return timeElapsed;
+    }
+
+    public void setTimeElapsed(double timeElapsed) {
+        this.timeElapsed = timeElapsed;
     }
 
     public double getDirection() {

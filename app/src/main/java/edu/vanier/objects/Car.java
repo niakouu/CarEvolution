@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package edu.vanier.car;
+package edu.vanier.objects;
 
 import edu.vanier.neuralNetwork.NeuralNetwork;
 import java.util.ArrayList;
@@ -20,9 +20,13 @@ public class Car extends Circle implements Comparable<Car> {
 
     private final static double MAX_VELOCITY = 1;
     private final static double MAX_ANGULAR_VELOCITY = 3;
+    private final static int OUTPUT_NODES_NUMBER = 3;
+    private final static int HIDDEN_NODES_NUMBER = 6;
+    private final static int SENSORS_NUMBER = 10;
+    private final static float LEARNING_RATE = 0.5f;
     
     private double velocity;
-    private double angularVelocity;
+    private double angularVelocity;  
     private Sensor[] sensors;
     private NeuralNetwork brain;
     private Color color;
@@ -33,7 +37,7 @@ public class Car extends Circle implements Comparable<Car> {
 
     public Car(Pane root) {
         this.color = Color.GREEN;
-        this.sensors = new Sensor[8];
+        this.sensors = new Sensor[SENSORS_NUMBER];
         this.moveStraightCounter = 0;
         this.velocity = MAX_VELOCITY;
         this.angularVelocity = MAX_ANGULAR_VELOCITY;
@@ -46,14 +50,14 @@ public class Car extends Circle implements Comparable<Car> {
             sensors[i] = new Sensor(i, this);
             root.getChildren().add(sensors[i]);
         }
-        this.brain = new NeuralNetwork(8, 5, 3, 0.3f);
+        this.brain = new NeuralNetwork(SENSORS_NUMBER, HIDDEN_NODES_NUMBER, OUTPUT_NODES_NUMBER, LEARNING_RATE);
 
         root.getChildren().add(this);
     }
     
     public Car(Pane root, NeuralNetwork mutator, NeuralNetwork secondMutator) {
         this.color = Color.GREEN;
-        this.sensors = new Sensor[8];
+        this.sensors = new Sensor[SENSORS_NUMBER];
         this.moveStraightCounter = 0;
         this.velocity = MAX_VELOCITY;
         this.angularVelocity = MAX_ANGULAR_VELOCITY;
@@ -139,11 +143,7 @@ public class Car extends Circle implements Comparable<Car> {
         this.setCenterX(this.getCenterX() - this.velocity * Math.cos(Math.toRadians(this.getRotate())));
         this.setCenterY(this.getCenterY() - this.velocity * Math.sin(Math.toRadians(this.getRotate())));
     }
-
-//    public void moveStraightCounter() {
-//        this.setCenterX(this.getCenterX() + this.MAX_VELOCITY * Math.cos(Math.toRadians(this.getRotate())));
-//        this.setCenterY(this.getCenterY() + this.MAX_VELOCITY * Math.sin(Math.toRadians(this.getRotate())));
-//    }
+    
     public void rotateRight() {
         this.setRotate(this.getRotate() + this.angularVelocity);
     }

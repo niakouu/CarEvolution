@@ -3,11 +3,10 @@
  */
 package edu.vanier.main;
 
-import edu.vanier.car.Car;
-import edu.vanier.car.Sensor;
+import edu.vanier.objects.Car;
+import edu.vanier.objects.Sensor;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
@@ -47,9 +46,6 @@ public class App extends Application {
         shapeDangers = dangers(root);
         cars = new ArrayList<>();
         
-        // Edelina a voir
-        HashMap<Car, Double> findBestCar = new HashMap<>();
-        
         // HashMap <Double, Car> findMaxX = new HashMap<>();
 
         for (int i = 0; i < NUMBER_CARS; i++) {
@@ -61,28 +57,22 @@ public class App extends Application {
         
         //Display Sensors length
         VBox sensors = new VBox();
-        for (int i = 0; i < cars.get(0).getSensors().length; i++) {
+        for (Sensor sensor1 : cars.get(0).getSensors()) {
             Label label = new Label();
-            Sensor sensor = cars.get(0).getSensors()[i];
-            label.textProperty().bind(Bindings.createStringBinding(() -> String.valueOf(sensor.getProjectedLength().get()), cars.get(0).getSensors()[i].getProjectedLength()));
+            Sensor sensor = sensor1;
+            label.textProperty().bind(Bindings.createStringBinding(() -> String.valueOf(sensor.getProjectedLength().get()), sensor1.getProjectedLength()));
             sensors.getChildren().add(label);
         }
         root.getChildren().add(sensors);
         
         //Behaviors at each frame.
+
         AnimationTimer timer = new AnimationTimer() {
-            /*entry.getKey().setTimeElapsed(timer)
-             long start = System.nanoTime();
-             // some time passes
-             long end = System.nanoTime();
-             long elapsedTime = end - start; 
-             each car must have their own timer to calculate the elapsed time... might be memory consuming 
-           
-             */
+            
             private int timeCounter = 0;
             private long cycles = 0;
             private static long maxCycles = 1000;
-
+            
             @Override
             public void handle(long now) {
                 timeCounter++;
@@ -112,17 +102,6 @@ public class App extends Application {
                     for (int j = 0; j < shapeDangers.size(); j++) {
                         if (Shape.intersect(car, shapeDangers.get(j)).getBoundsInParent().getWidth() != -1) {
                             cars.remove(car);
-                            findBestCar.put(car, shapeDangers.get(j).getLayoutX());
-                            double maxValueInMap = (Collections.max(findBestCar.values()));
-                            
-                            for (HashMap.Entry<Car, Double> entry : findBestCar.entrySet()) {
-                                entry.getKey().setFitnessScore(entry.getKey().getVelocity() * entry.getKey().getTimeElapsed());
-                                if (entry.getValue() == maxValueInMap) {
-                                    entry.getKey().setFitnessScore(maxValueInMap);
-                                    // return currentEntry.getKey(); --> should be added to another function 
-                                }
-                            }
-                            
                             eliminatedCars.add(car);
                             for (int k = 0; k < car.getSensors().length; k++) {
                                 root.getChildren().remove(car.getSensors()[k]);

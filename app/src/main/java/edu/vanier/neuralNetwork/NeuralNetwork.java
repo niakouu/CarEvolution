@@ -6,7 +6,7 @@ package edu.vanier.neuralNetwork;
 
 import java.util.Arrays;
 import java.util.Random;
-import edu.vanier.car.Sensor;
+import edu.vanier.objects.Sensor;
 
 /**
  *

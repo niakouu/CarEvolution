@@ -3,22 +3,21 @@
  */
 package edu.vanier.main;
 
-import edu.vanier.car.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.beans.binding.Bindings;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.*;
+import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
+import neuralNetwork.NeuralNetworkManipulation;
 
 public class App extends Application {
 
@@ -30,33 +29,35 @@ public class App extends Application {
         Pane root = loader.load();
         Scene scene = new Scene(root, 1200, 800, Color.WHITE);
         primaryStage.setScene(scene);
-        primaryStage.setFullScreen(true);
         primaryStage.show();
-        
+        Label time = new Label();
+        root.getChildren().add(time);
 
         //components in the map
         ArrayList<Shape> shapeDangers = dangers(root);
         ArrayList<Car> cars = new ArrayList<>();
         HashMap<Car, Double> findBestCar = new HashMap<>();
         // HashMap <Double, Car> findMaxX = new HashMap<>(); 
+        ArrayList<Car> eliminatedCars = new ArrayList<>();
 
         for (int i = 0; i < 5; i++) {
 
             Car car = new Car(root);
             cars.add(car);
-            car.setRotate(60 * i);
+            car.setRotate(180);
         }
 
+        /*
         //Display Sensors length
         VBox sensors = new VBox();
-        for (int i = 0; i < cars.get(0).getSensors().length; i++) {
+        for (int i = 0; i < cars.get(0).sensors.length; i++) {
             Label label = new Label();
-            Sensor sensor = cars.get(0).getSensors()[i];
-            label.textProperty().bind(Bindings.createStringBinding(() -> String.valueOf(sensor.getProjectedLength()), cars.get(0).getSensors()[i].getProjectedLength()));
+            Sensor sensor = cars.get(0).sensors[i];
+            label.textProperty().bind(Bindings.createStringBinding(() -> String.valueOf(sensor.projectedLength.get()), cars.get(0).sensors[i].projectedLength));
             sensors.getChildren().add(label);
         }
         root.getChildren().add(sensors);
-
+         */
         //Behaviors at each frame.
         AnimationTimer timer = new AnimationTimer() {
             /*entry.getKey().setTimeElapsed(timer)
@@ -68,19 +69,55 @@ public class App extends Application {
            
              */
 
-            private long cycles = 0;
-            private static long maxCycles = 100;
-            
+
+            int timeCounter = 0;
+
             @Override
             public void handle(long now) {
-                if (this.cycles++ >= maxCycles) {
-                    maxCycles++;
-                    this.stop();
+                timeCounter++;
+
+                time.setText(String.valueOf(timeCounter));
+
+                if (cars.size() == 0 || timeCounter == 10000) {
+                    timeCounter = 0;
+                    Collections.sort(eliminatedCars, new carComparator());
+                    Car mutator = eliminatedCars.get(eliminatedCars.size() - 1);
+                    Car secondMutator = eliminatedCars.get(eliminatedCars.size() - 2);
+                    cars.addAll(eliminatedCars);
+
+                    for (int i = 0; i < cars.size(); i++) {
+
+                        cars.get(i).setCenterX(65);
+                        cars.get(i).setCenterY(130);
+
+                        cars.get(i).setRotate(170 + i * 3);
+                        NeuralNetworkManipulation.Mutate(cars.get(i).neuralNetwork, mutator.neuralNetwork, mutator.fitnessScore, secondMutator.neuralNetwork, secondMutator.fitnessScore);
+
+                    }
+
+                    for (int i = 0; i < eliminatedCars.size(); i++) {
+
+                        for (Sensor sensor : eliminatedCars.get(i).sensors) {
+
+                            
+                            
+                            
+
+                            if(!root.getChildren().contains(sensor))
+                            root.getChildren().add(sensor);
+                        }
+
+                    }
+
+                    eliminatedCars.clear();
+
                 }
-                
+
                 for (int i = 0; i < cars.size(); i++) {
                     Car car = cars.get(i);
-                    randomMove(car);
+
+                    car.move();
+                    car.fitnessScore ++;
 
                     //detect collision
                     for (int j = 0; j < shapeDangers.size(); j++) {
@@ -101,8 +138,9 @@ public class App extends Application {
 
                             }
 
-                            for (int k = 0; k < car.getSensors().length; k++) {
-                                root.getChildren().remove(car.getSensors()[k]);
+                            eliminatedCars.add(car);
+                            for (int k = 0; k < car.sensors.length; k++) {
+                                root.getChildren().remove(car.sensors[k]);
                             }
                         }
                     }
@@ -112,6 +150,7 @@ public class App extends Application {
         };
         timer.start();
 
+        
     }
 
     //detect all shapes that represent dangers to the car.
@@ -120,7 +159,7 @@ public class App extends Application {
         ArrayList<Shape> dangers = new ArrayList<>();
         for (int i = 0; i < root.getChildren().size(); i++) {
             Node node = root.getChildren().get(i);
-            if (!Circle.class.isInstance(node) && !Sensor.class.isInstance(node)) {
+            if (!Circle.class.isInstance(node) && !Sensor.class.isInstance(node) && Shape.class.isInstance(node)) {
                 dangers.add((Shape) root.getChildren().get(i));
             }
         }
@@ -130,8 +169,8 @@ public class App extends Application {
 
     private static void detectSensorsIntersection(Car car1, ArrayList<Shape> dangers) {
 
-        for (int i = 0; i < car1.getSensors().length; i++) {
-            Sensor cSensor = car1.getSensors()[i];
+        for (int i = 0; i < car1.sensors.length; i++) {
+            Sensor cSensor = car1.sensors[i];
             boolean touched = false;
             ArrayList<Double> intersections = new ArrayList<>();
             for (int j = 0; j < dangers.size(); j++) {
@@ -147,27 +186,14 @@ public class App extends Application {
             }
             if (touched) {
                 Collections.sort(intersections);
-                cSensor.getProjectedLength().setValue(intersections.get(0));
+                cSensor.projectedLength.setValue(intersections.get(0));
             }
             if (!touched) {
                 cSensor.setStroke(Color.GREEN);
-                cSensor.getProjectedLength().setValue(cSensor.getLength() - car1.getRadius());
+                cSensor.projectedLength.setValue(cSensor.length - car1.getRadius());
 
             }
         }
-    }
-
-    public void randomMove(Car car) {
-        double[] outputs = car.think();
-        if (outputs[0] > outputs[1] && outputs[0] > outputs[2]) {
-            car.rotateLeft();
-        }
-        else if (outputs[1] > outputs[0] && outputs[1] > outputs[2]){
-            car.move();
-        } else {
-            car.rotateRight();
-        }
-        car.move();
     }
 
     public static void main(String[] args) {

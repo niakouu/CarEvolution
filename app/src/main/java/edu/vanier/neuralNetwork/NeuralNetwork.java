@@ -14,8 +14,6 @@ import edu.vanier.car.Sensor;
  */
 public class NeuralNetwork {
 
-    private final static int DEFAULT_NODES = 3;
-    private final static float DEFAULT_LEARNING_RATE = 0.3f;
     private final static double INITIAL_VALUE_TARGETS = 0.1;
 
     private final int inputNodes;
@@ -32,6 +30,19 @@ public class NeuralNetwork {
         this.learningRate = learningRate;
         generateLinkWeights();
     }
+
+    public NeuralNetwork(NeuralNetwork mutator, NeuralNetwork secondMutator) {
+        this.inputNodes = mutator.inputNodes;
+        this.hiddenNodes = mutator.hiddenNodes;
+        this.outputNodes = mutator.outputNodes;
+        this.learningRate = mutator.learningRate;
+        this.weightsHiddenToOutput = MatrixManipulations.
+                averageMatrixElementByElement(mutator.weightsHiddenToOutput, secondMutator.weightsHiddenToOutput);
+        this.weightsInputToHidden = MatrixManipulations.
+                averageMatrixElementByElement(mutator.weightsInputToHidden, secondMutator.weightsInputToHidden);
+    }
+    
+    
 
     public Matrix getWeightsInputToHidden() {
         return this.weightsInputToHidden;
@@ -63,6 +74,13 @@ public class NeuralNetwork {
         }
         System.out.println("]");
         return outputs;
+    }
+    
+    public void mutate() {
+        this.weightsHiddenToOutput = MatrixManipulations
+                .mutate(this.weightsInputToHidden, this.learningRate);
+        this.weightsInputToHidden = MatrixManipulations
+                .mutate(this.weightsInputToHidden, this.learningRate);
     }
 
     private Matrix getReformedInput(double[] input) {

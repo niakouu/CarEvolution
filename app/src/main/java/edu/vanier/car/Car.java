@@ -20,17 +20,23 @@ public class Car extends Circle implements Comparable<Car> {
 
     private final static double MAX_VELOCITY = 0.3;
     private final static double MAX_ANGULAR_VELOCITY = 5;
-
+    
+    private double velocity;
+    private double angularVelocity;
     private Sensor[] sensors;
     private NeuralNetwork brain;
     private Color color;
     private double fitnessScore;
     private double timeElapsed;
     private double direction;
+    private int moveStraightCounter; 
 
     public Car(Pane root) {
         this.color = Color.GREEN;
         this.sensors = new Sensor[7];
+        this.moveStraightCounter = 0;
+        this.velocity = MAX_VELOCITY;
+        this.angularVelocity = MAX_ANGULAR_VELOCITY;
 
         this.setRadius(15);
         this.setCenterX(65);
@@ -44,6 +50,28 @@ public class Car extends Circle implements Comparable<Car> {
 
         root.getChildren().add(this);
     }
+    
+    public Car(Pane root, NeuralNetwork mutator, NeuralNetwork secondMutator) {
+        this.color = Color.GREEN;
+        this.sensors = new Sensor[7];
+        this.moveStraightCounter = 0;
+        this.velocity = MAX_VELOCITY;
+        this.angularVelocity = MAX_ANGULAR_VELOCITY;
+
+        this.setRadius(15);
+        this.setCenterX(65);
+        this.setCenterY(130);
+        this.setFill(color);
+        for (int i = 0; i < sensors.length; i++) {
+            sensors[i] = new Sensor(i, this);
+            root.getChildren().add(sensors[i]);
+        }
+        
+        this.brain = new NeuralNetwork(mutator, secondMutator);
+        brain.mutate();
+
+        root.getChildren().add(this);
+    }
 
     public void think() {
         double[] outputs = this.brain.query(this.sensors);
@@ -54,9 +82,12 @@ public class Car extends Circle implements Comparable<Car> {
 
         if (LeftIsBestOutcome > NoRotationIsBestOutcome && LeftIsBestOutcome > RightRotationIsBestOutcome) {
             this.rotateLeft();
+            System.out.println("rotate right");
         } else if (RightRotationIsBestOutcome > NoRotationIsBestOutcome && RightRotationIsBestOutcome > LeftIsBestOutcome) {
             this.rotateRight();
+            System.out.println("rotate left");
         } else {
+            moveStraightCounter++;
             this.moveStraight();
         }
     }
@@ -87,6 +118,11 @@ public class Car extends Circle implements Comparable<Car> {
             }
         }
     }
+    
+    public void stop() {
+        this.velocity = 0;
+        this.angularVelocity = 0;
+    }
 
     public void move() {
 
@@ -94,26 +130,26 @@ public class Car extends Circle implements Comparable<Car> {
 
         this.setRotate(this.getRotate() + calculatedRotation[0]);
 
-        this.setCenterX(this.getCenterX() - MAX_VELOCITY * Math.cos(Math.toRadians(this.getRotate())));
-        this.setCenterY(this.getCenterY() - MAX_VELOCITY * Math.sin(Math.toRadians(this.getRotate())));
+        this.setCenterX(this.getCenterX() - this.velocity * Math.cos(Math.toRadians(this.getRotate())));
+        this.setCenterY(this.getCenterY() - this.velocity * Math.sin(Math.toRadians(this.getRotate())));
 
     }
 
     public void moveStraight() {
-        this.setCenterX(this.getCenterX() - MAX_VELOCITY * Math.cos(Math.toRadians(this.getRotate())));
-        this.setCenterY(this.getCenterY() - MAX_VELOCITY * Math.sin(Math.toRadians(this.getRotate())));
+        this.setCenterX(this.getCenterX() - this.velocity * Math.cos(Math.toRadians(this.getRotate())));
+        this.setCenterY(this.getCenterY() - this.velocity * Math.sin(Math.toRadians(this.getRotate())));
     }
 
-//    public void move() {
+//    public void moveStraightCounter() {
 //        this.setCenterX(this.getCenterX() + this.MAX_VELOCITY * Math.cos(Math.toRadians(this.getRotate())));
 //        this.setCenterY(this.getCenterY() + this.MAX_VELOCITY * Math.sin(Math.toRadians(this.getRotate())));
 //    }
     public void rotateRight() {
-        this.setRotate(this.getRotate() + MAX_ANGULAR_VELOCITY);
+        this.setRotate(this.getRotate() + this.angularVelocity);
     }
 
     public void rotateLeft() {
-        this.setRotate(this.getRotate() - MAX_ANGULAR_VELOCITY);
+        this.setRotate(this.getRotate() - this.angularVelocity);
     }
 
     @Override
@@ -143,11 +179,11 @@ public class Car extends Circle implements Comparable<Car> {
     }
 
     public double getVelocity() {
-        return this.MAX_VELOCITY;
+        return this.velocity;
     }
 
     public double getAngularVelocity() {
-        return this.MAX_ANGULAR_VELOCITY;
+        return this.velocity;
     }
 
     public double getTimeElapsed() {
@@ -165,4 +201,9 @@ public class Car extends Circle implements Comparable<Car> {
     public NeuralNetwork getBrain() {
         return this.brain;
     }
+
+    public int getMove() {
+        return this.moveStraightCounter;
+    }
+    
 }

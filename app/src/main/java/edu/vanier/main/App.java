@@ -22,14 +22,19 @@ import javafx.stage.Stage;
 
 public class App extends Application {
     
-    private final static int NUMBER_CARS = 5;
+    private final static int NUMBER_CARS = 10;
+    private static ArrayList<Car> eliminatedCars;
+    private static ArrayList<Car> cars;
+    private static ArrayList<Shape> shapeDangers;
+    private static ArrayList<Car> mutators;
+    private static Pane root;
     
     @Override
     public void start(Stage primaryStage) throws Exception { 
         
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Map.fxml"));
         loader.setController(new FXMLController());
-        Pane root = loader.load();
+        root = loader.load();
         Scene scene = new Scene(root, 1200, 700, Color.WHITE);
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -37,9 +42,9 @@ public class App extends Application {
         root.getChildren().add(time);
 
         //Components in the map
-        ArrayList<Shape> shapeDangers = dangers(root);
-        ArrayList<Car> cars = new ArrayList<>();
-        ArrayList<Car> eliminatedCars = new ArrayList<>();
+        eliminatedCars = new ArrayList<>();
+        shapeDangers = dangers(root);
+        cars = new ArrayList<>();
         
         // Edelina a voir
         HashMap<Car, Double> findBestCar = new HashMap<>();
@@ -74,48 +79,27 @@ public class App extends Application {
              each car must have their own timer to calculate the elapsed time... might be memory consuming 
            
              */
-            int timeCounter = 0;
-            
+            private int timeCounter = 0;
             private long cycles = 0;
-            private static long maxCycles = 300;
+            private static long maxCycles = 1000;
 
             @Override
             public void handle(long now) {
                 timeCounter++;
 
                 time.setText(String.valueOf(timeCounter));
-                
-//                if (this.cycles++ >= maxCycles) {
-//                    maxCycles++;
-//                    this.stop();
-//                }
 
-                if (cars.size() == 0 || timeCounter == 10000) {
-                    timeCounter = 0;
-                    // Change to array 
-                    Collections.sort(eliminatedCars);
-                    Car mutator = eliminatedCars.get(eliminatedCars.size() - 1);
-                    Car secondMutator = eliminatedCars.get(eliminatedCars.size() - 2);
-                    cars.addAll(eliminatedCars);
-
-                    for (int i = 0; i < cars.size(); i++) {
-
-                        cars.get(i).setCenterX(65);
-                        cars.get(i).setCenterY(130);
-
-                        cars.get(i).setRotate(170 + i * 3);
-                        //NeuralNetworkManipulation.Mutate(cars.get(i).getBrain(), mutator.getBrain(), mutator.getFitnessScore(), secondMutator.getBrain(), secondMutator.getFitnessScore());
-
-                    }
+                if (cars.isEmpty() || timeCounter == 10000) {
+                    timeCounter = 2;
+                    
+                    mutate();
 
                     for (int i = 0; i < eliminatedCars.size(); i++) {
-
                         for (Sensor sensor : eliminatedCars.get(i).getSensors()) {
 
                             if(!root.getChildren().contains(sensor))
                             root.getChildren().add(sensor);
                         }
-
                     }
                     eliminatedCars.clear();
                 }
@@ -146,6 +130,15 @@ public class App extends Application {
                             }
                         }
                     }
+                    if (this.cycles++ >= maxCycles && car.getMove() == 0) {
+                        cars.remove(car);
+                        maxCycles++;
+                        car.stop();
+                        for (int k = 0; k < car.getSensors().length; k++) {
+                            root.getChildren().remove(car.getSensors()[k]);
+                        }
+                        eliminatedCars.add(car);
+                    }
                     car.update(shapeDangers);
                 }
             }
@@ -166,35 +159,23 @@ public class App extends Application {
 
         return dangers;
     }
-
-//    private static void detectSensorsIntersection(Car car1, ArrayList<Shape> dangers) {
-//
-//        for (int i = 0; i < car1.getSensors().length; i++) {
-//            Sensor cSensor = car1.getSensors()[i];
-//            boolean touched = false;
-//            ArrayList<Double> intersections = new ArrayList<>();
-//            for (int j = 0; j < dangers.size(); j++) {
-//                Shape shape = Shape.intersect(cSensor, dangers.get(j));
-//                if (shape.getBoundsInParent().getWidth() != -1) {
-//                    double projected = Math.sqrt(Math.pow((shape.getBoundsInParent().getCenterX() - car1.getCenterX()), 2) + Math.pow((shape.getBoundsInParent().getCenterY() - car1.getCenterY()), 2)) - car1.getRadius();
-//                    if (projected >= 0) {
-//                        cSensor.setStroke(Color.RED);
-//                        touched = true;
-//                        intersections.add(projected);
-//                    }
-//                }
-//            }
-//            if (touched) {
-//                Collections.sort(intersections);
-//                cSensor.getProjectedLength().setValue(intersections.get(0));
-//            }
-//            if (!touched) {
-//                cSensor.setStroke(Color.GREEN);
-//                cSensor.getProjectedLength().setValue(cSensor.getLength() - car1.getRadius());
-//
-//            }
-//        }
-//    }
+    
+    public static void mutate() {
+        Collections.sort(eliminatedCars);
+        Car mutator = eliminatedCars.get(eliminatedCars.size() - 1);
+        Car secondMutator = eliminatedCars.get(eliminatedCars.size() - 2);
+        eliminatedCars.clear();
+        
+        cars.add(mutator);
+        cars.add(secondMutator);
+        
+        for (int i = 0; i < NUMBER_CARS - 2; i++) {
+            Car car = new Car(root, mutator.getBrain(), secondMutator.getBrain());
+            cars.add(car);
+            car.setRotate(180);
+        }
+        
+    }
 
     public static void main(String[] args) {
         launch(args);

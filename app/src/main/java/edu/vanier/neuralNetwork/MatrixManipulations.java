@@ -25,6 +25,14 @@ public class MatrixManipulations {
     public static Matrix multiplyMatrixElementByElement(double num, Matrix matrix) {
         return operationGenerator(Operator.MULTIPLICATION, num, matrix);
     }
+    
+    public static Matrix multiplyMatrixElementByElement(Matrix m1, Matrix m2) {
+        return operationGenerator(Operator.MULTIPLICATION, m1, m2);
+    }
+    
+    public static Matrix averageMatrixElementByElement(Matrix m1, Matrix m2) {
+        return operationGenerator(Operator.DIVISION, operationGenerator(Operator.ADDITION, m1, m2), 2);
+    }
 
     public static Matrix multiplyMatrixElementByElement(Matrix m1, Matrix m2, Matrix m3) {
         return operationGenerator(Operator.MULTIPLICATION, m1, m2, m3);
@@ -73,6 +81,20 @@ public class MatrixManipulations {
         return new Matrix(weights);
     }
     
+    public static Matrix mutate(Matrix matrix, double rate){
+        double[][] result = new double[matrix.getNumberOfRows()][matrix.getNumberOfColumns()];
+        for (int i = 0; i < result.length; i++) {
+          for (int j = 0; j < result[i].length; j++) {
+                if (Math.random() < rate) {
+                    result[i][j] = Math.random() * 2 - 1;
+                } else {
+                    result[i][j] = matrix.getData()[i][j];
+                }
+            }
+        }
+        return new Matrix(result);
+    }
+    
     public static Matrix sigmoid(Matrix matrix) {
         double[][] arr = matrix.getData();
         for (int i = 0; i < arr.length; i++) {
@@ -102,6 +124,16 @@ public class MatrixManipulations {
     for (int i = 0; i < result.length; i++) {
       for (int j = 0; j < result[i].length; j++) {
         result[i][j] = operator.apply(m1, m2.getData()[i][j]);
+      }
+    }
+    return new Matrix(result);
+  }
+  
+  private static Matrix operationGenerator(Operator operator, Matrix m2, double m1) {
+    double[][] result = new double[m2.getNumberOfRows()][m2.getNumberOfColumns()];
+    for (int i = 0; i < result.length; i++) {
+      for (int j = 0; j < result[i].length; j++) {
+        result[i][j] = operator.apply(m2.getData()[i][j], m1);
       }
     }
     return new Matrix(result);

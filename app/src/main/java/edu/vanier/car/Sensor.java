@@ -2,22 +2,21 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package edu.vanier.main;
+package edu.vanier.car;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
 /**
  *
  * @author enyihou
  */
-class Sensor extends Line {
+public class Sensor extends Line {
 
-    double length = 150;
-    DoubleProperty projectedLength = new SimpleDoubleProperty();
+    private double length = 150;
+    private DoubleProperty projectedLength = new SimpleDoubleProperty();
 
     public Sensor(int order, Car car) {
 
@@ -58,4 +57,11 @@ class Sensor extends Line {
 
     }
 
+    public double getLength() {
+        return this.length;
+    }
+
+    public DoubleProperty getProjectedLength() {
+        return this.projectedLength;
+    }
 }

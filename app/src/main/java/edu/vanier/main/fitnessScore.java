@@ -12,13 +12,11 @@ import javafx.scene.shape.Shape;
  *
  * @author nguye
  */
-public class fitnessScore {
-    HashMap <Car,Shape> findCar = new HashMap<Car, Shape>(); 
+public class FitnessScore {
+    HashMap <Car,Shape> findCar;
     
 
-    public fitnessScore() {
+    public FitnessScore() {
+        this.findCar = new HashMap<>();
     }
-    
-    
-    
 }

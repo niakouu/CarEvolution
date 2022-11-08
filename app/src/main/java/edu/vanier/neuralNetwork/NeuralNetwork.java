@@ -55,11 +55,6 @@ public class NeuralNetwork {
         Matrix inputs = getReformedInput(sensorsData);
         Matrix output = getFinalOutput(inputs);
         
-        for(double[] out : output.getData()) {
-            for(double o : out){
-                System.out.println(o);
-            }
-        }
         double[] outputs = new double[output.getData()[0].length];
         System.out.print("[");
         for (int i = 0; i < outputs.length; i++) {

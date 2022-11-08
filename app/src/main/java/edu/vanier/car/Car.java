@@ -18,8 +18,8 @@ import javafx.scene.shape.Shape;
  */
 public class Car extends Circle implements Comparable<Car> {
 
-    private final static double MAX_VELOCITY = 0.3;
-    private final static double MAX_ANGULAR_VELOCITY = 5;
+    private final static double MAX_VELOCITY = 1;
+    private final static double MAX_ANGULAR_VELOCITY = 3;
     
     private double velocity;
     private double angularVelocity;
@@ -33,7 +33,7 @@ public class Car extends Circle implements Comparable<Car> {
 
     public Car(Pane root) {
         this.color = Color.GREEN;
-        this.sensors = new Sensor[7];
+        this.sensors = new Sensor[8];
         this.moveStraightCounter = 0;
         this.velocity = MAX_VELOCITY;
         this.angularVelocity = MAX_ANGULAR_VELOCITY;
@@ -46,14 +46,14 @@ public class Car extends Circle implements Comparable<Car> {
             sensors[i] = new Sensor(i, this);
             root.getChildren().add(sensors[i]);
         }
-        this.brain = new NeuralNetwork(7, 5, 3, 0.3f);
+        this.brain = new NeuralNetwork(8, 5, 3, 0.3f);
 
         root.getChildren().add(this);
     }
     
     public Car(Pane root, NeuralNetwork mutator, NeuralNetwork secondMutator) {
         this.color = Color.GREEN;
-        this.sensors = new Sensor[7];
+        this.sensors = new Sensor[8];
         this.moveStraightCounter = 0;
         this.velocity = MAX_VELOCITY;
         this.angularVelocity = MAX_ANGULAR_VELOCITY;
@@ -86,10 +86,10 @@ public class Car extends Circle implements Comparable<Car> {
         } else if (RightRotationIsBestOutcome > NoRotationIsBestOutcome && RightRotationIsBestOutcome > LeftIsBestOutcome) {
             this.rotateRight();
             System.out.println("rotate left");
-        } else {
-            moveStraightCounter++;
-            this.moveStraight();
         }
+        moveStraightCounter++;
+        this.moveStraight();
+        
     }
 
     public void update(ArrayList<Shape> dangers) {

@@ -61,7 +61,7 @@ public class NeuralNetwork {
     public double[] query(Sensor[] data) {
         double[] sensorsData = new double[data.length];
         for (int i = 0; i < data.length; i++) {
-            sensorsData[i] = data[i].getLength();
+            sensorsData[i] = data[i].getProjectedLength().get();
         }
         Matrix inputs = getReformedInput(sensorsData);
         Matrix output = getFinalOutput(inputs);
@@ -73,6 +73,7 @@ public class NeuralNetwork {
             System.out.print("[" + outputs[i] + "] , ");
         }
         System.out.println("]");
+        System.out.println(this);
         return outputs;
     }
     

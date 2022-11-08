@@ -10,11 +10,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
@@ -26,7 +28,6 @@ public class App extends Application {
     private static ArrayList<Car> eliminatedCars;
     private static ArrayList<Car> cars;
     private static ArrayList<Shape> shapeDangers;
-    private static ArrayList<Car> mutators;
     private static Pane root;
     
     @Override
@@ -57,17 +58,16 @@ public class App extends Application {
             car.setRotate(180);
         }
 
-        /*
+        
         //Display Sensors length
         VBox sensors = new VBox();
-        for (int i = 0; i < cars.get(0).sensors.length; i++) {
+        for (int i = 0; i < cars.get(0).getSensors().length; i++) {
             Label label = new Label();
-            Sensor sensor = cars.get(0).sensors[i];
-            label.textProperty().bind(Bindings.createStringBinding(() -> String.valueOf(sensor.projectedLength.get()), cars.get(0).sensors[i].projectedLength));
+            Sensor sensor = cars.get(0).getSensors()[i];
+            label.textProperty().bind(Bindings.createStringBinding(() -> String.valueOf(sensor.getProjectedLength().get()), cars.get(0).getSensors()[i].getProjectedLength()));
             sensors.getChildren().add(label);
         }
         root.getChildren().add(sensors);
-         */
         
         //Behaviors at each frame.
         AnimationTimer timer = new AnimationTimer() {
@@ -90,7 +90,6 @@ public class App extends Application {
                 time.setText(String.valueOf(timeCounter));
 
                 if (cars.isEmpty() || timeCounter == 10000) {
-                    timeCounter = 2;
                     
                     mutate();
 

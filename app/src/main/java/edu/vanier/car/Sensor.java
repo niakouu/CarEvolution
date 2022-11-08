@@ -15,7 +15,7 @@ import javafx.scene.shape.Line;
  */
 public class Sensor extends Line {
 
-    private double length = 150;
+    private double length = 200;
     private DoubleProperty projectedLength = new SimpleDoubleProperty();
 
     public Sensor(int order, Car car) {

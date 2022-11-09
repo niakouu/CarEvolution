@@ -3,149 +3,24 @@
  */
 package edu.vanier.main;
 
-import edu.vanier.objects.Car;
-import edu.vanier.objects.Sensor;
-import java.util.ArrayList;
-import java.util.Collections;
-import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 
 public class App extends Application {
-    
-    private final static int NUMBER_CARS = 10;
-    private static ArrayList<Car> eliminatedCars;
-    private static ArrayList<Car> cars;
-    private static ArrayList<Shape> shapeDangers;
-    private static Pane root;
     
     @Override
     public void start(Stage primaryStage) throws Exception { 
         
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Map.fxml"));
         loader.setController(new FXMLController());
-        root = loader.load();
-        Scene scene = new Scene(root, 1200, 700, Color.WHITE);
+        Scene scene = new Scene(loader.load(), 1200, 700, Color.WHITE);
         primaryStage.setScene(scene);
         primaryStage.show();
-        Label time = new Label();
-        root.getChildren().add(time);
-
-        //Components in the map
-        eliminatedCars = new ArrayList<>();
-        shapeDangers = dangers(root);
-        cars = new ArrayList<>();
-
-        for (int i = 0; i < NUMBER_CARS; i++) {
-            Car car = new Car(root);
-            cars.add(car);
-            car.setRotate(180);
-        }
-        
-        //Behaviors at each frame.
-
-        AnimationTimer timer = new AnimationTimer() {
-            
-            private int timeCounter = 0;
-            private long cycles = 0;
-            private static long maxCycles = 1000;
-            
-            @Override
-            public void handle(long now) {
-                timeCounter++;
-
-                time.setText(String.valueOf(timeCounter));
-
-                if (cars.isEmpty() || timeCounter == 10000) {
-                    
-                    mutate();
-
-                    for (int i = 0; i < eliminatedCars.size(); i++) {
-                        for (Sensor sensor : eliminatedCars.get(i).getSensors()) {
-
-                            if(!root.getChildren().contains(sensor))
-                            root.getChildren().add(sensor);
-                        }
-                    }
-                    eliminatedCars.clear();
-                }
-
-                for (int i = 0; i < cars.size(); i++) {
-                    Car car = cars.get(i);
-                    car.think();
-                    car.setFitnessScore(car.getFitnessScore() + 1);
-
-                    //detect collision
-                    for (int j = 0; j < shapeDangers.size(); j++) {
-                        if (Shape.intersect(car, shapeDangers.get(j)).getBoundsInParent().getWidth() != -1) {
-                            cars.remove(car);
-                            eliminatedCars.add(car);
-                            for (int k = 0; k < car.getSensors().length; k++) {
-                                root.getChildren().remove(car.getSensors()[k]);
-                            }
-                        }
-                    }
-                    if (this.cycles++ >= maxCycles && car.getMove() == 0) {
-                        cars.remove(car);
-                        maxCycles++;
-                        car.stop();
-                        for (int k = 0; k < car.getSensors().length; k++) {
-                            root.getChildren().remove(car.getSensors()[k]);
-                        }
-                        eliminatedCars.add(car);
-                    }
-                    car.update(shapeDangers);
-                }
-            }
-        };
-        timer.start();
     }
-
-    //detect all shapes that represent dangers to the car.
-    private static ArrayList<Shape> dangers(Pane root) {
-
-        ArrayList<Shape> dangers = new ArrayList<>();
-        for (int i = 0; i < root.getChildren().size(); i++) {
-            Node node = root.getChildren().get(i);
-            if (!Circle.class.isInstance(node) && !Sensor.class.isInstance(node) && Shape.class.isInstance(node)) {
-                dangers.add((Shape) root.getChildren().get(i));
-            }
-        }
-
-        return dangers;
-    }
-    
-    public static void mutate() {
-        Collections.sort(eliminatedCars);
-        Car mutator = eliminatedCars.get(eliminatedCars.size() - 1);
-        Car secondMutator = eliminatedCars.get(eliminatedCars.size() - 2);
-        eliminatedCars.clear();
         
-        mutator.setCenterX(65);
-        mutator.setCenterY(130);
-        
-        secondMutator.setCenterX(65);
-        secondMutator.setCenterY(130);
-        
-        cars.add(mutator);
-        cars.add(secondMutator);
-        
-        for (int i = 0; i < NUMBER_CARS - 2; i++) {
-            Car car = new Car(root, mutator.getBrain(), secondMutator.getBrain());
-            cars.add(car);
-            car.setRotate(180);
-        }
-        
-    }
-
     public static void main(String[] args) {
         launch(args);
     }

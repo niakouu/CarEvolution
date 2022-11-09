@@ -12,7 +12,7 @@ import edu.vanier.objects.Sensor;
  *
  * @author 2145013
  */
-public class NeuralNetwork {
+public class NeuralNetwork implements Cloneable {
 
     private final static double INITIAL_VALUE_TARGETS = 0.1;
 
@@ -30,19 +30,15 @@ public class NeuralNetwork {
         this.learningRate = learningRate;
         generateLinkWeights();
     }
-
-    public NeuralNetwork(NeuralNetwork mutator, NeuralNetwork secondMutator) {
-        this.inputNodes = mutator.inputNodes;
-        this.hiddenNodes = mutator.hiddenNodes;
-        this.outputNodes = mutator.outputNodes;
-        this.learningRate = mutator.learningRate;
-        this.weightsHiddenToOutput = MatrixManipulations.
-                averageMatrixElementByElement(mutator.weightsHiddenToOutput, secondMutator.weightsHiddenToOutput);
-        this.weightsInputToHidden = MatrixManipulations.
-                averageMatrixElementByElement(mutator.weightsInputToHidden, secondMutator.weightsInputToHidden);
+    
+    public NeuralNetwork clone() {
+        NeuralNetwork clone = new NeuralNetwork(inputNodes, hiddenNodes, outputNodes, learningRate);
+        
+        clone.weightsInputToHidden = this.weightsInputToHidden.clone();
+        clone.weightsHiddenToOutput = this.weightsHiddenToOutput.clone();
+        
+        return clone;
     }
-    
-    
 
     public Matrix getWeightsInputToHidden() {
         return this.weightsInputToHidden;
@@ -67,19 +63,19 @@ public class NeuralNetwork {
         Matrix output = getFinalOutput(inputs);
         
         double[] outputs = new double[output.getData()[0].length];
-        System.out.print("[");
+        //System.out.print("[");
         for (int i = 0; i < outputs.length; i++) {
             outputs[i] = output.getData()[0][i];
-            System.out.print("[" + outputs[i] + "] , ");
-        }
+          //  System.out.print("[" + outputs[i] + "] , ");
+        }/*
         System.out.println("]");
-        System.out.println(this);
+        System.out.println(this);*/
         return outputs;
     }
     
     public void mutate() {
         this.weightsHiddenToOutput = MatrixManipulations
-                .mutate(this.weightsInputToHidden, this.learningRate);
+                .mutate(this.weightsHiddenToOutput, this.learningRate);
         this.weightsInputToHidden = MatrixManipulations
                 .mutate(this.weightsInputToHidden, this.learningRate);
     }

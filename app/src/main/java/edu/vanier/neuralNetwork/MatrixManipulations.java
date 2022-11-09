@@ -82,17 +82,13 @@ public class MatrixManipulations {
     }
     
     public static Matrix mutate(Matrix matrix, double rate){
-        double[][] result = new double[matrix.getNumberOfRows()][matrix.getNumberOfColumns()];
-        for (int i = 0; i < result.length; i++) {
-          for (int j = 0; j < result[i].length; j++) {
-                if (Math.random() < rate) {
-                    result[i][j] = Math.random() * 2 - 1;
-                } else {
-                    result[i][j] = matrix.getData()[i][j];
-                }
-            }
-        }
-        return new Matrix(result);
+        Matrix result = matrix.clone();
+        for (int i = 0; i < result.getNumberOfRows(); i++)
+            for (int j = 0; j < result.getNumberOfColumns(); j++)
+                if (Math.random() < rate)
+                    result.set(i, j, Math.random() * 2 - 1);
+
+        return result;
     }
     
     public static Matrix sigmoid(Matrix matrix) {

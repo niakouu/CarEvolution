@@ -16,33 +16,10 @@ import javafx.scene.shape.Line;
 public class Sensor extends Line {
 
     private double length = 1000;
-    private DoubleProperty projectedLength = new SimpleDoubleProperty();
+    private final DoubleProperty projectedLength = new SimpleDoubleProperty();
 
     public Sensor(int order, Car car) {
 
-        /*
-        if (order == 0) {
-            this.setStroke(Color.RED);
-        }
-        if (order == 1) {
-            this.setStroke(Color.ORANGE);
-        }
-        if (order == 2) {
-            this.setStroke(Color.YELLOW);
-        }
-        if (order == 3) {
-            this.setStroke(Color.GREEN);
-        }
-        if (order == 4) {
-            this.setStroke(Color.BLUE);
-        }
-        if (order == 5) {
-            this.setStroke(Color.PURPLE);
-        }
-        if (order == 6) {
-            this.setStroke(Color.PINK);
-        }
-         */
         this.startXProperty().bind(car.centerXProperty());
         this.startYProperty().bind(car.centerYProperty());
 

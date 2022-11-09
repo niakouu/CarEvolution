@@ -21,8 +21,8 @@ public class Car extends Circle implements Comparable<Car> {
     private final static double MAX_VELOCITY = 1;
     private final static double MAX_ANGULAR_VELOCITY = 3;
     private final static int OUTPUT_NODES_NUMBER = 3;
-    private final static int HIDDEN_NODES_NUMBER = 6;
-    private final static int SENSORS_NUMBER = 10;
+    private final static int HIDDEN_NODES_NUMBER = 5;
+    private final static int SENSORS_NUMBER = 12;
     private final static float LEARNING_RATE = 0.5f;
     
     private double velocity;
@@ -205,5 +205,7 @@ public class Car extends Circle implements Comparable<Car> {
     public int getMove() {
         return this.moveStraightCounter;
     }
+    
+    
     
 }

@@ -9,13 +9,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.beans.binding.Bindings;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Shape;
@@ -45,25 +43,12 @@ public class App extends Application {
         eliminatedCars = new ArrayList<>();
         shapeDangers = dangers(root);
         cars = new ArrayList<>();
-        
-        // HashMap <Double, Car> findMaxX = new HashMap<>();
 
         for (int i = 0; i < NUMBER_CARS; i++) {
             Car car = new Car(root);
             cars.add(car);
             car.setRotate(180);
         }
-
-        
-        //Display Sensors length
-        VBox sensors = new VBox();
-        for (Sensor sensor1 : cars.get(0).getSensors()) {
-            Label label = new Label();
-            Sensor sensor = sensor1;
-            label.textProperty().bind(Bindings.createStringBinding(() -> String.valueOf(sensor.getProjectedLength().get()), sensor1.getProjectedLength()));
-            sensors.getChildren().add(label);
-        }
-        root.getChildren().add(sensors);
         
         //Behaviors at each frame.
 
@@ -143,6 +128,12 @@ public class App extends Application {
         Car mutator = eliminatedCars.get(eliminatedCars.size() - 1);
         Car secondMutator = eliminatedCars.get(eliminatedCars.size() - 2);
         eliminatedCars.clear();
+        
+        mutator.setCenterX(65);
+        mutator.setCenterY(130);
+        
+        secondMutator.setCenterX(65);
+        secondMutator.setCenterY(130);
         
         cars.add(mutator);
         cars.add(secondMutator);

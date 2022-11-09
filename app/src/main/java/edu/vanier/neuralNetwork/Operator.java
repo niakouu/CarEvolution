@@ -28,6 +28,13 @@ public enum Operator {
         public double apply(double x1, double x2) {
             return x1 * x2;
         }
+    },
+    DIVISION("/"){
+        @Override
+        public double apply(double x1, double x2) {
+            return x1 / x2;
+        }
+        
     };
     
     private final String text;

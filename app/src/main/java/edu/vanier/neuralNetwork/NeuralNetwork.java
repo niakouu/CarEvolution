@@ -6,16 +6,14 @@ package edu.vanier.neuralNetwork;
 
 import java.util.Arrays;
 import java.util.Random;
-import edu.vanier.car.Sensor;
+import edu.vanier.objects.Sensor;
 
 /**
  *
  * @author 2145013
  */
-public class NeuralNetwork {
+public class NeuralNetwork implements Cloneable {
 
-    private final static int DEFAULT_NODES = 3;
-    private final static float DEFAULT_LEARNING_RATE = 0.3f;
     private final static double INITIAL_VALUE_TARGETS = 0.1;
 
     private final int inputNodes;
@@ -31,6 +29,15 @@ public class NeuralNetwork {
         this.outputNodes = outputNodes;
         this.learningRate = learningRate;
         generateLinkWeights();
+    }
+    
+    public NeuralNetwork clone() {
+        NeuralNetwork clone = new NeuralNetwork(inputNodes, hiddenNodes, outputNodes, learningRate);
+        
+        clone.weightsInputToHidden = this.weightsInputToHidden.clone();
+        clone.weightsHiddenToOutput = this.weightsHiddenToOutput.clone();
+        
+        return clone;
     }
 
     public Matrix getWeightsInputToHidden() {
@@ -50,24 +57,27 @@ public class NeuralNetwork {
     public double[] query(Sensor[] data) {
         double[] sensorsData = new double[data.length];
         for (int i = 0; i < data.length; i++) {
-            sensorsData[i] = data[i].getLength();
+            sensorsData[i] = data[i].getProjectedLength().get();
         }
         Matrix inputs = getReformedInput(sensorsData);
         Matrix output = getFinalOutput(inputs);
         
-        for(double[] out : output.getData()) {
-            for(double o : out){
-                System.out.println(o);
-            }
-        }
         double[] outputs = new double[output.getData()[0].length];
-        System.out.print("[");
+        //System.out.print("[");
         for (int i = 0; i < outputs.length; i++) {
             outputs[i] = output.getData()[0][i];
-            System.out.print("[" + outputs[i] + "] , ");
-        }
+          //  System.out.print("[" + outputs[i] + "] , ");
+        }/*
         System.out.println("]");
+        System.out.println(this);*/
         return outputs;
+    }
+    
+    public void mutate() {
+        this.weightsHiddenToOutput = MatrixManipulations
+                .mutate(this.weightsHiddenToOutput, this.learningRate);
+        this.weightsInputToHidden = MatrixManipulations
+                .mutate(this.weightsInputToHidden, this.learningRate);
     }
 
     private Matrix getReformedInput(double[] input) {

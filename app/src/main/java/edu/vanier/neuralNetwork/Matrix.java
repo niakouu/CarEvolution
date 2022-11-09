@@ -8,7 +8,7 @@ package edu.vanier.neuralNetwork;
  *
  * @author 2145013
  */
-public class Matrix {
+public class Matrix implements Cloneable {
 
     private final int numberOfColumns;
     private final int numberOfRows;
@@ -20,6 +20,16 @@ public class Matrix {
         this.numberOfRows = inputs.length;
         this.data = inputs;
         this.firstRow = inputs[0];
+    }
+    
+    public Matrix clone() {
+        double[][] cloned = new double[numberOfRows][numberOfColumns];
+        
+        for (int i = 0; i < this.numberOfRows; ++i)
+            for (int j = 0; j < this.numberOfColumns; ++j)
+                cloned[i][j] = this.data[i][j];
+        
+        return new Matrix(cloned);
     }
 
     public int getNumberOfColumns() {
@@ -66,5 +76,13 @@ public class Matrix {
             }
         }
         return position;
+    }
+    
+    public void set(int row, int column, double newValue) {
+        this.data[row][column] = newValue;
+    }
+
+    public double get(int row, int column) {
+        return this.data[row][column];
     }
 }

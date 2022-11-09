@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package edu.vanier.car;
+package edu.vanier.objects;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
@@ -15,37 +15,11 @@ import javafx.scene.shape.Line;
  */
 public class Sensor extends Line {
 
-    private double length;
-    private final DoubleProperty projectedLength;
+    private double length = 1000;
+    private final DoubleProperty projectedLength = new SimpleDoubleProperty();
 
     public Sensor(int order, Car car) {
 
-        /*
-        if (order == 0) {
-            this.setStroke(Color.RED);
-        }
-        if (order == 1) {
-            this.setStroke(Color.ORANGE);
-        }
-        if (order == 2) {
-            this.setStroke(Color.YELLOW);
-        }
-        if (order == 3) {
-            this.setStroke(Color.GREEN);
-        }
-        if (order == 4) {
-            this.setStroke(Color.BLUE);
-        }
-        if (order == 5) {
-            this.setStroke(Color.PURPLE);
-        }
-        if (order == 6) {
-            this.setStroke(Color.PINK);
-        }
-         */
-        this.length = 130;
-        this.projectedLength = new SimpleDoubleProperty();
-        
         this.startXProperty().bind(car.centerXProperty());
         this.startYProperty().bind(car.centerYProperty());
 
@@ -57,6 +31,7 @@ public class Sensor extends Line {
                 -> car.centerYProperty().get() - this.length * Math.sin(
                 Math.toRadians((-90 + 30 * order) + car.rotateProperty().get())),
                 car.centerYProperty(), car.rotateProperty()));
+
     }
 
     public double getLength() {

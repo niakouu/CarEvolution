@@ -3,173 +3,24 @@
  */
 package edu.vanier.main;
 
-import edu.vanier.car.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.beans.binding.Bindings;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.*;
-import javafx.scene.control.Label;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.Scene;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 
 public class App extends Application {
-
+    
     @Override
-    public void start(Stage primaryStage) throws Exception {
-
+    public void start(Stage primaryStage) throws Exception { 
+        
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Map.fxml"));
         loader.setController(new FXMLController());
-        Pane root = loader.load();
-        Scene scene = new Scene(root, 1200, 800, Color.WHITE);
+        Scene scene = new Scene(loader.load(), 1200, 700, Color.WHITE);
         primaryStage.setScene(scene);
-        primaryStage.setFullScreen(true);
         primaryStage.show();
+    }
         
-
-        //components in the map
-        ArrayList<Shape> shapeDangers = dangers(root);
-        ArrayList<Car> cars = new ArrayList<>();
-        HashMap<Car, Double> findBestCar = new HashMap<>();
-        // HashMap <Double, Car> findMaxX = new HashMap<>(); 
-
-        for (int i = 0; i < 5; i++) {
-
-            Car car = new Car(root);
-            cars.add(car);
-            car.setRotate(60 * i);
-        }
-
-        //Display Sensors length
-        VBox sensors = new VBox();
-        for (int i = 0; i < cars.get(0).getSensors().length; i++) {
-            Label label = new Label();
-            Sensor sensor = cars.get(0).getSensors()[i];
-            label.textProperty().bind(Bindings.createStringBinding(() -> String.valueOf(sensor.getProjectedLength()), cars.get(0).getSensors()[i].getProjectedLength()));
-            sensors.getChildren().add(label);
-        }
-        root.getChildren().add(sensors);
-
-        //Behaviors at each frame.
-        AnimationTimer timer = new AnimationTimer() {
-            /*entry.getKey().setTimeElapsed(timer)
-             long start = System.nanoTime();
-             // some time passes
-             long end = System.nanoTime();
-             long elapsedTime = end - start; 
-             each car must have their own timer to calculate the elapsed time... might be memory consuming 
-           
-             */
-
-            private long cycles = 0;
-            private static long maxCycles = 100;
-            
-            @Override
-            public void handle(long now) {
-                if (this.cycles++ >= maxCycles) {
-                    maxCycles++;
-                    this.stop();
-                }
-                
-                for (int i = 0; i < cars.size(); i++) {
-                    Car car = cars.get(i);
-                    randomMove(car);
-
-                    //detect collision
-                    for (int j = 0; j < shapeDangers.size(); j++) {
-                        if (Shape.intersect(car, shapeDangers.get(j)).getBoundsInParent().getWidth() != -1) {
-                            cars.remove(car);
-
-                            findBestCar.put(car, shapeDangers.get(j).getLayoutX());
-                            double maxValueInMap = (Collections.max(findBestCar.values()));
-                            for (HashMap.Entry<Car, Double> entry : findBestCar.entrySet()) {
-                                entry.getKey().setFitnessScore((double) entry.getKey().getVelocity() * entry.getKey().getTimeElapsed());
-                            }
-                            for (HashMap.Entry<Car, Double> currentEntry : findBestCar.entrySet()) {
-
-                                if (currentEntry.getValue() == maxValueInMap) {
-                                    currentEntry.getKey().setFitnessScore(maxValueInMap);
-                                    // return currentEntry.getKey(); --> should be added to another function 
-                                }
-
-                            }
-
-                            for (int k = 0; k < car.getSensors().length; k++) {
-                                root.getChildren().remove(car.getSensors()[k]);
-                            }
-                        }
-                    }
-                    detectSensorsIntersection(car, shapeDangers);
-                }
-            }
-        };
-        timer.start();
-
-    }
-
-    //detect all shapes that represent dangers to the car.
-    private static ArrayList<Shape> dangers(Pane root) {
-
-        ArrayList<Shape> dangers = new ArrayList<>();
-        for (int i = 0; i < root.getChildren().size(); i++) {
-            Node node = root.getChildren().get(i);
-            if (!Circle.class.isInstance(node) && !Sensor.class.isInstance(node)) {
-                dangers.add((Shape) root.getChildren().get(i));
-            }
-        }
-
-        return dangers;
-    }
-
-    private static void detectSensorsIntersection(Car car1, ArrayList<Shape> dangers) {
-
-        for (int i = 0; i < car1.getSensors().length; i++) {
-            Sensor cSensor = car1.getSensors()[i];
-            boolean touched = false;
-            ArrayList<Double> intersections = new ArrayList<>();
-            for (int j = 0; j < dangers.size(); j++) {
-                Shape shape = Shape.intersect(cSensor, dangers.get(j));
-                if (shape.getBoundsInParent().getWidth() != -1) {
-                    double projected = Math.sqrt(Math.pow((shape.getBoundsInParent().getCenterX() - car1.getCenterX()), 2) + Math.pow((shape.getBoundsInParent().getCenterY() - car1.getCenterY()), 2)) - car1.getRadius();
-                    if (projected >= 0) {
-                        cSensor.setStroke(Color.RED);
-                        touched = true;
-                        intersections.add(projected);
-                    }
-                }
-            }
-            if (touched) {
-                Collections.sort(intersections);
-                cSensor.getProjectedLength().setValue(intersections.get(0));
-            }
-            if (!touched) {
-                cSensor.setStroke(Color.GREEN);
-                cSensor.getProjectedLength().setValue(cSensor.getLength() - car1.getRadius());
-
-            }
-        }
-    }
-
-    public void randomMove(Car car) {
-        double[] outputs = car.think();
-        if (outputs[0] > outputs[1] && outputs[0] > outputs[2]) {
-            car.rotateLeft();
-        }
-        else if (outputs[1] > outputs[0] && outputs[1] > outputs[2]){
-            car.move();
-        } else {
-            car.rotateRight();
-        }
-        car.move();
-    }
-
     public static void main(String[] args) {
         launch(args);
     }

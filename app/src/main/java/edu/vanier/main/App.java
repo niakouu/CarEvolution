@@ -11,9 +11,11 @@ import java.util.HashMap;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.beans.binding.Bindings;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -23,16 +25,17 @@ import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 
 public class App extends Application {
-    
+
     private final static int NUMBER_CARS = 10;
     private static ArrayList<Car> eliminatedCars;
     private static ArrayList<Car> cars;
     private static ArrayList<Shape> shapeDangers;
     private static Pane root;
-    
+    public static AnimationTimer timer;
+
     @Override
-    public void start(Stage primaryStage) throws Exception { 
-        
+    public void start(Stage primaryStage) throws Exception {
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Map.fxml"));
         loader.setController(new FXMLController());
         root = loader.load();
@@ -47,18 +50,17 @@ public class App extends Application {
         shapeDangers = dangers(root);
         cars = new ArrayList<>();
         
+
         // Edelina a voir
         HashMap<Car, Double> findBestCar = new HashMap<>();
-        
-        // HashMap <Double, Car> findMaxX = new HashMap<>();
 
+        // HashMap <Double, Car> findMaxX = new HashMap<>();
         for (int i = 0; i < NUMBER_CARS; i++) {
             Car car = new Car(root);
             cars.add(car);
             car.setRotate(180);
         }
 
-        
         //Display Sensors length
         VBox sensors = new VBox();
         for (int i = 0; i < cars.get(0).getSensors().length; i++) {
@@ -68,9 +70,9 @@ public class App extends Application {
             sensors.getChildren().add(label);
         }
         root.getChildren().add(sensors);
-        
+
         //Behaviors at each frame.
-        AnimationTimer timer = new AnimationTimer() {
+        timer = new AnimationTimer() {
             /*entry.getKey().setTimeElapsed(timer)
              long start = System.nanoTime();
              // some time passes
@@ -79,6 +81,7 @@ public class App extends Application {
              each car must have their own timer to calculate the elapsed time... might be memory consuming 
            
              */
+
             private int timeCounter = 0;
             private long cycles = 0;
             private static long maxCycles = 1000;
@@ -90,17 +93,20 @@ public class App extends Application {
                 time.setText(String.valueOf(timeCounter));
 
                 if (cars.isEmpty() || timeCounter == 10000) {
-                    
+
                     mutate();
 
                     for (int i = 0; i < eliminatedCars.size(); i++) {
                         for (Sensor sensor : eliminatedCars.get(i).getSensors()) {
 
-                            if(!root.getChildren().contains(sensor))
-                            root.getChildren().add(sensor);
+                            if (!root.getChildren().contains(sensor)) {
+                                root.getChildren().add(sensor);
+                            }
                         }
                     }
                     eliminatedCars.clear();
+                
+                    
                 }
 
                 for (int i = 0; i < cars.size(); i++) {
@@ -114,7 +120,7 @@ public class App extends Application {
                             cars.remove(car);
                             findBestCar.put(car, shapeDangers.get(j).getLayoutX());
                             double maxValueInMap = (Collections.max(findBestCar.values()));
-                            
+
                             for (HashMap.Entry<Car, Double> entry : findBestCar.entrySet()) {
                                 entry.getKey().setFitnessScore(entry.getKey().getVelocity() * entry.getKey().getTimeElapsed());
                                 if (entry.getValue() == maxValueInMap) {
@@ -122,7 +128,7 @@ public class App extends Application {
                                     // return currentEntry.getKey(); --> should be added to another function 
                                 }
                             }
-                            
+
                             eliminatedCars.add(car);
                             for (int k = 0; k < car.getSensors().length; k++) {
                                 root.getChildren().remove(car.getSensors()[k]);
@@ -143,8 +149,10 @@ public class App extends Application {
             }
         };
         timer.start();
+        
     }
 
+    
     //detect all shapes that represent dangers to the car.
     private static ArrayList<Shape> dangers(Pane root) {
 
@@ -158,22 +166,22 @@ public class App extends Application {
 
         return dangers;
     }
-    
+
     public static void mutate() {
         Collections.sort(eliminatedCars);
         Car mutator = eliminatedCars.get(eliminatedCars.size() - 1);
         Car secondMutator = eliminatedCars.get(eliminatedCars.size() - 2);
         eliminatedCars.clear();
-        
+
         cars.add(mutator);
         cars.add(secondMutator);
-        
+
         for (int i = 0; i < NUMBER_CARS - 2; i++) {
             Car car = new Car(root, mutator.getBrain(), secondMutator.getBrain());
             cars.add(car);
             car.setRotate(180);
         }
-        
+
     }
 
     public static void main(String[] args) {

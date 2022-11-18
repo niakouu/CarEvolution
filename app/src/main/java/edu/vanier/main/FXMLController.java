@@ -5,18 +5,30 @@
 package edu.vanier.main;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 
 /**
  *
  * @author enyihou
  */
 public class FXMLController {
-    
+
     @FXML
-    void initialize(){
+    void initialize() {
+        
+        btnPause.setOnAction((e) -> {
+            App.timer.stop();
+
+        });
+        btnPlay.setOnAction((e) -> {
+            App.timer.start();
+        });
         
     }
     
-    
-    
+    @FXML
+    Button btnPause;
+    @FXML
+    Button btnPlay;
+
 }

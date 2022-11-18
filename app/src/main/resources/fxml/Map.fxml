@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Line?>
-
 
 <Pane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="785.0" prefWidth="1167.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
    <children>
@@ -35,5 +35,7 @@
       <Line endX="-140.0" endY="313.0" layoutX="1043.0" layoutY="295.0" startX="-69.29290771484375" startY="224.70709228515625" />
       <Line endX="-150.70709228515625" endY="303.70709228515625" layoutX="1053.0" layoutY="305.0" startX="-387.0" startY="334.0" />
       <Line endX="-52.7071533203125" endY="421.70709228515625" layoutX="1063.0" layoutY="315.0" startX="-390.0" startY="436.0" />
+      <Button fx:id="btnPause" layoutX="403.0" layoutY="94.0" mnemonicParsing="false" text="Pause" />
+      <Button fx:id="btnPlay" layoutX="463.0" layoutY="94.0" mnemonicParsing="false" text="Play" />
    </children>
 </Pane>

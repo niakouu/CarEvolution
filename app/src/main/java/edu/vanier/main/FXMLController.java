@@ -91,4 +91,5 @@ public class FXMLController {
         this.btnResetFitnessScore.setDisable(true);
         this.btnSetFitnessScore.setDisable(true);
     }
+    
 }

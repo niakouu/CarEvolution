@@ -104,6 +104,15 @@ public class CarAnimations extends AnimationTimer{
         }
     }
     
+    public void killAll() {
+        this.cars.forEach((car) -> {
+            root.getChildren().removeAll(car.getSensors());
+            root.getChildren().remove(car);
+        });
+        
+        this.cars.clear();
+    }
+    
     private void mutate() {
         this.eliminatedCars.addAll(this.cars);
         this.cars.clear();

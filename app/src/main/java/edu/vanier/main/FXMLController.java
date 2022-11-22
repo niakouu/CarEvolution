@@ -5,32 +5,15 @@
 package edu.vanier.main;
 
 import edu.vanier.animations.CarAnimations;
-import edu.vanier.neuralNetwork.NeuralNetwork;
-import edu.vanier.objects.Car;
-import edu.vanier.objects.Point;
-import edu.vanier.objects.Sensor;
-import java.util.ArrayList;
-import java.util.Collections;
 import javafx.fxml.FXML;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Shape;
 
 /**
  *
  * @author enyihou
  */
 public class FXMLController {
-    private final static int NUMBER_CARS = 20;
-    private ArrayList<Car> eliminatedCars;
-    private ArrayList<Car> cars;
-    private ArrayList<Shape> shapeDangers;
-    private ArrayList<Point> fitnessScore;
-    private boolean fitnessSet = false;
-    private Label time;
     
     private CarAnimations timer;
     
@@ -58,84 +41,54 @@ public class FXMLController {
         
         this.btnStart.setDisable(true);
         this.btnKillCars.setDisable(true);
+        this.btnPause.setDisable(true);
+        this.btnResetFitnessScore.setDisable(true);
     }
-
-    //detect all shapes that represent dangers to the car.
-    private ArrayList<Shape> dangers(Pane root) {
-
-        ArrayList<Shape> dangers = new ArrayList<>();
-        for (int i = 0; i < root.getChildren().size(); i++) {
-            Node node = root.getChildren().get(i);
-            if (!Circle.class.isInstance(node) && !Sensor.class.isInstance(node) && Shape.class.isInstance(node)) {
-                dangers.add((Shape) root.getChildren().get(i));
-            }
-        }
-
-        return dangers;
-    }
-    
     
     @FXML
     private void killCars() {
-        this.cars.forEach((car) -> {
-            root.getChildren().removeAll(car.getSensors());
-            root.getChildren().remove(car);
-        });
-        
-        this.cars.clear();
+        this.timer.killAll();
     }
     
     @FXML
     private void setFitnessScore() {
         this.root.onMouseClickedProperty();
+        
+        this.btnPause.setDisable(true);
         this.btnStart.setDisable(false);
-        this.btnKillCars.setDisable(false);
+        this.btnKillCars.setDisable(true);
+        this.btnResetFitnessScore.setDisable(false);
+        this.btnSetFitnessScore.setDisable(true);
     }
     
     @FXML
     private void pauseCars(){
         this.timer.stop();
+        this.btnPause.setDisable(true);
+        this.btnStart.setDisable(false);
+        this.btnKillCars.setDisable(true);
+        this.btnResetFitnessScore.setDisable(false);
+        this.btnSetFitnessScore.setDisable(true);
     }
     @FXML
     private void resetFitnessScore() {
+        this.btnKillCars.setDisable(true);
         
+        this.btnPause.setDisable(true);
+        this.btnStart.setDisable(true);
+        this.btnKillCars.setDisable(true);
+        this.btnResetFitnessScore.setDisable(true);
+        this.btnSetFitnessScore.setDisable(false);
     }   
     
     @FXML
     private void startCars() {
         this.timer.start();
-    }
-    
-    private void mutate() {
-        eliminatedCars.addAll(cars);
-        cars.clear();
         
-        Collections.sort(eliminatedCars);
-        Car mutator = eliminatedCars.get(eliminatedCars.size() - 1);
-        Car secondMutator = eliminatedCars.get(eliminatedCars.size() - 2);
-        eliminatedCars.clear();
-        
-        mutator.setCenterX(65);
-        mutator.setCenterY(130);
-        
-        secondMutator.setCenterX(65);
-        secondMutator.setCenterY(130);
-        
-        cars.add(new Car(root, mutator.getBrain()));
-        cars.add(new Car(root, secondMutator.getBrain()));
-        
-        for (int i = 0; i < NUMBER_CARS - 2; i++) {
-            NeuralNetwork brain = (i % 2 == 0 ?
-                mutator.getBrain() :
-                secondMutator.getBrain()
-            ).clone();
-            
-            brain.mutate();
-            
-            Car car = new Car(root, brain);
-            cars.add(car);
-        }
-        
-        cars.forEach((t) -> t.setRotate(180));
+        this.btnPause.setDisable(false);
+        this.btnStart.setDisable(true);
+        this.btnKillCars.setDisable(false);
+        this.btnResetFitnessScore.setDisable(true);
+        this.btnSetFitnessScore.setDisable(true);
     }
 }

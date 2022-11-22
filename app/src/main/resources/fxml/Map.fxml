@@ -45,6 +45,7 @@
                 <Button fx:id="btnResetFitnessScore" mnemonicParsing="false" onAction="#resetFitnessScore" prefHeight="13.0" prefWidth="297.0" text="Reset Fitness Score" />
                   <Button fx:id="btnKillCars" mnemonicParsing="false" onAction="#killCars" text="Kill Cars" />
                   <Button fx:id="btnStart" minWidth="0.0" mnemonicParsing="false" onAction="#startCars" prefHeight="16.0" text="Start" />
+                  <Button fx:id="btnPause" mnemonicParsing="false" onAction="#pauseCars" text="Pause" />
               </buttons>
             </ButtonBar>
          </children>

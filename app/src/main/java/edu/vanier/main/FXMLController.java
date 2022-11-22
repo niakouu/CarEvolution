@@ -4,13 +4,13 @@
  */
 package edu.vanier.main;
 
+import edu.vanier.animations.CarAnimations;
 import edu.vanier.neuralNetwork.NeuralNetwork;
 import edu.vanier.objects.Car;
 import edu.vanier.objects.Point;
 import edu.vanier.objects.Sensor;
 import java.util.ArrayList;
 import java.util.Collections;
-import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -32,6 +32,8 @@ public class FXMLController {
     private boolean fitnessSet = false;
     private Label time;
     
+    private CarAnimations timer;
+    
     @FXML
     private Pane root;
     
@@ -49,85 +51,10 @@ public class FXMLController {
     
     @FXML
     void initialize(){
+        this.timer = new CarAnimations(root);
+        
         this.btnStart.setDisable(true);
         this.btnKillCars.setDisable(true);
-        
-        this.time = new Label();
-        this.root.getChildren().add(time);
-        
-        //Components in the map
-        this.eliminatedCars = new ArrayList<>();
-        this.shapeDangers = dangers(root);
-        this.cars = new ArrayList<>();
-
-        for (int i = 0; i < NUMBER_CARS; i++) {
-            Car car = new Car(root);
-            cars.add(car);
-        }
-        
-        cars.forEach((t) -> t.setRotate(180));
-        
-        if (!this.btnStart.isDisable()) {
-            AnimationTimer timer = new AnimationTimer() {
-            
-                private int timeCounter = 0;
-                private long cycles = 0;
-                private static long maxCycles = 1000;
-
-
-                @Override
-                public void handle(long now) {
-                    timeCounter++;
-
-                    time.setText(String.valueOf(timeCounter));
-
-                    if (cars.isEmpty() || timeCounter == 10000) {
-
-                        mutate();
-
-                        for (int i = 0; i < eliminatedCars.size(); i++) {
-                            for (Sensor sensor : eliminatedCars.get(i).getSensors()) {
-
-                                if(!root.getChildren().contains(sensor))
-                                root.getChildren().add(sensor);
-                            }
-                        }
-                        eliminatedCars.clear();
-                    }
-
-                    for (int i = 0; i < cars.size(); i++) {
-                        Car car = cars.get(i);
-                        car.think();
-                        car.setFitnessScore(car.getFitnessScore() + 1);
-
-                        //detect collision
-                        for (int j = 0; j < shapeDangers.size(); j++) {
-                            if (Shape.intersect(car, shapeDangers.get(j)).getBoundsInParent().getWidth() != -1) {
-                                cars.remove(car);
-                                eliminatedCars.add(car);
-                                for (int k = 0; k < car.getSensors().length; k++) {
-                                    root.getChildren().remove(car.getSensors()[k]);
-                                }
-                                root.getChildren().remove(car);
-                            }
-                        }
-                        if (this.cycles++ >= maxCycles && car.getMove() == 0) {
-                            cars.remove(car);
-                            maxCycles++;
-                            car.stop();
-                            for (int k = 0; k < car.getSensors().length; k++) {
-                                root.getChildren().remove(car.getSensors()[k]);
-                            }
-                            root.getChildren().remove(car);
-                            eliminatedCars.add(car);
-                        }
-                        car.update(shapeDangers);
-                    }
-                }
-            };
-            timer.start();
-        }
-        
     }
 
     //detect all shapes that represent dangers to the car.
@@ -158,6 +85,8 @@ public class FXMLController {
     @FXML
     private void setFitnessScore() {
         this.root.onMouseClickedProperty();
+        this.btnStart.setDisable(false);
+        this.btnKillCars.setDisable(false);
     }
     
     @FXML
@@ -167,7 +96,7 @@ public class FXMLController {
     
     @FXML
     private void startCars() {
-        
+        this.timer.start();
     }
     
     private void mutate() {

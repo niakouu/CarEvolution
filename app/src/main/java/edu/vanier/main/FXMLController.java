@@ -13,6 +13,7 @@ import java.util.Collections;
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Circle;
@@ -29,19 +30,35 @@ public class FXMLController {
     private ArrayList<Shape> shapeDangers;
     private ArrayList<Point> fitnessScore;
     private boolean fitnessSet = false;
+    private Label time;
     
     @FXML
     private Pane root;
     
     @FXML
+    private Button btnSetFitnessScore;
+    
+    @FXML
+    private Button btnResetFitnessScore;
+    
+    @FXML
+    private Button btnKillCars;
+    
+    @FXML
+    private Button btnStart;
+    
+    @FXML
     void initialize(){
-        Label time = new Label();
-        root.getChildren().add(time);
-
+        this.btnStart.setDisable(true);
+        this.btnKillCars.setDisable(true);
+        
+        this.time = new Label();
+        this.root.getChildren().add(time);
+        
         //Components in the map
-        eliminatedCars = new ArrayList<>();
-        shapeDangers = dangers(root);
-        cars = new ArrayList<>();
+        this.eliminatedCars = new ArrayList<>();
+        this.shapeDangers = dangers(root);
+        this.cars = new ArrayList<>();
 
         for (int i = 0; i < NUMBER_CARS; i++) {
             Car car = new Car(root);
@@ -50,69 +67,67 @@ public class FXMLController {
         
         cars.forEach((t) -> t.setRotate(180));
         
-        // setting the fitness score
-        
-        
-        
-        //Behaviors at each frame.
-
-        AnimationTimer timer = new AnimationTimer() {
+        if (!this.btnStart.isDisable()) {
+            AnimationTimer timer = new AnimationTimer() {
             
-            private int timeCounter = 0;
-            private long cycles = 0;
-            private static long maxCycles = 1000;
-            
-            @Override
-            public void handle(long now) {
-                timeCounter++;
+                private int timeCounter = 0;
+                private long cycles = 0;
+                private static long maxCycles = 1000;
 
-                time.setText(String.valueOf(timeCounter));
 
-                if (cars.isEmpty() || timeCounter == 10000) {
-                    
-                    mutate();
+                @Override
+                public void handle(long now) {
+                    timeCounter++;
 
-                    for (int i = 0; i < eliminatedCars.size(); i++) {
-                        for (Sensor sensor : eliminatedCars.get(i).getSensors()) {
+                    time.setText(String.valueOf(timeCounter));
 
-                            if(!root.getChildren().contains(sensor))
-                            root.getChildren().add(sensor);
+                    if (cars.isEmpty() || timeCounter == 10000) {
+
+                        mutate();
+
+                        for (int i = 0; i < eliminatedCars.size(); i++) {
+                            for (Sensor sensor : eliminatedCars.get(i).getSensors()) {
+
+                                if(!root.getChildren().contains(sensor))
+                                root.getChildren().add(sensor);
+                            }
                         }
+                        eliminatedCars.clear();
                     }
-                    eliminatedCars.clear();
-                }
 
-                for (int i = 0; i < cars.size(); i++) {
-                    Car car = cars.get(i);
-                    car.think();
-                    car.setFitnessScore(car.getFitnessScore() + 1);
+                    for (int i = 0; i < cars.size(); i++) {
+                        Car car = cars.get(i);
+                        car.think();
+                        car.setFitnessScore(car.getFitnessScore() + 1);
 
-                    //detect collision
-                    for (int j = 0; j < shapeDangers.size(); j++) {
-                        if (Shape.intersect(car, shapeDangers.get(j)).getBoundsInParent().getWidth() != -1) {
+                        //detect collision
+                        for (int j = 0; j < shapeDangers.size(); j++) {
+                            if (Shape.intersect(car, shapeDangers.get(j)).getBoundsInParent().getWidth() != -1) {
+                                cars.remove(car);
+                                eliminatedCars.add(car);
+                                for (int k = 0; k < car.getSensors().length; k++) {
+                                    root.getChildren().remove(car.getSensors()[k]);
+                                }
+                                root.getChildren().remove(car);
+                            }
+                        }
+                        if (this.cycles++ >= maxCycles && car.getMove() == 0) {
                             cars.remove(car);
-                            eliminatedCars.add(car);
+                            maxCycles++;
+                            car.stop();
                             for (int k = 0; k < car.getSensors().length; k++) {
                                 root.getChildren().remove(car.getSensors()[k]);
                             }
                             root.getChildren().remove(car);
+                            eliminatedCars.add(car);
                         }
+                        car.update(shapeDangers);
                     }
-                    if (this.cycles++ >= maxCycles && car.getMove() == 0) {
-                        cars.remove(car);
-                        maxCycles++;
-                        car.stop();
-                        for (int k = 0; k < car.getSensors().length; k++) {
-                            root.getChildren().remove(car.getSensors()[k]);
-                        }
-                        root.getChildren().remove(car);
-                        eliminatedCars.add(car);
-                    }
-                    car.update(shapeDangers);
                 }
-            }
-        };
-        timer.start();
+            };
+            timer.start();
+        }
+        
     }
 
     //detect all shapes that represent dangers to the car.
@@ -142,7 +157,7 @@ public class FXMLController {
     
     @FXML
     private void setFitnessScore() {
-        
+        this.root.onMouseClickedProperty();
     }
     
     @FXML

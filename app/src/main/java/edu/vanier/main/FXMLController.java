@@ -6,6 +6,7 @@ package edu.vanier.main;
 
 import edu.vanier.neuralNetwork.NeuralNetwork;
 import edu.vanier.objects.Car;
+import edu.vanier.objects.Point;
 import edu.vanier.objects.Sensor;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,6 +27,8 @@ public class FXMLController {
     private ArrayList<Car> eliminatedCars;
     private ArrayList<Car> cars;
     private ArrayList<Shape> shapeDangers;
+    private ArrayList<Point> fitnessScore;
+    private boolean fitnessSet = false;
     
     @FXML
     private Pane root;
@@ -46,6 +49,10 @@ public class FXMLController {
         }
         
         cars.forEach((t) -> t.setRotate(180));
+        
+        // setting the fitness score
+        
+        
         
         //Behaviors at each frame.
 
@@ -124,13 +131,28 @@ public class FXMLController {
     
     
     @FXML
-    private void killall() {
+    private void killCars() {
         this.cars.forEach((car) -> {
             root.getChildren().removeAll(car.getSensors());
             root.getChildren().remove(car);
         });
         
         this.cars.clear();
+    }
+    
+    @FXML
+    private void setFitnessScore() {
+        
+    }
+    
+    @FXML
+    private void resetFitnessScore() {
+        
+    }   
+    
+    @FXML
+    private void startCars() {
+        
     }
     
     private void mutate() {

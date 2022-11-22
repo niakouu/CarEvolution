@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Line?>
-
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
    <children>
@@ -39,8 +39,15 @@
             <Line endX="-140.0" endY="313.0" layoutX="1043.0" layoutY="295.0" startX="-69.29290771484375" startY="224.70709228515625" />
             <Line endX="-150.70709228515625" endY="303.70709228515625" layoutX="1053.0" layoutY="305.0" startX="-387.0" startY="334.0" />
             <Line endX="-52.7071533203125" endY="421.70709228515625" layoutX="1063.0" layoutY="315.0" startX="-390.0" startY="436.0" />
+            <ButtonBar layoutX="10.0" layoutY="9.0" prefHeight="12.0" prefWidth="635.0">
+              <buttons>
+                  <Button fx:id="btnSetFitnessScore" mnemonicParsing="false" onAction="#setFitnessScore" text="Set Fitness Score" />
+                <Button fx:id="btnResetFitnessScore" mnemonicParsing="false" onAction="#resetFitnessScore" prefHeight="13.0" prefWidth="297.0" text="Reset Fitness Score" />
+                  <Button fx:id="btnKillCars" mnemonicParsing="false" onAction="#killCars" text="Kill Cars" />
+                  <Button fx:id="btnStart" minWidth="0.0" mnemonicParsing="false" onAction="#startCars" prefHeight="16.0" text="Start" />
+              </buttons>
+            </ButtonBar>
          </children>
       </Pane>
-      <Button mnemonicParsing="false" onAction="#killall" text="Kill All" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0" />
    </children>
 </AnchorPane>

@@ -31,6 +31,7 @@ public class NeuralNetwork implements Cloneable {
         generateLinkWeights();
     }
     
+    @Override
     public NeuralNetwork clone() {
         NeuralNetwork clone = new NeuralNetwork(inputNodes, hiddenNodes, outputNodes, learningRate);
         

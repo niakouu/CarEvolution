@@ -56,7 +56,7 @@ public class FXMLController {
     void initialize(){
         this.timer = new CarAnimations(root);
         
-        this.btnStart.setDisable(true);
+        this.btnStart.setDisable(false);
         this.btnKillCars.setDisable(true);
     }
 
@@ -94,7 +94,7 @@ public class FXMLController {
     
     @FXML
     private void pauseCars(){
-        this.timer.stop();
+      
     }
     @FXML
     private void resetFitnessScore() {

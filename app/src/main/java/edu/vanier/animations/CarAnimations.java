@@ -54,6 +54,7 @@ public class CarAnimations extends AnimationTimer{
         
     }
     
+    @Override
     public void start() {
         this.cars = getNewCars();
         this.timeCounter++;
@@ -82,15 +83,6 @@ public class CarAnimations extends AnimationTimer{
         });
         
         this.cars.clear();
-    }
-    
-    public void setFitnessScores() {
-        this.root.setOnMouseClicked((event) -> {
-            //Point point = new Point(event.getX(), event.getY());
-            //System.out.println("New point created " + point.getLayoutX() + ", " + point.getLayoutY());
-            //this.fitnessScores.add(point);
-            //this.root.getChildren().addAll(point);
-        });
     }
     
     private void mutate() {

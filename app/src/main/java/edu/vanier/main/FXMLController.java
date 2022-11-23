@@ -46,8 +46,6 @@ public class FXMLController {
         this.btnPause.setDisable(true);
         this.btnResetFitnessScore.setDisable(true);
         
-        this.timer.setFitnessScores();
-        
         this.road = new Road();
         road.createRoad(root);
     }

@@ -72,7 +72,7 @@ public class FXMLController {
     }
     @FXML
     private void resetFitnessScore() {
-        this.btnKillCars.setDisable(true);
+        
         
         this.btnPause.setDisable(true);
         this.btnStart.setDisable(true);

@@ -82,6 +82,12 @@ public class CarAnimations extends AnimationTimer{
         this.cars.clear();
     }
     
+    public void setFitnessScores() {
+        this.root.setOnMouseClicked((event) -> {
+            this.fitnessScores.add(new Point(event.getX(), event.getY()));
+        });
+    }
+    
     private void mutate() {
         this.eliminatedCars.addAll(this.cars);
         this.cars.clear();
@@ -162,8 +168,8 @@ public class CarAnimations extends AnimationTimer{
             }
         }
     }
-    
-    public void calculateFitnessScore() {
-        
+
+    public ArrayList<Point> getFitnessScores() {
+        return this.fitnessScores;
     }
 }

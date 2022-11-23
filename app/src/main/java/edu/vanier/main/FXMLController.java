@@ -5,6 +5,7 @@
 package edu.vanier.main;
 
 import edu.vanier.animations.CarAnimations;
+import edu.vanier.objects.Road;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
@@ -16,6 +17,7 @@ import javafx.scene.layout.Pane;
 public class FXMLController {
     
     private CarAnimations timer;
+    private Road road;
     
     @FXML
     private Pane root;
@@ -43,6 +45,11 @@ public class FXMLController {
         this.btnKillCars.setDisable(true);
         this.btnPause.setDisable(true);
         this.btnResetFitnessScore.setDisable(true);
+        
+        this.timer.setFitnessScores();
+        
+        this.road = new Road();
+        road.createRoad(root);
     }
     
     @FXML
@@ -52,7 +59,7 @@ public class FXMLController {
     
     @FXML
     private void setFitnessScore() {
-        this.root.onMouseClickedProperty();
+        
         
         this.btnPause.setDisable(true);
         this.btnStart.setDisable(false);

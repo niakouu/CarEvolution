@@ -4,27 +4,21 @@
  */
 package edu.vanier.objects;
 
-import javafx.scene.shape.Circle;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 /**
  *
  * @author edeli
  */
-public class Point {
-    
-    private final double x;
-    private final double y;
-    private final Circle visualPoint;
+public class Point extends Rectangle {
 
     public Point(double x, double y) {
-        this.x = x;
-        this.y = y;
-        visualPoint = new Circle(x, y, 2d);
+        this.setLayoutX(x);
+        this.setLayoutY(y);
+        this.setFill(Color.CRIMSON);
+        this.setHeight(12d);
+        this.setWidth(12d);
     }
     
-    public void show(boolean isShow) {
-        if(isShow){
-            
-        }
-    }
 }

@@ -6,7 +6,6 @@ package edu.vanier.main;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class App extends Application {
@@ -14,9 +13,10 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception { 
         
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Map.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/self_made_map.fxml"));
         loader.setController(new FXMLController());
-        Scene scene = new Scene(loader.load(), 1200, 700, Color.WHITE);
+        Scene scene = new Scene(loader.load());
+        //Scene scene = new Scene(loader.load(), 1200, 700, Color.WHITE);
         primaryStage.setScene(scene);
         primaryStage.show();
     }

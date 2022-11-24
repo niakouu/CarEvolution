@@ -13,6 +13,12 @@ import javafx.scene.shape.Rectangle;
  */
 public class Point extends Rectangle {
 
+    public Point() {
+        this.setFill(Color.CRIMSON);
+        this.setHeight(12d);
+        this.setWidth(12d);
+    }
+    
     public Point(double x, double y) {
         this.setLayoutX(x);
         this.setLayoutY(y);

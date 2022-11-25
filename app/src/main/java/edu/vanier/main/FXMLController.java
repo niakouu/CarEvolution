@@ -39,10 +39,7 @@ public class FXMLController {
     @FXML
     void initialize(){
         this.timer = new CarAnimations(root);
-<<<<<<< HEAD
-        
-=======
->>>>>>> main
+
         this.btnStart.setDisable(false);
         this.btnKillCars.setDisable(true);
         this.btnPause.setDisable(true);
@@ -67,16 +64,12 @@ public class FXMLController {
     
     @FXML
     private void pauseCars(){
-<<<<<<< HEAD
-      
-=======
         this.timer.stop();
         this.btnPause.setDisable(true);
         this.btnStart.setDisable(false);
         this.btnKillCars.setDisable(true);
         this.btnResetFitnessScore.setDisable(false);
         this.btnSetFitnessScore.setDisable(true);
->>>>>>> main
     }
     @FXML
     private void resetFitnessScore() {

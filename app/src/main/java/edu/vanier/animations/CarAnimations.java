@@ -66,45 +66,11 @@ public class CarAnimations extends AnimationTimer {
 
         for (Car car : cars) {
             car.think();
-<<<<<<< HEAD
-            detectCarCollisionsWithWall(car);
-            car.setFitnessScore(car.getFitnessScore() + 1);
-
-
-            //detect collision
-            for (int j = 0; j < this.shapeDangers.size(); j++) {
-                if (Shape.intersect(car, this.shapeDangers.get(j)).getBoundsInParent().getWidth() != -1) {
-                    this.cars.remove(car);
-                    this.eliminatedCars.add(car);
-                    for (int k = 0; k < car.getSensors().length; k++) {
-                        this.root.getChildren().remove(car.getSensors()[k]);
-                    }
-                    this.root.getChildren().remove(car);
-                }
-            }
-            if (this.cycles++ >= maxCycles && car.getMove() == 0) {
-                this.cars.remove(car);
-                maxCycles++;
-                car.stop();
-                for (int k = 0; k < car.getSensors().length; k++) {
-                    this.root.getChildren().remove(car.getSensors()[k]);
-                }
-                this.root.getChildren().remove(car);
-                this.eliminatedCars.add(car);
-
-
-            car.update(this.shapeDangers);
-            }
-=======
             
             car.setFitnessScore(car.getFitnessScore() + 1);
 
-           
-            
             car.update(this.shapeDangers);
              detectCarCollisionsWithWall(car);
-              
->>>>>>> main
         }
        
 //        for (Car car : cars){
@@ -134,42 +100,6 @@ public class CarAnimations extends AnimationTimer {
         removeDeadCars();
 
     }
-<<<<<<< HEAD
-    
-    
-    private void mutate() {
-        this.eliminatedCars.addAll(this.cars);
-        this.cars.clear();
-        
-        Collections.sort(this.eliminatedCars);
-      
-        Car mutator = this.eliminatedCars.get(this.eliminatedCars.size() - 1);
-        Car secondMutator = this.eliminatedCars.get(this.eliminatedCars.size() - 2);
-        this.eliminatedCars.clear();
-        
-        mutator.setCenterX(65);
-        mutator.setCenterY(130);
-        
-        secondMutator.setCenterX(65);
-        secondMutator.setCenterY(130);
-        
-        this.cars.add(new Car(this.root, mutator.getBrain()));
-        this.cars.add(new Car(this.root, secondMutator.getBrain()));
-        
-        for (int i = 0; i < NUMBER_CARS - 2; i++) {
-            NeuralNetwork brain = (i % 2 == 0 ?
-                mutator.getBrain() :
-                secondMutator.getBrain()
-            ).clone();
-            
-            brain.mutate();
-            
-            Car car = new Car(this.root, brain);
-            this.cars.add(car);
-        }
-        
-        this.cars.forEach((t) -> t.setRotate(180));
-=======
 
     public void removeDeadCars() {
         this.cars.removeAll(this.eliminatedCars);
@@ -183,7 +113,6 @@ public class CarAnimations extends AnimationTimer {
         });
 
         this.cars.clear();
->>>>>>> main
     }
 
     public void setFitnessScores() {
@@ -230,34 +159,7 @@ public class CarAnimations extends AnimationTimer {
         }
         return dangers;
     }
-
-    /**
-     * Creating a new ArrayList of cars.
-     *
-     * @return an empty ArrayList of Cars
-     */
-    private ArrayList<Car> getNewCars() {
-        ArrayList<Car> newCars = new ArrayList<>();
-        for (int i = 0; i < NUMBER_CARS; i++) {
-            Car car = new Car(root);
-            newCars.add(car);
-        }
-        newCars.forEach((t) -> t.setRotate(180));
-        return newCars;
-    }
-
-    private void eliminatingCarsSensors() {
-        for (int i = 0; i < this.eliminatedCars.size(); i++) {
-            for (Sensor sensor : this.eliminatedCars.get(i).getSensors()) {
-                if (!this.root.getChildren().contains(sensor)) {
-                    this.root.getChildren().add(sensor);
-                }
-            }
-        }
-    }
     
-<<<<<<< HEAD
-
     /**
      * Creating a new ArrayList of cars.
      * @return an empty ArrayList of Cars
@@ -282,40 +184,25 @@ public class CarAnimations extends AnimationTimer {
     }
     
     private void detectCarCollisionsWithWall(Car car) {
-        for (int j = 0; j < this.shapeDangers.size(); j++) {
-            if (Shape.intersect(car, this.shapeDangers.get(j)).getBoundsInParent().getWidth() != -1) {
-               // this.cars.remove(car);
-=======
-    private void detectCarCollisionsWithWall(Car car) {
         
         for (int j = 0; j < this.shapeDangers.size(); j++) {
             if (Shape.intersect(car, this.shapeDangers.get(j)).getBoundsInParent().getWidth() != -1) {
                //this.cars.remove(car);
                //car.stop();
                //car.setHaveIntersect(true);
->>>>>>> main
                 this.eliminatedCars.add(car);
                 for (Sensor sensor : car.getSensors()) {
                     this.root.getChildren().remove(sensor);
                 }
-<<<<<<< HEAD
-                this.root.getChildren().remove(car);
+               // this.root.getChildren().remove(car);
             
             }
-        }
-    }
-
-  
-=======
-            }
-        
         }
     }
 
     public ArrayList<Point> getFitnessScores() {
         return this.fitnessScores;
     }
->>>>>>> main
 }
 
 

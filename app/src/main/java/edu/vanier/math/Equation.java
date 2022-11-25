@@ -35,4 +35,5 @@ public class Equation {
         double y = getY(x);
         return new Point(x, y);
     }
+    
 }

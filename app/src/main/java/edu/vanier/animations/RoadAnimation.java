@@ -20,6 +20,7 @@ import javafx.scene.shape.Shape;
  */
 public class RoadAnimation extends AnimationTimer {
 
+    private final static double DISTANCE_BETWEEN_FITNESS_SCORES = 10d;
     private final ArrayList<Point> mainFitnessScores;
     private final ArrayList<Point> fitnessScores;
     private final ArrayList<Line> roadLines;
@@ -194,11 +195,24 @@ public class RoadAnimation extends AnimationTimer {
         double endXPoint = end.getLayoutX();
         double endYPoint = end.getLayoutY();
         
-        for (int counter = 0; startXPoint + counter < endXPoint && startYPoint + counter < endYPoint; counter+=1) {
-            Point fitnessScore = new Point(startXPoint + counter, equation.getY(startXPoint + counter));
+        final double hypot = Math.hypot(
+            endXPoint - startXPoint,
+            endYPoint - startYPoint
+        );
+        
+        for (double i = 0; i < hypot; i += DISTANCE_BETWEEN_FITNESS_SCORES) {
+            double angle = Math.atan2(
+                endYPoint - startYPoint,
+                endXPoint - startXPoint
+            );
+            
+            Point fitnessScore = new Point(
+                startXPoint + Math.cos(angle) * i,
+                startYPoint + Math.sin(angle) * i
+            );
+            
             this.fitnessScores.add(fitnessScore);
-            this.root.getChildren().add(fitnessScore);
-        }
+        }    
     }
     
 }

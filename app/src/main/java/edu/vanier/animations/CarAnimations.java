@@ -51,40 +51,26 @@ public class CarAnimations extends AnimationTimer{
 
     @Override
     public void handle(long now) {
-        
-    }
-    
-
-    public void start() {
         this.cars = getNewCars();
         this.timeCounter++;
         this.time.setText(String.valueOf(this.timeCounter));
         
-        
-       
-
         for (Car car : cars) {
             car.think();
-            
             car.setFitnessScore(car.getFitnessScore() + 1);
 
-           
-            
             car.update(this.shapeDangers);
-             detectCarCollisionsWithWall(car);
-             
+             detectCarCollisionsWithWall(car); 
         }
-        for (Car car : cars){
-            if (car.isHaveIntersect() == true) {
-                cars.remove(car); 
-            }
-        }
+//        for (Car car : cars){
+//            if (car.isHaveIntersect() == true) {
+//                this.cars.remove(car); 
+//            }
+//        }
         if (this.cars.isEmpty() || this.timeCounter == 10000) {
             mutate();
             eliminatingCarsSensors();
             this.eliminatedCars.clear();
-            
-            
         }
     }
     
@@ -132,7 +118,7 @@ public class CarAnimations extends AnimationTimer{
     
     //detect all shapes that represent dangers to the car.
     private ArrayList<Shape> dangers() {
-        ArrayList<Shape> dangers = new ArrayList<>();
+       ArrayList<Shape> dangers = new ArrayList<>();
         for (int i = 0; i < this.root.getChildren().size(); i++) {
             Node node = this.root.getChildren().get(i);
             if (!Circle.class.isInstance(node) && !Sensor.class.isInstance(node) && Shape.class.isInstance(node)) {

@@ -16,7 +16,6 @@ public class App extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/self_made_map.fxml"));
         loader.setController(new FXMLController());
         Scene scene = new Scene(loader.load());
-        //Scene scene = new Scene(loader.load(), 1200, 700, Color.WHITE);
         primaryStage.setScene(scene);
         primaryStage.show();
     }

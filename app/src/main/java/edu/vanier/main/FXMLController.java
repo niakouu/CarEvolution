@@ -39,7 +39,6 @@ public class FXMLController {
     
     @FXML
     void initialize(){
-        this.timer = new CarAnimations(root);
         this.road = new RoadAnimation(this.root);
         
         this.btnStart.setDisable(false);
@@ -89,6 +88,7 @@ public class FXMLController {
     
     @FXML
     private void startCars() {
+        this.timer = new CarAnimations(root);
         this.timer.start();
         
         this.btnPause.setDisable(false);

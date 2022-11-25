@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import javafx.animation.AnimationTimer;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
@@ -54,6 +55,12 @@ public class RoadAnimation extends AnimationTimer {
     @Override
     public void start(){
         createRoad();
+    }
+    
+    
+    public void stop() {
+        this.root.setOnMouseClicked(null);
+        this.root.getChildren().add(this.end);
     }
     
     public void reset() {
@@ -114,6 +121,8 @@ public class RoadAnimation extends AnimationTimer {
         Point latest = this.mainFitnessScores.get(this.roadLenght - 1);
         Point newPoint = new Point(event.getX(), event.getY());
         
+        this.end = new Circle(event.getX(), event.getY(), 20d, Color.GREEN);
+        
         double angle = Math.atan2(
             newPoint.getLayoutY() - latest.getLayoutY(),
             newPoint.getLayoutX() - latest.getLayoutX()
@@ -121,8 +130,7 @@ public class RoadAnimation extends AnimationTimer {
         
         System.out.println("Space: New point created " + newPoint.getLayoutX() + ", " + newPoint.getLayoutY());
 
-        Equation fitnessScoreEquation = new Equation(latest, newPoint);
-        addMultipleFitnessScores(fitnessScoreEquation, latest, newPoint);
+        addMultipleFitnessScores(latest, newPoint);
 
         Line line1 = new Line(
             latest.getLayoutX() + this.distanceBetweenLines * Math.cos(angle),
@@ -148,6 +156,7 @@ public class RoadAnimation extends AnimationTimer {
                     latest.getLayoutX() - this.distanceBetweenLines * Math.cos(angle),
                     latest.getLayoutY() - this.distanceBetweenLines * Math.sin(angle));
             
+            //this.startCarsPostion = placeAnotherPoint(angle, latest, latest)
             
             this.roadLines.add(firstLine);
             this.root.getChildren().addAll(firstLine);
@@ -188,7 +197,7 @@ public class RoadAnimation extends AnimationTimer {
         this.root.getChildren().addAll(line1, line2, newPoint);
     }
     
-    private void addMultipleFitnessScores(Equation equation, Point start, Point end) {
+    private void addMultipleFitnessScores(Point start, Point end) {
         
         double startXPoint = start.getLayoutX();
         double startYPoint = start.getLayoutY();
@@ -213,6 +222,30 @@ public class RoadAnimation extends AnimationTimer {
             
             this.fitnessScores.add(fitnessScore);
         }    
+    }
+    
+    public ArrayList<Line> getDangers() {
+        return this.roadLines;
+    }
+    
+    public Point placeAnotherPoint(double hypot, Point start, Point end) {
+        
+        double startXPoint = start.getLayoutX();
+        double startYPoint = start.getLayoutY();
+        double endXPoint = end.getLayoutX();
+        double endYPoint = end.getLayoutY();
+        
+        double angle = Math.atan2(
+            endYPoint - startYPoint,
+            endXPoint - startXPoint
+        );
+
+        Point point = new Point(
+            startXPoint + Math.cos(angle) * 12,
+            startYPoint + Math.sin(angle) * 12
+        );
+        
+        return point;
     }
     
 }

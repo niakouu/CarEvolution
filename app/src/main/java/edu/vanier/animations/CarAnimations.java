@@ -10,10 +10,8 @@ import edu.vanier.objects.Sensor;
 import java.util.ArrayList;
 import java.util.Collections;
 import javafx.animation.AnimationTimer;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
 
@@ -31,7 +29,7 @@ public class CarAnimations extends AnimationTimer {
     private final ArrayList<Line> shapeDangers;
     private final Point position;
     private final ArrayList<Car> allCars;
-    private final ArrayList<Car> cars;
+    private ArrayList<Car> cars;
     private final ArrayList<Point> fitnessScores;
     private final Pane root;
 
@@ -51,13 +49,7 @@ public class CarAnimations extends AnimationTimer {
         this.root.getChildren().add(time);
 
         //Components in the map
-        this.shapeDangers = dangers();
-
-        //Adding the car to the the arrayList
-        this.cars = getNewCars();
-        for (Car car : cars) {
-            allCars.add(car);
-        }
+        this.shapeDangers = dangers;
     }
 
     @Override
@@ -146,18 +138,6 @@ public class CarAnimations extends AnimationTimer {
         }
 
     }
-
-    //detect all shapes that represent dangers to the car.
-//    private ArrayList<Shape> dangers() {
-//       ArrayList<Shape> dangers = new ArrayList<>();
-//        for (int i = 0; i < this.root.getChildren().size(); i++) {
-//            Node node = this.root.getChildren().get(i);
-//            if (!Circle.class.isInstance(node) && !Sensor.class.isInstance(node) && Shape.class.isInstance(node)) {
-//                dangers.add((Shape) this.root.getChildren().get(i));
-//            }
-//        }
-//        return dangers;
-//    }
     
     /**
      * Creating a new ArrayList of cars.
@@ -188,9 +168,7 @@ public class CarAnimations extends AnimationTimer {
         
         for (int j = 0; j < this.shapeDangers.size(); j++) {
             if (Shape.intersect(car, this.shapeDangers.get(j)).getBoundsInParent().getWidth() != -1) {
-               //this.cars.remove(car);
-               //car.stop();
-               //car.setHaveIntersect(true);
+               
                 this.eliminatedCars.add(car);
                 for (Sensor sensor : car.getSensors()) {
                     this.root.getChildren().remove(sensor);

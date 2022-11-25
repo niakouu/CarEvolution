@@ -57,11 +57,20 @@ public class RoadAnimation extends AnimationTimer {
         createRoad();
     }
     
-    
+    @Override
     public void stop() {
-        this.root.setOnMouseClicked(null);
+        super.stop();
+        Point lastPoint = this.mainFitnessScores.get(this.mainFitnessScores.size() - 1);
+        this.end = new Circle(lastPoint.getLayoutX(), lastPoint.getLayoutY(), DISTANCE_BETWEEN_FITNESS_SCORES * 2, Color.GREEN);
+        this.startCarsPostion = this.fitnessScores.get(0);
         this.root.getChildren().add(this.end);
     }
+    
+    
+//    public void stop() {
+//        this.root.setOnMouseClicked(null);
+//        this.root.getChildren().add(this.end);
+//    }
     
     public void reset() {
         for(Point fitnessScore : this.mainFitnessScores) {
@@ -121,8 +130,6 @@ public class RoadAnimation extends AnimationTimer {
         Point latest = this.mainFitnessScores.get(this.roadLenght - 1);
         Point newPoint = new Point(event.getX(), event.getY());
         
-        this.end = new Circle(event.getX(), event.getY(), 20d, Color.GREEN);
-        
         double angle = Math.atan2(
             newPoint.getLayoutY() - latest.getLayoutY(),
             newPoint.getLayoutX() - latest.getLayoutX()
@@ -150,13 +157,15 @@ public class RoadAnimation extends AnimationTimer {
                             line2.getStartX(), line2.getStartY());
         
         if(!this.isFirstLinePut) {
-            Line firstLine = new Line(
-                    latest.getLayoutX() + this.distanceBetweenLines * Math.cos(angle),
-                    latest.getLayoutY() + this.distanceBetweenLines * Math.sin(angle),
-                    latest.getLayoutX() - this.distanceBetweenLines * Math.cos(angle),
-                    latest.getLayoutY() - this.distanceBetweenLines * Math.sin(angle));
+            line1.setStartX(line1.getStartX() + this.distanceBetweenLines * Math.cos(angle + Math.PI / 2));
+            line1.setStartY(line1.getStartY() + this.distanceBetweenLines * Math.sin(angle + Math.PI / 2));
+            line2.setStartX(line2.getStartX() + this.distanceBetweenLines * Math.cos(angle + Math.PI / 2));
+            line2.setStartY(line2.getStartY() + this.distanceBetweenLines * Math.sin(angle + Math.PI / 2));
             
-            //this.startCarsPostion = placeAnotherPoint(angle, latest, latest)
+            Line firstLine = new Line(
+                    line1.getStartX(), line1.getStartY(),
+                    line2.getStartX(), line2.getStartY()
+                    );
             
             this.roadLines.add(firstLine);
             this.root.getChildren().addAll(firstLine);
@@ -228,24 +237,8 @@ public class RoadAnimation extends AnimationTimer {
         return this.roadLines;
     }
     
-    public Point placeAnotherPoint(double hypot, Point start, Point end) {
-        
-        double startXPoint = start.getLayoutX();
-        double startYPoint = start.getLayoutY();
-        double endXPoint = end.getLayoutX();
-        double endYPoint = end.getLayoutY();
-        
-        double angle = Math.atan2(
-            endYPoint - startYPoint,
-            endXPoint - startXPoint
-        );
-
-        Point point = new Point(
-            startXPoint + Math.cos(angle) * 12,
-            startYPoint + Math.sin(angle) * 12
-        );
-        
-        return point;
+    public Point getStartPoint() {
+        return this.startCarsPostion;
     }
     
 }

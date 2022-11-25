@@ -41,7 +41,7 @@ public class FXMLController {
     void initialize(){
         this.road = new RoadAnimation(this.root);
         
-        this.btnStart.setDisable(false);
+        this.btnStart.setDisable(true);
         this.btnKillCars.setDisable(true);
         this.btnPause.setDisable(true);
         this.btnResetFitnessScore.setDisable(true);
@@ -71,7 +71,7 @@ public class FXMLController {
         
         this.btnPause.setDisable(true);
         this.btnStart.setDisable(false);
-        this.btnKillCars.setDisable(true);
+        this.btnKillCars.setDisable(false);
         this.btnResetFitnessScore.setDisable(false);
         this.btnSetFitnessScore.setDisable(true);
     }
@@ -80,7 +80,7 @@ public class FXMLController {
         this.road.reset();
         
         this.btnPause.setDisable(true);
-        this.btnStart.setDisable(true);
+        this.btnStart.setDisable(false);
         this.btnKillCars.setDisable(true);
         this.btnResetFitnessScore.setDisable(true);
         this.btnSetFitnessScore.setDisable(false);
@@ -88,7 +88,7 @@ public class FXMLController {
     
     @FXML
     private void startCars() {
-        this.timer = new CarAnimations(root);
+        this.timer = new CarAnimations(root, this.road.getStartPoint(), this.road.getDangers());
         this.timer.start();
         
         this.btnPause.setDisable(false);

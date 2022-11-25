@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.ChoiceBox?>
@@ -7,69 +8,123 @@
 <?import javafx.scene.control.Slider?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Line?>
 
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
-   <children>
-      <Pane fx:id="root" layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
+<BorderPane xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
          <children>
-            <Line endX="93.5" endY="-40.0" layoutX="152.0" layoutY="141.0" startX="-107.5" startY="-86.0" />
-            <Line endX="47.5" endY="47.0" layoutX="246.0" layoutY="139.0" startX="0.20709228515625" startY="-37.29289245605469" />
-            <Line endX="11.79290771484375" endY="64.0" layoutX="198.0" layoutY="161.0" startX="-156.5" startY="53.0" />
-            <Line endX="-138.5" endY="111.0" layoutX="381.0" layoutY="208.0" startX="-170.5" startY="17.70709228515625" />
-            <Line endX="-133.5" endY="128.0" layoutX="460.0" layoutY="203.0" startX="-165.79290771484375" startY="-16.29290771484375" />
-            <Line endX="-194.5" endY="138.0" layoutX="414.0" layoutY="336.0" startX="-170.5" startY="-16.0" />
-            <Line endX="-153.20709228515625" endY="-106.70710754394531" layoutX="197.0" layoutY="161.0" startX="-156.5" startY="53.0" />
-            <Line endX="-158.5" endY="138.0" layoutX="495.0" layoutY="348.0" startX="-167.79290771484375" startY="-16.29290771484375" />
-            <Line endX="-199.79290771484375" endY="93.70709228515625" layoutX="537.0" layoutY="393.0" startX="-118.5" startY="107.0" />
-            <Line endX="-238.20709228515625" endY="100.70709228515625" layoutX="457.0" layoutY="374.0" startX="-220.5" startY="275.0" />
-            <Line endX="-233.79290771484375" endY="100.70709228515625" layoutX="471.0" layoutY="549.0" startX="-103.5" startY="50.0" />
-            <Line endX="-228.79290771484375" endY="101.29290771484375" layoutX="597.0" layoutY="497.0" startX="-55.5" startY="111.0" />
-            <Line endX="-237.79290771484375" endY="100.70709228515625" layoutX="657.0" layoutY="400.0" startX="-123.5" startY="14.0" />
-            <Line endX="-237.79290771484375" endY="100.70709228515625" layoutX="780.0" layoutY="508.0" startX="-111.5" startY="-112.0" />
-            <Line endX="-237.20709228515625" endY="93.70709228515625" layoutX="772.0" layoutY="320.0" startX="-174.5" startY="-100.0" />
-            <Line endX="-237.20709228515625" endY="93.70709228515625" layoutX="907.0" layoutY="302.0" startX="-179.5" startY="-120.0" />
-            <Line endX="-237.20709228515625" endY="93.70709228515625" layoutX="836.0" layoutY="125.0" startX="-174.5" startY="-86.0" />
-            <Circle fx:id="goal" fill="#22ff00" layoutX="672.0" layoutY="696.0" radius="57.0" stroke="BLACK" strokeType="INSIDE" />
-            <Line endX="-29.5" endY="-112.0" layoutX="836.0" layoutY="125.0" startX="-174.5" startY="-86.0" />
-            <Line endX="-82.0" endY="-120.0" layoutX="903.0" layoutY="266.0" startX="-174.5" startY="-86.0" />
-            <Line endX="57.0" endY="-32.0" layoutX="982.0" layoutY="125.0" startX="-174.79290771484375" startY="-112.70710754394531" />
-            <Line endX="-71.0" endY="-74.0" layoutX="1003.0" layoutY="255.0" startX="-181.29290771484375" startY="-109.70710754394531" />
-            <Line endX="-80.29290771484375" endY="-83.29290771484375" layoutX="1013.0" layoutY="265.0" startX="-40.0" startY="254.0" />
-            <Line endX="16.7071533203125" endY="-181.2928924560547" layoutX="1023.0" layoutY="275.0" startX="89.0" startY="267.0" />
-            <Line endX="-22.0" endY="451.0" layoutX="1033.0" layoutY="285.0" startX="79.7071533203125" startY="257.70709228515625" />
-            <Line endX="-140.0" endY="313.0" layoutX="1043.0" layoutY="295.0" startX="-69.29290771484375" startY="224.70709228515625" />
-            <Line endX="-150.70709228515625" endY="303.70709228515625" layoutX="1053.0" layoutY="305.0" startX="-387.0" startY="334.0" />
-            <Line endX="-52.7071533203125" endY="421.70709228515625" layoutX="1063.0" layoutY="315.0" startX="-390.0" startY="436.0" />
-            <ButtonBar layoutX="10.0" layoutY="9.0" prefHeight="12.0" prefWidth="635.0">
-               <buttons>
-                  <Button fx:id="btnSetFitnessScore" mnemonicParsing="false" onAction="#setFitnessScore" text="Set Fitness Score" />
-                  <Button fx:id="btnResetFitnessScore" mnemonicParsing="false" onAction="#resetFitnessScore" prefHeight="13.0" prefWidth="297.0" text="Reset Fitness Score" />
-                  <Button fx:id="btnKillCars" mnemonicParsing="false" onAction="#killCars" text="Kill Cars" />
-                  <Button fx:id="btnStart" minWidth="0.0" mnemonicParsing="false" onAction="#startCars" prefHeight="16.0" text="Start" />
-                  <Button fx:id="btnPause" mnemonicParsing="false" onAction="#pauseCars" text="Pause" />
-               </buttons>
-            </ButtonBar>
-            <Pane layoutX="14.0" layoutY="404.0" prefHeight="339.0" prefWidth="196.0">
+            <Pane fx:id="root" layoutX="10.0" layoutY="10.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity">
                <children>
-                  <Slider fx:id="sliderAngularVelocity" layoutX="14.0" layoutY="275.0" />
-                  <Slider fx:id="sliderCarSpeed" layoutX="14.0" layoutY="107.0" />
-                  <Slider fx:id="sliderNeurons" layoutX="14.0" layoutY="170.0" />
-                  <Label fx:id="labelControls" layoutX="76.0" layoutY="6.0" prefHeight="17.0" prefWidth="45.0" text="Controls" />
-                  <ChoiceBox fx:id="choiceBoxLayers" layoutX="89.0" layoutY="208.0" prefHeight="25.0" prefWidth="74.0" />
-                  <Label fx:id="labelLayers" layoutX="14.0" layoutY="212.0" text="Layers" />
-                  <Label layoutX="14.0" layoutY="143.0" prefHeight="17.0" prefWidth="112.0" text="Neurons per layers" />
-                  <Label layoutX="16.0" layoutY="250.0" text="Angular velocity" />
-                  <ChoiceBox fx:id="choiceBoxLR" layoutX="98.0" layoutY="40.0" prefHeight="25.0" prefWidth="85.0" />
-                  <Label layoutX="17.0" layoutY="44.0" text="Learning rate" />
-                  <Label layoutX="17.0" layoutY="80.0" text="Car speed" />
+                  <Line endX="93.5" endY="-40.0" layoutX="152.0" layoutY="141.0" startX="-107.5" startY="-86.0" />
+                  <Line endX="47.5" endY="47.0" layoutX="246.0" layoutY="139.0" startX="0.20709228515625" startY="-37.29289245605469" />
+                  <Line endX="11.79290771484375" endY="64.0" layoutX="198.0" layoutY="161.0" startX="-156.5" startY="53.0" />
+                  <Line endX="-138.5" endY="111.0" layoutX="381.0" layoutY="208.0" startX="-170.5" startY="17.70709228515625" />
+                  <Line endX="-133.5" endY="128.0" layoutX="460.0" layoutY="203.0" startX="-165.79290771484375" startY="-16.29290771484375" />
+                  <Line endX="-194.5" endY="138.0" layoutX="414.0" layoutY="336.0" startX="-170.5" startY="-16.0" />
+                  <Line endX="-153.20709228515625" endY="-106.70710754394531" layoutX="197.0" layoutY="161.0" startX="-156.5" startY="53.0" />
+                  <Line endX="-158.5" endY="138.0" layoutX="495.0" layoutY="348.0" startX="-167.79290771484375" startY="-16.29290771484375" />
+                  <Line endX="-199.79290771484375" endY="93.70709228515625" layoutX="537.0" layoutY="393.0" startX="-118.5" startY="107.0" />
+                  <Line endX="-238.20709228515625" endY="100.70709228515625" layoutX="457.0" layoutY="374.0" startX="-220.5" startY="275.0" />
+                  <Line endX="-233.79290771484375" endY="100.70709228515625" layoutX="471.0" layoutY="549.0" startX="-103.5" startY="50.0" />
+                  <Line endX="-228.79290771484375" endY="101.29290771484375" layoutX="597.0" layoutY="497.0" startX="-55.5" startY="111.0" />
+                  <Line endX="-237.79290771484375" endY="100.70709228515625" layoutX="657.0" layoutY="400.0" startX="-123.5" startY="14.0" />
+                  <Line endX="-237.79290771484375" endY="100.70709228515625" layoutX="780.0" layoutY="508.0" startX="-111.5" startY="-112.0" />
+                  <Line endX="-237.20709228515625" endY="93.70709228515625" layoutX="772.0" layoutY="320.0" startX="-174.5" startY="-100.0" />
+                  <Line endX="-237.20709228515625" endY="93.70709228515625" layoutX="907.0" layoutY="302.0" startX="-179.5" startY="-120.0" />
+                  <Line endX="-237.20709228515625" endY="93.70709228515625" layoutX="836.0" layoutY="125.0" startX="-174.5" startY="-86.0" />
+                  <Circle fx:id="goal" fill="#22ff00" layoutX="672.0" layoutY="696.0" radius="57.0" stroke="BLACK" strokeType="INSIDE" />
+                  <Line endX="-29.5" endY="-112.0" layoutX="836.0" layoutY="125.0" startX="-174.5" startY="-86.0" />
+                  <Line endX="-82.0" endY="-120.0" layoutX="903.0" layoutY="266.0" startX="-174.5" startY="-86.0" />
+                  <Line endX="57.0" endY="-32.0" layoutX="982.0" layoutY="125.0" startX="-174.79290771484375" startY="-112.70710754394531" />
+                  <Line endX="-71.0" endY="-74.0" layoutX="1003.0" layoutY="255.0" startX="-181.29290771484375" startY="-109.70710754394531" />
+                  <Line endX="-80.29290771484375" endY="-83.29290771484375" layoutX="1013.0" layoutY="265.0" startX="-40.0" startY="254.0" />
+                  <Line endX="16.7071533203125" endY="-181.2928924560547" layoutX="1023.0" layoutY="275.0" startX="89.0" startY="267.0" />
+                  <Line endX="-22.0" endY="451.0" layoutX="1033.0" layoutY="285.0" startX="79.7071533203125" startY="257.70709228515625" />
+                  <Line endX="-140.0" endY="313.0" layoutX="1043.0" layoutY="295.0" startX="-69.29290771484375" startY="224.70709228515625" />
+                  <Line endX="-150.70709228515625" endY="303.70709228515625" layoutX="1053.0" layoutY="305.0" startX="-387.0" startY="334.0" />
+                  <Line endX="-52.7071533203125" endY="421.70709228515625" layoutX="1063.0" layoutY="315.0" startX="-390.0" startY="436.0" />
                </children>
             </Pane>
          </children>
-      </Pane>
-      <BorderPane prefHeight="200.0" prefWidth="200.0" />
-   </children>
-</AnchorPane>
+      </AnchorPane>
+   </center>
+   <left>
+      <VBox fx:id="VboxControls" prefHeight="633.0" prefWidth="199.0" spacing="10.0" BorderPane.alignment="CENTER">
+         <children>
+            <VBox prefHeight="200.0" prefWidth="100.0" spacing="15.0">
+               <children>
+                  <Label prefHeight="17.0" prefWidth="45.0" text="Controls">
+                     <VBox.margin>
+                        <Insets left="70.0" />
+                     </VBox.margin>
+                  </Label>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label text="Mutation rate">
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
+                        </Label>
+                        <ChoiceBox fx:id="choiceBoxMR" prefHeight="25.0" prefWidth="85.0">
+                           <HBox.margin>
+                              <Insets left="13.0" />
+                           </HBox.margin>
+                        </ChoiceBox>
+                     </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </HBox>
+                  <Label text="Car speed" />
+                  <Slider fx:id="sliderCarSpeed" />
+                  <Label prefHeight="17.0" prefWidth="112.0" text="Neurons per layers" />
+                  <Slider fx:id="sliderNbrOfNeurons" />
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label text="Layers">
+                           <HBox.margin>
+                              <Insets top="5.0" />
+                           </HBox.margin>
+                        </Label>
+                        <ChoiceBox fx:id="choiceBoxLayers" prefHeight="25.0" prefWidth="74.0">
+                           <HBox.margin>
+                              <Insets left="13.0" />
+                           </HBox.margin>
+                        </ChoiceBox>
+                     </children>
+                  </HBox>
+                  <Label text="Angular velocity" />
+                  <Slider fx:id="sliderAngularVelocity" />
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </VBox>
+            <VBox fx:id="VboxButtons" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
+               <children>
+                  <Button fx:id="btnSetFitnessScore" mnemonicParsing="false" onAction="#setFitnessScore" prefHeight="25.0" prefWidth="143.0" text="Set Fitness Score" />
+                  <Button fx:id="btnResetFitnessScore" mnemonicParsing="false" onAction="#resetFitnessScore" prefHeight="25.0" prefWidth="140.0" text="Reset Fitness Score" />
+                  <Button fx:id="btnKillCars" mnemonicParsing="false" onAction="#killCars" prefHeight="25.0" prefWidth="143.0" text="Kill Cars" />
+                  <Button fx:id="btnStart" minWidth="0.0" mnemonicParsing="false" onAction="#startCars" prefHeight="25.0" prefWidth="144.0" text="Start" />
+                  <Button fx:id="btnPause" mnemonicParsing="false" onAction="#pauseCars" prefHeight="25.0" prefWidth="142.0" text="Pause" />
+               </children>
+               <padding>
+                  <Insets left="20.0" top="10.0" />
+               </padding>
+            </VBox>
+         </children>
+         <BorderPane.margin>
+            <Insets left="10.0" top="10.0" />
+         </BorderPane.margin>
+         <padding>
+            <Insets left="5.0" right="5.0" />
+         </padding>
+      </VBox>
+   </left>
+</BorderPane>

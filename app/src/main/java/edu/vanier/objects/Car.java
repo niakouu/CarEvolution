@@ -39,7 +39,6 @@ public class Car extends Circle implements Comparable<Car> {
     private double direction;
     private int moveStraightCounter;
     private Pane root;
-    private int moveStraightCounter; 
     private boolean haveIntersect = false; 
 
     public boolean isHaveIntersect() {

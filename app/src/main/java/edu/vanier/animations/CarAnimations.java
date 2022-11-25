@@ -76,12 +76,14 @@ public class CarAnimations extends AnimationTimer {
               
         }
        
-        for (Car car : cars){
-            if (car.isHaveIntersect() == true) {
-                cars.remove(car); 
-                break; 
-            }
-        }
+//        for (Car car : cars){
+//            if (car.isHaveIntersect() == true) {
+//                cars.remove(car); 
+//                break; 
+//            }
+//        }
+
+
         if (this.cars.isEmpty() || this.timeCounter == 10000) {
             timeCounter = 0;
             mutate();

@@ -25,7 +25,6 @@ public class Car extends Circle implements Comparable<Car> {
     private final static double MAX_VELOCITY = 2;
     private final static double MAX_ANGULAR_VELOCITY = 2;
     private final static int OUTPUT_NODES_NUMBER = 3;
-    private final static int HIDDEN_NODES_NUMBER = 7;
     private final static int SENSORS_NUMBER = 7;
     private final static float LEARNING_RATE = 0.7f;
 
@@ -94,6 +93,7 @@ public class Car extends Circle implements Comparable<Car> {
         root.getChildren().add(this);
 
         this.networkDisplay = new NeuralNetworkDisplay(this);
+        
     }
 
     public final void setOnDisplay() {

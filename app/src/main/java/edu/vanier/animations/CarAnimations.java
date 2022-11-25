@@ -69,17 +69,20 @@ public class CarAnimations extends AnimationTimer{
             
             car.update(this.shapeDangers);
              detectCarCollisionsWithWall(car);
-             
+              
         }
+       
         for (Car car : cars){
             if (car.isHaveIntersect() == true) {
                 cars.remove(car); 
+                break; 
             }
         }
         if (this.cars.isEmpty() || this.timeCounter == 10000) {
             mutate();
             eliminatingCarsSensors();
             this.eliminatedCars.clear();
+            
             
             
         }
@@ -177,10 +180,10 @@ public class CarAnimations extends AnimationTimer{
                car.stop();
                car.setHaveIntersect(true);
                 this.eliminatedCars.add(car);
-//                for (Sensor sensor : car.getSensors()) {
-//                    this.root.getChildren().remove(sensor);
-//                }
-//                this.root.getChildren().remove(car);
+                for (Sensor sensor : car.getSensors()) {
+                    this.root.getChildren().remove(sensor);
+                }
+                this.root.getChildren().remove(car);
             }
         
         }

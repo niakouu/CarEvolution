@@ -7,6 +7,7 @@ package edu.vanier.neuralNetwork;
 import edu.vanier.objects.Car;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 
 /**
  *
@@ -14,8 +15,8 @@ import javafx.scene.layout.Pane;
  */
 public class NeuralNetworkDisplay extends Pane {
 
-    private static final int WIDTH = 400;
-    private static final int HEIGHT = 500;
+    private static final int WIDTH = 600;
+    private static final int HEIGHT = 400;
     private static final int PANE_PADDING = 20;
 
     private Car displayedCar;
@@ -29,8 +30,12 @@ public class NeuralNetworkDisplay extends Pane {
         this.neurons = displayedCar.getBrain().getNeurons();
         this.neuralNetwork = displayedCar.getBrain();
         this.weights = displayedCar.getBrain().getWeights();
-        generateNeurons();
+
         generateWeight();
+        generateNeurons();
+        this.setLayoutX(1000);
+        this.setLayoutY(0);
+
     }
 
     private void generateNeurons() {
@@ -44,12 +49,14 @@ public class NeuralNetworkDisplay extends Pane {
             for (int j = 0; j < neurons[i].length; j++) {
 
                 Label value = new Label();
+                
+                value.setTextFill(Color.BLACK);
                 value.textProperty().bind(neurons[i][j].getValueProperty().asString("%.2f"));
 
-                neurons[i][j].setLayoutX(layerGap * (i + 1));
-                neurons[i][j].setLayoutY(heighGap * (j + 1));
-                value.setLayoutX(layerGap * (i + 1));
-                value.setLayoutY(heighGap * (j + 1));
+                neurons[i][j].setLayoutX(layerGap * (i + 1) - (this.getWidth()));
+                neurons[i][j].setLayoutY(heighGap * (j + 1) - (this.getHeight()));
+                value.setLayoutX(layerGap * (i + 1) - (15));
+                value.setLayoutY(heighGap * (j + 1) - (8));
 
                 this.getChildren().addAll(neurons[i][j], value);
 
@@ -70,14 +77,6 @@ public class NeuralNetworkDisplay extends Pane {
 
     public Car getDisplayedCar() {
         return displayedCar;
-    }
-
-    public void setDisplayedCar(Car displayedCar) {
-        this.neurons = displayedCar.getBrain().getNeurons();
-        this.neuralNetwork = displayedCar.getBrain();
-        this.weights = displayedCar.getBrain().getWeights();
-        this.displayedCar = displayedCar;
-
     }
 
 }

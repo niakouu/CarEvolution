@@ -5,6 +5,7 @@
 package edu.vanier.main;
 
 import edu.vanier.animations.CarAnimations;
+import edu.vanier.neuralNetwork.NeuralNetworkDisplay;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
@@ -38,7 +39,6 @@ public class FXMLController {
     @FXML
     void initialize(){
         this.timer = new CarAnimations(root);
-        
         this.btnStart.setDisable(true);
         this.btnKillCars.setDisable(true);
         this.btnPause.setDisable(true);

@@ -4,7 +4,6 @@
  */
 package edu.vanier.animations;
 
-import edu.vanier.neuralNetwork.NeuralNetwork;
 import edu.vanier.objects.Car;
 import edu.vanier.objects.Point;
 import edu.vanier.objects.Sensor;
@@ -23,11 +22,12 @@ import javafx.scene.shape.Shape;
  */
 public class CarAnimations extends AnimationTimer {
 
-    private final static int NUMBER_CARS = 20;
+    private final static int NUMBER_CARS = 10;
     private int timeCounter;
 
     private final Label time;
     private final ArrayList<Car> eliminatedCars;
+    private final ArrayList<Car> allCars;
     private final ArrayList<Car> cars;
     private final ArrayList<Shape> shapeDangers;
     private final ArrayList<Point> fitnessScores;
@@ -38,6 +38,7 @@ public class CarAnimations extends AnimationTimer {
 
         //Initializing new objects
         this.time = new Label();
+        this.allCars = new ArrayList<>();
         this.eliminatedCars = new ArrayList<>();
         this.fitnessScores = new ArrayList<>();
 
@@ -50,6 +51,9 @@ public class CarAnimations extends AnimationTimer {
 
         //Adding the car to the the arrayList
         this.cars = getNewCars();
+        for (Car car : cars) {
+            allCars.add(car);
+        }
     }
 
     @Override
@@ -58,20 +62,23 @@ public class CarAnimations extends AnimationTimer {
         this.time.setText(String.valueOf(this.timeCounter));
 
         if (this.cars.isEmpty() || this.timeCounter == 10000) {
+            timeCounter = 0;
             mutate();
             eliminatingCarsSensors();
+            this.cars.addAll(allCars);
             this.eliminatedCars.clear();
+            root.getChildren().removeAll(cars);
+            root.getChildren().addAll(cars);
         }
 
         for (Car car : cars) {
+            car.update(this.shapeDangers);
             car.think();
             car.setFitnessScore(car.getFitnessScore() + 1);
-            car.update(this.shapeDangers);
             detectCarCollisionsWithWall(car);
 
         }
-                    removeDeadCars();
-
+        removeDeadCars();
 
     }
 
@@ -83,6 +90,7 @@ public class CarAnimations extends AnimationTimer {
         this.cars.forEach((car) -> {
             this.root.getChildren().removeAll(car.getSensors());
             this.root.getChildren().remove(car);
+            this.eliminatedCars.add(car);
         });
 
         this.cars.clear();
@@ -95,29 +103,30 @@ public class CarAnimations extends AnimationTimer {
     }
 
     private void mutate() {
-        this.eliminatedCars.addAll(this.cars);
-        this.cars.clear();
 
-        Collections.sort(this.eliminatedCars);
-        Car mutator = this.eliminatedCars.get(this.eliminatedCars.size() - 1);
-        Car secondMutator = this.eliminatedCars.get(this.eliminatedCars.size() - 2);
-        this.cars.addAll(eliminatedCars);
+        System.out.println(allCars);
+        Collections.sort(this.allCars);
+                System.out.println(allCars);
 
-        for (int i = 0; i < cars.size(); i++) {
-            Car currentCar = cars.get(i);
-            currentCar.setCenterX(65);
-            currentCar.setCenterY(130);
-            if (!cars.get(i).equals(mutator) && !cars.get(i).equals(secondMutator)) {
+        Car mutator = this.allCars.get(this.allCars.size() - 1);
+        Car secondMutator = this.allCars.get(this.allCars.size() - 2);
+
+        for (int i = 0; i < allCars.size(); i++) {
+            Car currentCar = allCars.get(i);
+            if (!currentCar.equals(mutator) && !currentCar.equals(secondMutator)) {
 
                 currentCar.setBrain(i % 2 == 0
                         ? mutator.getBrain()
                         : secondMutator.getBrain());
                 currentCar.getBrain().mutate();
+                currentCar.setFitnessScore(0);
             }
+            currentCar.setFitnessScore(0);
+            currentCar.setCenterX(65);
+            currentCar.setCenterY(130);
+            currentCar.setRotate(180);
         }
 
-        this.cars.forEach((t) -> t.setRotate(180));
-        this.eliminatedCars.clear();
     }
 
     //detect all shapes that represent dangers to the car.

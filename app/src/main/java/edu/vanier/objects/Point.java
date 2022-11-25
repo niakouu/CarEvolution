@@ -26,5 +26,4 @@ public class Point extends Rectangle {
         this.setHeight(12d);
         this.setWidth(12d);
     }
-    
 }

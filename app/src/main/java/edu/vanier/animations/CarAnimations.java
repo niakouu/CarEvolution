@@ -54,7 +54,7 @@ public class CarAnimations extends AnimationTimer{
         
     }
     
-    @Override
+
     public void start() {
         this.cars = getNewCars();
         this.timeCounter++;

@@ -40,15 +40,14 @@ public class FXMLController {
     @FXML
     void initialize(){
         this.timer = new CarAnimations(root);
+        this.road = new RoadAnimation(this.root);
         
         this.btnStart.setDisable(true);
         this.btnKillCars.setDisable(true);
         this.btnPause.setDisable(true);
         this.btnResetFitnessScore.setDisable(true);
         
-        this.road = new RoadAnimation(this.root);
         this.road.start();
-        
     }
     
     @FXML
@@ -70,6 +69,7 @@ public class FXMLController {
     @FXML
     private void pauseCars(){
         this.timer.stop();
+        
         this.btnPause.setDisable(true);
         this.btnStart.setDisable(false);
         this.btnKillCars.setDisable(true);

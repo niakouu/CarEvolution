@@ -1,0 +1,61 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package edu.vanier.neuralNetwork;
+
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.scene.shape.Line;
+
+/**
+ *
+ * @author enyihou
+ */
+public class Weight extends Line {
+
+    public Weight() {
+
+        this.setOnMouseEntered((e) -> {
+            System.out.println(this.value.get());
+        });
+
+    }
+
+    private DoubleProperty value = new SimpleDoubleProperty();
+
+    private Neuron neuron1;
+    private Neuron neuron2;
+
+    public Neuron getNeuron1() {
+        return neuron1;
+    }
+
+    public void setNeuron1(Neuron neuron1) {
+        this.neuron1 = neuron1;
+    }
+
+    public Neuron getNeuron2() {
+        return neuron2;
+    }
+
+    public void setNeuron2(Neuron neuron2) {
+        this.neuron2 = neuron2;
+    }
+
+    public Weight(Neuron neuron1, Neuron neuron2) {
+
+        this.neuron1 = neuron1;
+        this.neuron2 = neuron2;
+
+    }
+
+    public DoubleProperty getValue() {
+        return value;
+    }
+
+    public void setValue(double value) {
+        this.value.setValue(value);
+    }
+
+}

@@ -1,147 +1,122 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package edu.vanier.neuralNetwork;
 
-import java.util.Arrays;
-import java.util.Random;
 import edu.vanier.objects.Sensor;
 
-/**
- *
- * @author 2145013
- */
-public class NeuralNetwork implements Cloneable {
+public final class NeuralNetwork {
 
-    private final static double INITIAL_VALUE_TARGETS = 0.1;
-
-    private final int inputNodes;
-    private final int hiddenNodes;
-    private final int outputNodes;
-    private final float learningRate;
-    private Matrix weightsInputToHidden;
-    private Matrix weightsHiddenToOutput;
-
-    public NeuralNetwork(int inputNodes, int hiddenNodes, int outputNodes, float learningRate) {
-        this.inputNodes = inputNodes;
-        this.hiddenNodes = hiddenNodes;
-        this.outputNodes = outputNodes;
-        this.learningRate = learningRate;
-        generateLinkWeights();
-    }
+    private int layers;
+    private int[] size;
+    private Weight[][][] weights;
+    private Neuron[][] neurons;
     
-    @Override
-    public NeuralNetwork clone() {
-        NeuralNetwork clone = new NeuralNetwork(inputNodes, hiddenNodes, outputNodes, learningRate);
-        
-        clone.weightsInputToHidden = this.weightsInputToHidden.clone();
-        clone.weightsHiddenToOutput = this.weightsHiddenToOutput.clone();
-        
-        return clone;
-    }
-
-    public Matrix getWeightsInputToHidden() {
-        return this.weightsInputToHidden;
-    }
-
-    public Matrix getWeightsHiddenToOutput() {
-        return this.weightsHiddenToOutput;
-    }
-
-    @Override
-    public String toString() {
-        return "input nodes = " + inputNodes + "; hidden nodes = " + hiddenNodes + "; output nodes = "
-                + outputNodes + "; learning rate = " + learningRate;
-    }
-
-    public double[] query(Sensor[] data) {
-        double[] sensorsData = new double[data.length];
-        for (int i = 0; i < data.length; i++) {
-            sensorsData[i] = data[i].getProjectedLength().get();
-        }
-        Matrix inputs = getReformedInput(sensorsData);
-        Matrix output = getFinalOutput(inputs);
-        
-        double[] outputs = new double[output.getData()[0].length];
-        //System.out.print("[");
-        for (int i = 0; i < outputs.length; i++) {
-            outputs[i] = output.getData()[0][i];
-          //  System.out.print("[" + outputs[i] + "] , ");
-        }/*
-        System.out.println("]");
-        System.out.println(this);*/
-        return outputs;
-    }
     
-    public void mutate() {
-        this.weightsHiddenToOutput = MatrixManipulations
-                .mutate(this.weightsHiddenToOutput, this.learningRate);
-        this.weightsInputToHidden = MatrixManipulations
-                .mutate(this.weightsInputToHidden, this.learningRate);
-    }
-
-    private Matrix getReformedInput(double[] input) {
-        return MatrixManipulations.transformArrayToMatrix(1, input.length, input);
-    }
-
-    private Matrix getFinalOutput(Matrix inputs) {
-        NeuralNetworkHiddenElements neural = new NeuralNetworkHiddenElements(inputs, this);
-        return neural.getFinalOutputs();
-    }
-
-    private Matrix initialTargetsValues(int length, int target) {
-        double[] result = new double[length];
-        Arrays.fill(result, INITIAL_VALUE_TARGETS);
-        result[target] = 0.99;
-        return MatrixManipulations.transformArrayToMatrix(this.outputNodes, 1, result);
-    }
-
-    private void rescaleWeight(Matrix inputs, Matrix targets) {
-        NeuralNetworkHiddenElements components = new NeuralNetworkHiddenElements(inputs, targets, this);
-        this.weightsInputToHidden = MatrixManipulations.addMatrix(
-                rescaleWeight(components.getHiddenErrors(), components.getHiddenOutputs(), inputs),
-                this.weightsInputToHidden);
-        this.weightsHiddenToOutput = MatrixManipulations.addMatrix(
-                rescaleWeight(components.getOutputErrors(), components.getFinalOutputs(),
-                        components.getHiddenOutputs()), this.weightsHiddenToOutput);
-    }
-
-    private Matrix rescaleWeight(Matrix errors, Matrix outputs, Matrix layerInBetween) {
-        return MatrixManipulations.multiplyMatrixElementByElement(this.learningRate,
-                getWeightsError(errors, outputs, layerInBetween));
-    }
-
-    private Matrix getWeightsError(Matrix errors, Matrix outputs, Matrix layerInBetween) {
-        return MatrixManipulations.multiplyMatrix(layerInBetween, getSigmoidWeight(errors, outputs));
-    }
-
-    private Matrix getSigmoidWeight(Matrix errors, Matrix outputs) {
-        return MatrixManipulations.multiplyMatrixElementByElement(errors, outputs,
-                getDifferenceWithTargetWeight(outputs));
-    }
-
-    private Matrix getDifferenceWithTargetWeight(Matrix outputs) {
-        return MatrixManipulations.subtractMatrix(1.0, outputs);
-    }
-
-    private void generateLinkWeights() {
-        this.weightsInputToHidden = MatrixManipulations.transformArrayToMatrix(this.inputNodes,
-                this.hiddenNodes,
-                addNegativeNumbersForWeights(generateRandomizedWeights(this.inputNodes, this.hiddenNodes)));
-        this.weightsHiddenToOutput = MatrixManipulations.transformArrayToMatrix(this.hiddenNodes,
-                this.outputNodes,
-                addNegativeNumbersForWeights(generateRandomizedWeights(this.hiddenNodes, this.outputNodes)));
-    }
-
-    private double[] addNegativeNumbersForWeights(double[] weights) {
-        for (int i = 0; i < weights.length; i++) {
-            weights[i] -= 0.5;
+    public NeuralNetwork(int[] size, float learningRate) {
+        this.layers = size.length;
+        this.size = size;
+        this.weights = new Weight[layers - 1][][];
+        for (int i = 1; i < layers; i++) {
+            weights[i - 1] = new Weight[size[i]][size[i - 1]];
         }
+        
+        neurons = new Neuron[layers][];
+        for (int i = 0; i<neurons.length; i++) {
+            neurons[i] = new Neuron[this.size[i]];
+            for (int j = 0; j < neurons[i].length; j++) {
+                neurons[i][j] = new Neuron();
+            }
+        }
+        this.generateRandomWeight();
+    }
+
+    public double[] calculate(Sensor[] sensors) {
+        double[] inputs = new double[sensors.length];
+        
+        for(int i = 0; i< sensors.length; i++){
+            inputs[i] = sensors[i].getLength();
+        }
+        
+        for (int i = 0; i < neurons[0].length; i++) {
+           this.neurons[0][i].setValue(inputs[i]);
+        }
+        for (int i = 1; i < neurons.length; i++) {
+            for (int j = 0; j < neurons[i].length; j++) {
+                Neuron neuron = neurons[i][j];
+                neuron.calculate(weights[i-1][j], neurons[i-1]);
+            }
+        }
+        return this.outputs();
+    }
+
+    
+    public void mutate(){
+        
+    }
+
+    public void generateRandomWeight() {
+        
+        for (int i = 1; i < neurons.length; i++) {
+
+            for (int j = 0; j < neurons[i].length; j++) {
+
+                Neuron currentNeuron = neurons[i][j];
+
+                for (int k = 0; k < neurons[i - 1].length; k++) {
+
+                    Neuron previousNeuron = neurons[i - 1][k];
+
+                    Weight weight = new Weight(previousNeuron, currentNeuron);
+                    weight.startXProperty().bind(previousNeuron.layoutXProperty());
+                    weight.startYProperty().bind(previousNeuron.layoutYProperty());
+
+                    weight.endXProperty().bind(currentNeuron.layoutXProperty());
+                    weight.endYProperty().bind(currentNeuron.layoutYProperty());
+                    weight.setValue(2 * (Math.random() - 0.5));
+                    
+                    weights[i-1][j][k] = weight;
+
+                }
+
+            }
+        }
+        
+        
+    }
+
+
+    public double[] outputs() {
+        double[] answers = new double[neurons[neurons.length-1].length];
+        for (int i = 0; i < answers.length; i++) {
+            answers[i] = neurons[neurons.length - 1][i].activationFunctionValue();
+        }
+        return answers;
+    }
+
+
+    public int getLayers() {
+        return layers;
+    }
+
+    public void setLayers(int layers) {
+        this.layers = layers;
+    }
+
+    public int[] getSize() {
+        return size;
+    }
+
+    public void setSize(int[] size) {
+        this.size = size;
+    }
+
+    public Weight[][][] getWeights() {
         return weights;
     }
 
-    private double[] generateRandomizedWeights(int node1, int node2) {
-        return new Random().doubles((long) node1 * node2).toArray();
+    public Neuron[][] getNeurons() {
+        return neurons;
+    }
+
+    public void setNeurons(Neuron[][] neurons) {
+        this.neurons = neurons;
     }
 }

@@ -22,7 +22,7 @@ public class Car extends Circle implements Comparable<Car> {
     private final static double MAX_ANGULAR_VELOCITY = 3;
     private final static int OUTPUT_NODES_NUMBER = 3;
     private final static int HIDDEN_NODES_NUMBER = 7;
-    private final static int SENSORS_NUMBER = 14;
+    private final static int SENSORS_NUMBER =7;
     private final static float LEARNING_RATE = 0.5f;
     
     private double velocity;
@@ -50,7 +50,7 @@ public class Car extends Circle implements Comparable<Car> {
             sensors[i] = new Sensor(i, this);
             root.getChildren().add(sensors[i]);
         }
-        this.brain = new NeuralNetwork(SENSORS_NUMBER, HIDDEN_NODES_NUMBER, OUTPUT_NODES_NUMBER, LEARNING_RATE);
+        this.brain = new NeuralNetwork(new int[]{SENSORS_NUMBER,HIDDEN_NODES_NUMBER,OUTPUT_NODES_NUMBER}, LEARNING_RATE);
 
         root.getChildren().add(this);
     }
@@ -77,7 +77,7 @@ public class Car extends Circle implements Comparable<Car> {
     }
 
     public void think() {
-        double[] outputs = this.brain.query(this.sensors);
+        double[] outputs = this.brain.calculate(this.sensors);
 
         double LeftIsBestOutcome = outputs[0];
         double NoRotationIsBestOutcome = outputs[1];
@@ -127,7 +127,7 @@ public class Car extends Circle implements Comparable<Car> {
 
     public void move() {
 
-        double[] calculatedRotation = this.brain.query(sensors);
+        double[] calculatedRotation = this.brain.calculate(sensors);
 
         this.setRotate(this.getRotate() + calculatedRotation[0]);
 
@@ -199,6 +199,9 @@ public class Car extends Circle implements Comparable<Car> {
         return this.brain;
     }
 
+    public void setBrain(NeuralNetwork brain){
+        this.brain = brain;
+    }
     public int getMove() {
         return this.moveStraightCounter;
     }

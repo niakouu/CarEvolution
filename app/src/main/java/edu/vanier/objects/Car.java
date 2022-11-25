@@ -18,7 +18,7 @@ import javafx.scene.shape.Shape;
  */
 public class Car extends Circle implements Comparable<Car> {
 
-    private final static double MAX_VELOCITY = 1;
+    private final static double MAX_VELOCITY = 3;
     private final static double MAX_ANGULAR_VELOCITY = 3;
     private final static int OUTPUT_NODES_NUMBER = 3;
     private final static int HIDDEN_NODES_NUMBER = 7;
@@ -34,6 +34,15 @@ public class Car extends Circle implements Comparable<Car> {
     private double timeElapsed;
     private double direction;
     private int moveStraightCounter; 
+    private boolean haveIntersect = false; 
+
+    public boolean isHaveIntersect() {
+        return haveIntersect;
+    }
+
+    public void setHaveIntersect(boolean haveIntersect) {
+        this.haveIntersect = haveIntersect;
+    }
 
     public Car(Pane root) {
         this.color = Color.GREEN;

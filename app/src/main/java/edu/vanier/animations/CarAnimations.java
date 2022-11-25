@@ -56,20 +56,32 @@ public class CarAnimations extends AnimationTimer{
     public void handle(long now) {
         this.timeCounter++;
         this.time.setText(String.valueOf(this.timeCounter));
+        
+        
+       
 
+        for (Car car : cars) {
+            car.think();
+            
+            car.setFitnessScore(car.getFitnessScore() + 1);
+
+           
+            
+            car.update(this.shapeDangers);
+             detectCarCollisionsWithWall(car);
+             
+        }
+        for (Car car : cars){
+            if (car.isHaveIntersect() == true) {
+                cars.remove(car); 
+            }
+        }
         if (this.cars.isEmpty() || this.timeCounter == 10000) {
             mutate();
             eliminatingCarsSensors();
             this.eliminatedCars.clear();
-        }
-
-        for (Car car : cars) {
-            car.think();
-            car.setFitnessScore(car.getFitnessScore() + 1);
-
-            detectCarCollisionsWithWall(car);
             
-            car.update(this.shapeDangers);
+            
         }
     }
     
@@ -156,16 +168,21 @@ public class CarAnimations extends AnimationTimer{
         }
     }
     
+    
     private void detectCarCollisionsWithWall(Car car) {
+        
         for (int j = 0; j < this.shapeDangers.size(); j++) {
             if (Shape.intersect(car, this.shapeDangers.get(j)).getBoundsInParent().getWidth() != -1) {
-                this.cars.remove(car);
+               //this.cars.remove(car);
+               car.stop();
+               car.setHaveIntersect(true);
                 this.eliminatedCars.add(car);
-                for (Sensor sensor : car.getSensors()) {
-                    this.root.getChildren().remove(sensor);
-                }
-                this.root.getChildren().remove(car);
+//                for (Sensor sensor : car.getSensors()) {
+//                    this.root.getChildren().remove(sensor);
+//                }
+//                this.root.getChildren().remove(car);
             }
+        
         }
     }
 

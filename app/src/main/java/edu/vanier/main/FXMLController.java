@@ -33,8 +33,7 @@ public class FXMLController {
     private boolean fitnessSet = false;
 
     private CarAnimations timer;
-    private NeuralNetwork neuralNetwork;
-    private Car car;
+    
  
     
     
@@ -81,13 +80,13 @@ public class FXMLController {
     @FXML
     private Label timeCounter;
 
-    private Double mutationRate[] = {0.0, 0.05, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 1.00};
+    private Double mutationRate[] = {0.05, 0.15, 0.20, 0.25, 0.30, 0.35, 0.40, 0.45, 0.50, 0.55, 0.60, 0.65, 0.70, 0.75, 0.80, 0.85, 0.90, 0.95, 1.00};
     private ObservableList<Double> mutationRateElements = FXCollections.observableArrayList(mutationRate);
 
-    private Integer neuronsChoices[] = {0, 1, 2, 3, 4, 5};
+    private Integer neuronsChoices[] = {1, 2, 3, 4, 5};
     private ObservableList<Integer> neuronsElements = FXCollections.observableArrayList(neuronsChoices);
 
-    private Integer layersChoices[] = {0, 1, 2, 3, 4};
+    private Integer layersChoices[] = {1, 2, 3, 4, 5};
     private ObservableList<Integer> layersElements = FXCollections.observableArrayList(layersChoices);
 
     @FXML
@@ -125,20 +124,20 @@ public class FXMLController {
         this.btnResetFitnessScore.setDisable(true);
         
         this.btnSaveControls.setOnAction((e)->{
+            Car.setMAX_ANGULAR_VELOCITY(this.sliderAngularVelocity.getValue());
+            System.out.println(this.sliderAngularVelocity.getValue());
             
-            for (Car car : cars) {
-                this.neuralNetwork = car.getBrain(); 
-                this.neuralNetwork.setLayers((int)this.choiceBoxLayers.getValue());
-            }
-            
+           
 //        this.neuralNetwork.setLayers((int)this.choiceBoxLayers.getValue());
 //      this.neuralNetwork.setNeurons(neurons);
 //        this.car.setAngularVelocity(this.sliderAngularVelocity.getValue());
 //        this.car.setVelocity(this.sliderCarSpeed.getValue());
 //        this.neuralNetwork.setlearningRate((float)this.choiceBoxMR.getValue());
 //        
+this.btnStart.setDisable(false);
         
         });
+        
 
     }
 
@@ -149,7 +148,7 @@ public class FXMLController {
         this.choiceBoxLayers.setDisable(true);
         this.choiceBoxMR.setDisable(true);
         this.choiceBoxNPL.setDisable(true);
-        this.btnStart.setDisable(false);
+        
 
     }
 

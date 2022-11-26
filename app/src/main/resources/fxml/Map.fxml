@@ -81,15 +81,9 @@
                   </HBox>
                   <Label text="Car speed" />
                   <Slider fx:id="sliderCarSpeed" />
-                  <HBox prefHeight="100.0" prefWidth="200.0">
+                  <HBox prefHeight="100.0" prefWidth="190.0">
                      <children>
-                        <Label prefHeight="17.0" prefWidth="112.0" text="Neurons per layers" />
-                        <ChoiceBox fx:id="choiceBoxNPL" prefHeight="26.0" prefWidth="82.0" />
-                     </children>
-                  </HBox>
-                  <HBox prefHeight="100.0" prefWidth="200.0">
-                     <children>
-                        <Label text="Layers">
+                        <Label prefWidth="121.0" text="Hidden layers">
                            <HBox.margin>
                               <Insets top="5.0" />
                            </HBox.margin>
@@ -99,6 +93,12 @@
                               <Insets left="13.0" />
                            </HBox.margin>
                         </ChoiceBox>
+                     </children>
+                  </HBox>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label prefHeight="17.0" prefWidth="112.0" text="Neurons per layers" />
+                        <ChoiceBox fx:id="choiceBoxNPL" prefHeight="26.0" prefWidth="82.0" />
                      </children>
                   </HBox>
                   <Label text="Angular velocity" />
@@ -111,8 +111,8 @@
             <VBox fx:id="VboxButtons" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
                <children>
                   <Button fx:id="btnSaveControls" mnemonicParsing="false" onAction="#saveControls" prefHeight="26.0" prefWidth="146.0" text="Save controls" />
-                  <Button fx:id="btnSetFitnessScore" mnemonicParsing="false" onAction="#setFitnessScore" prefHeight="25.0" prefWidth="143.0" text="Set Fitness Score" />
-                  <Button fx:id="btnResetFitnessScore" mnemonicParsing="false" onAction="#resetFitnessScore" prefHeight="25.0" prefWidth="140.0" text="Reset Fitness Score" />
+                  <Button fx:id="btnSetFitnessScore" mnemonicParsing="false" onAction="#setFitnessScore" prefHeight="25.0" prefWidth="143.0" text="Set map" />
+                  <Button fx:id="btnResetFitnessScore" mnemonicParsing="false" onAction="#resetFitnessScore" prefHeight="25.0" prefWidth="140.0" text="Reset map" />
                   <Button fx:id="btnKillCars" mnemonicParsing="false" onAction="#killCars" prefHeight="25.0" prefWidth="143.0" text="Kill Cars" />
                   <Button fx:id="btnStart" minWidth="0.0" mnemonicParsing="false" onAction="#startCars" prefHeight="25.0" prefWidth="144.0" text="Start" />
                   <Button fx:id="btnPause" mnemonicParsing="false" onAction="#pauseCars" prefHeight="25.0" prefWidth="142.0" text="Pause" />

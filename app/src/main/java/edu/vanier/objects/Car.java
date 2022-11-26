@@ -21,12 +21,12 @@ public class Car extends Circle implements Comparable<Car> {
 
     public static NeuralNetworkDisplay display;
 
-    private final static double MAX_VELOCITY = 2;
-    private final static double MAX_ANGULAR_VELOCITY = 2;
-    private final static int OUTPUT_NODES_NUMBER = 3;
-    private final static int HIDDEN_NODES_NUMBER = 7;
-    private final static int SENSORS_NUMBER = 7;
-    private final static float LEARNING_RATE = 0.7f;
+    private static double MAX_VELOCITY = 2;
+    private static double MAX_ANGULAR_VELOCITY = 2;
+    private static int OUTPUT_NODES_NUMBER = 3;
+    private static int HIDDEN_NODES_NUMBER = 7;
+    private static int SENSORS_NUMBER = 7;
+    private static float LEARNING_RATE = 0.7f;
 
     private final NeuralNetworkDisplay networkDisplay;
     private double velocity;
@@ -267,4 +267,27 @@ public class Car extends Circle implements Comparable<Car> {
         return "Car{" + "fitnessScore =" + fitnessScore + '}';
     }
 
+    public static double getMAX_VELOCITY() {
+        return MAX_VELOCITY;
+    }
+
+    public static void setMAX_VELOCITY(double MAX_VELOCITY) {
+        Car.MAX_VELOCITY = MAX_VELOCITY;
+    }
+
+    public static double getMAX_ANGULAR_VELOCITY() {
+        return MAX_ANGULAR_VELOCITY;
+    }
+
+    public static void setMAX_ANGULAR_VELOCITY(double MAX_ANGULAR_VELOCITY) {
+        Car.MAX_ANGULAR_VELOCITY = MAX_ANGULAR_VELOCITY;
+    }
+
+    public static float getLEARNING_RATE() {
+        return LEARNING_RATE;
+    }
+
+    public static void setLEARNING_RATE(float LEARNING_RATE) {
+        Car.LEARNING_RATE = LEARNING_RATE;
+    }
 }

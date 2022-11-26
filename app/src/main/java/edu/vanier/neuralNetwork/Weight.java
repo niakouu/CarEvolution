@@ -18,6 +18,7 @@ public class Weight extends Line {
 
         this.opacityProperty().bind((this.value.divide(2)).add(0.5));
         this.strokeWidthProperty().bind(((this.value.divide(2)).add(0.5)).multiply(3));
+        
 
         this.setOnMouseClicked((e) -> {
             System.out.println(this.value.get());

@@ -130,4 +130,8 @@ public final class NeuralNetwork {
     public void setNeurons(Neuron[][] neurons) {
         this.neurons = neurons;
     }
+    
+    public void setlearningRate(float learningRate){
+        this.learningRate = learningRate; 
+    }
 }

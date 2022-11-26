@@ -21,12 +21,12 @@ public class Car extends Circle implements Comparable<Car> {
 
     public static NeuralNetworkDisplay display;
 
-    private final static double MAX_VELOCITY = 2;
-    private final static double MAX_ANGULAR_VELOCITY = 2;
-    private final static int OUTPUT_NODES_NUMBER = 3;
-    private final static int HIDDEN_NODES_NUMBER = 7;
-    private final static int SENSORS_NUMBER = 7;
-    private final static float LEARNING_RATE = 0.7f;
+    private static double MAX_VELOCITY = 2;
+    private static double MAX_ANGULAR_VELOCITY = 2;
+    private static int OUTPUT_NODES_NUMBER = 3;
+    private static int HIDDEN_NODES_NUMBER = 7;
+    private static int SENSORS_NUMBER = 7;
+    private static float LEARNING_RATE = 0.7f;
 
     private final NeuralNetworkDisplay networkDisplay;
     private double velocity;
@@ -39,7 +39,7 @@ public class Car extends Circle implements Comparable<Car> {
     private double direction;
     private int moveStraightCounter;
     private Pane root;
-    private boolean haveIntersect = false; 
+    private boolean haveIntersect = false;
 
     public boolean isHaveIntersect() {
         return haveIntersect;
@@ -66,7 +66,7 @@ public class Car extends Circle implements Comparable<Car> {
             sensors[i] = new Sensor(i, this);
             root.getChildren().add(sensors[i]);
         }
-        this.brain = new NeuralNetwork(new int[]{SENSORS_NUMBER, 6,5,4, OUTPUT_NODES_NUMBER}, LEARNING_RATE);
+        this.brain = new NeuralNetwork(new int[]{SENSORS_NUMBER, 6, 5, 4, OUTPUT_NODES_NUMBER}, LEARNING_RATE);
 
         root.getChildren().add(this);
         this.networkDisplay = new NeuralNetworkDisplay(this);
@@ -192,14 +192,22 @@ public class Car extends Circle implements Comparable<Car> {
         double fitnessScore2 = o2.getFitnessScore();
 
         if (fitnessScore1 > fitnessScore2) {
-           
+
             return 1;
         } else if (fitnessScore1 < fitnessScore2) {
-            
+
             return -1;
         } else {
             return 0;
         }
+    }
+
+    public void setVelocity(double velocity) {
+        this.velocity = velocity;
+    }
+
+    public void setAngularVelocity(double angularVelocity) {
+        this.angularVelocity = angularVelocity;
     }
 
     public double getFitnessScore() {
@@ -256,7 +264,30 @@ public class Car extends Circle implements Comparable<Car> {
 
     @Override
     public String toString() {
-        return "Car{" + "fitnessScore=" + fitnessScore + '}';
+        return "Car{" + "fitnessScore =" + fitnessScore + '}';
     }
 
+    public static double getMAX_VELOCITY() {
+        return MAX_VELOCITY;
+    }
+
+    public static void setMAX_VELOCITY(double MAX_VELOCITY) {
+        Car.MAX_VELOCITY = MAX_VELOCITY;
+    }
+
+    public static double getMAX_ANGULAR_VELOCITY() {
+        return MAX_ANGULAR_VELOCITY;
+    }
+
+    public static void setMAX_ANGULAR_VELOCITY(double MAX_ANGULAR_VELOCITY) {
+        Car.MAX_ANGULAR_VELOCITY = MAX_ANGULAR_VELOCITY;
+    }
+
+    public static float getLEARNING_RATE() {
+        return LEARNING_RATE;
+    }
+
+    public static void setLEARNING_RATE(float LEARNING_RATE) {
+        Car.LEARNING_RATE = LEARNING_RATE;
+    }
 }

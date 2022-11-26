@@ -23,7 +23,7 @@ import javafx.scene.shape.Shape;
 public class CarAnimations extends AnimationTimer {
 
     private final static int NUMBER_CARS = 10;
-    private int timeCounter;
+    private int counterTime;
 
     private final Label time;
     private final ArrayList<Car> eliminatedCars;
@@ -34,7 +34,7 @@ public class CarAnimations extends AnimationTimer {
     private final Pane root;
 
     public CarAnimations(Pane root) {
-        this.timeCounter = 0;
+        this.counterTime = 0;
 
         //Initializing new objects
         this.time = new Label();
@@ -58,34 +58,26 @@ public class CarAnimations extends AnimationTimer {
 
     @Override
     public void handle(long now) {
-        this.timeCounter++;
-        this.time.setText(String.valueOf(this.timeCounter));
-        
-        
-       
+        this.counterTime++;
+        this.time.setText(String.valueOf(this.counterTime));
 
         for (Car car : cars) {
             car.think();
-            
+
             car.setFitnessScore(car.getFitnessScore() + 1);
 
-           
-            
             car.update(this.shapeDangers);
-             detectCarCollisionsWithWall(car);
-              
+            detectCarCollisionsWithWall(car);
         }
-       
+
 //        for (Car car : cars){
 //            if (car.isHaveIntersect() == true) {
 //                cars.remove(car); 
 //                break; 
 //            }
 //        }
-
-
-        if (this.cars.isEmpty() || this.timeCounter == 10000) {
-            timeCounter = 0;
+        if (this.cars.isEmpty() || this.counterTime == 10000) {
+            counterTime = 0;
             mutate();
             eliminatingCarsSensors();
             this.cars.addAll(allCars);
@@ -128,7 +120,7 @@ public class CarAnimations extends AnimationTimer {
 
         System.out.println(allCars);
         Collections.sort(this.allCars);
-                System.out.println(allCars);
+        System.out.println(allCars);
 
         Car mutator = this.allCars.get(this.allCars.size() - 1);
         Car secondMutator = this.allCars.get(this.allCars.size() - 2);
@@ -187,24 +179,33 @@ public class CarAnimations extends AnimationTimer {
             }
         }
     }
-    
+
     private void detectCarCollisionsWithWall(Car car) {
-        
+
         for (int j = 0; j < this.shapeDangers.size(); j++) {
             if (Shape.intersect(car, this.shapeDangers.get(j)).getBoundsInParent().getWidth() != -1) {
-               //this.cars.remove(car);
-               //car.stop();
-               //car.setHaveIntersect(true);
+                //this.cars.remove(car);
+                //car.stop();
+                //car.setHaveIntersect(true);
                 this.eliminatedCars.add(car);
                 for (Sensor sensor : car.getSensors()) {
                     this.root.getChildren().remove(sensor);
                 }
+                // this.root.getChildren().remove(car);
+
             }
-        
         }
     }
 
     public ArrayList<Point> getFitnessScores() {
         return this.fitnessScores;
+    }
+
+    public int getTimeCounter() {
+        return counterTime;
+    }
+
+    public void setTimeCounter(int counterTime) {
+        this.counterTime = counterTime;
     }
 }

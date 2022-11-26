@@ -60,27 +60,22 @@ public class CarAnimations extends AnimationTimer {
     public void handle(long now) {
         this.counterTime++;
         this.time.setText(String.valueOf(this.counterTime));
-        
-        
-       
 
         for (Car car : cars) {
             car.think();
-            
+
             car.setFitnessScore(car.getFitnessScore() + 1);
 
             car.update(this.shapeDangers);
-             detectCarCollisionsWithWall(car);
+            detectCarCollisionsWithWall(car);
         }
-       
+
 //        for (Car car : cars){
 //            if (car.isHaveIntersect() == true) {
 //                cars.remove(car); 
 //                break; 
 //            }
 //        }
-
-
         if (this.cars.isEmpty() || this.counterTime == 10000) {
             counterTime = 0;
             mutate();
@@ -99,8 +94,6 @@ public class CarAnimations extends AnimationTimer {
         }
         removeDeadCars();
 
-        
-        
     }
 
     public void removeDeadCars() {
@@ -127,7 +120,7 @@ public class CarAnimations extends AnimationTimer {
 
         System.out.println(allCars);
         Collections.sort(this.allCars);
-                System.out.println(allCars);
+        System.out.println(allCars);
 
         Car mutator = this.allCars.get(this.allCars.size() - 1);
         Car secondMutator = this.allCars.get(this.allCars.size() - 2);
@@ -161,9 +154,10 @@ public class CarAnimations extends AnimationTimer {
         }
         return dangers;
     }
-    
+
     /**
      * Creating a new ArrayList of cars.
+     *
      * @return an empty ArrayList of Cars
      */
     private ArrayList<Car> getNewCars() {
@@ -175,29 +169,30 @@ public class CarAnimations extends AnimationTimer {
         newCars.forEach((t) -> t.setRotate(180));
         return newCars;
     }
-    
+
     private void eliminatingCarsSensors() {
         for (int i = 0; i < this.eliminatedCars.size(); i++) {
             for (Sensor sensor : this.eliminatedCars.get(i).getSensors()) {
-                if(!this.root.getChildren().contains(sensor))
-                this.root.getChildren().add(sensor);
+                if (!this.root.getChildren().contains(sensor)) {
+                    this.root.getChildren().add(sensor);
+                }
             }
         }
     }
-    
+
     private void detectCarCollisionsWithWall(Car car) {
-        
+
         for (int j = 0; j < this.shapeDangers.size(); j++) {
             if (Shape.intersect(car, this.shapeDangers.get(j)).getBoundsInParent().getWidth() != -1) {
-               //this.cars.remove(car);
-               //car.stop();
-               //car.setHaveIntersect(true);
+                //this.cars.remove(car);
+                //car.stop();
+                //car.setHaveIntersect(true);
                 this.eliminatedCars.add(car);
                 for (Sensor sensor : car.getSensors()) {
                     this.root.getChildren().remove(sensor);
                 }
-               // this.root.getChildren().remove(car);
-            
+                // this.root.getChildren().remove(car);
+
             }
         }
     }
@@ -205,8 +200,8 @@ public class CarAnimations extends AnimationTimer {
     public ArrayList<Point> getFitnessScores() {
         return this.fitnessScores;
     }
-    
-     public int getTimeCounter() {
+
+    public int getTimeCounter() {
         return counterTime;
     }
 
@@ -214,5 +209,3 @@ public class CarAnimations extends AnimationTimer {
         this.counterTime = counterTime;
     }
 }
-
-

@@ -2,7 +2,6 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Slider?>
@@ -13,7 +12,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Line?>
-
 
 <BorderPane xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
    <center>
@@ -57,7 +55,7 @@
    <left>
       <VBox fx:id="VboxControls" prefHeight="633.0" prefWidth="199.0" spacing="10.0" BorderPane.alignment="CENTER">
          <children>
-            <VBox prefHeight="200.0" prefWidth="100.0" spacing="15.0">
+            <VBox fx:id="VboxControllers" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
                <children>
                   <Label prefHeight="17.0" prefWidth="45.0" text="Controls">
                      <VBox.margin>
@@ -83,8 +81,12 @@
                   </HBox>
                   <Label text="Car speed" />
                   <Slider fx:id="sliderCarSpeed" />
-                  <Label prefHeight="17.0" prefWidth="112.0" text="Neurons per layers" />
-                  <Slider fx:id="sliderNbrOfNeurons" />
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                     <children>
+                        <Label prefHeight="17.0" prefWidth="112.0" text="Neurons per layers" />
+                        <ChoiceBox fx:id="choiceBoxNPL" prefHeight="26.0" prefWidth="82.0" />
+                     </children>
+                  </HBox>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                      <children>
                         <Label text="Layers">
@@ -108,6 +110,7 @@
             </VBox>
             <VBox fx:id="VboxButtons" prefHeight="200.0" prefWidth="100.0" spacing="15.0">
                <children>
+                  <Button fx:id="btnSaveControls" mnemonicParsing="false" onAction="#saveControls" prefHeight="26.0" prefWidth="146.0" text="Save controls" />
                   <Button fx:id="btnSetFitnessScore" mnemonicParsing="false" onAction="#setFitnessScore" prefHeight="25.0" prefWidth="143.0" text="Set Fitness Score" />
                   <Button fx:id="btnResetFitnessScore" mnemonicParsing="false" onAction="#resetFitnessScore" prefHeight="25.0" prefWidth="140.0" text="Reset Fitness Score" />
                   <Button fx:id="btnKillCars" mnemonicParsing="false" onAction="#killCars" prefHeight="25.0" prefWidth="143.0" text="Kill Cars" />
@@ -118,6 +121,27 @@
                   <Insets left="20.0" top="10.0" />
                </padding>
             </VBox>
+            <HBox prefHeight="25.0" prefWidth="190.0" spacing="5.0">
+               <children>
+                  <Label text="Generation:" />
+                  <Label fx:id="generationCounter" text="Label" />
+               </children>
+               <padding>
+                  <Insets left="5.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </HBox>
+            <HBox fx:id="Hboxtime" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+               <children>
+                  <Label text="Timer" />
+                  <Label fx:id="timeCounter" text="Label" />
+               </children>
+               <padding>
+                  <Insets left="5.0" />
+               </padding>
+            </HBox>
          </children>
          <BorderPane.margin>
             <Insets left="10.0" top="10.0" />

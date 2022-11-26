@@ -39,7 +39,7 @@ public class Car extends Circle implements Comparable<Car> {
     private double direction;
     private int moveStraightCounter;
     private Pane root;
-    private boolean haveIntersect = false; 
+    private boolean haveIntersect = false;
 
     public boolean isHaveIntersect() {
         return haveIntersect;
@@ -66,7 +66,7 @@ public class Car extends Circle implements Comparable<Car> {
             sensors[i] = new Sensor(i, this);
             root.getChildren().add(sensors[i]);
         }
-        this.brain = new NeuralNetwork(new int[]{SENSORS_NUMBER, 6,5,4, OUTPUT_NODES_NUMBER}, LEARNING_RATE);
+        this.brain = new NeuralNetwork(new int[]{SENSORS_NUMBER, 6, 5, 4, OUTPUT_NODES_NUMBER}, LEARNING_RATE);
 
         root.getChildren().add(this);
         this.networkDisplay = new NeuralNetworkDisplay(this);
@@ -192,14 +192,22 @@ public class Car extends Circle implements Comparable<Car> {
         double fitnessScore2 = o2.getFitnessScore();
 
         if (fitnessScore1 > fitnessScore2) {
-           
+
             return 1;
         } else if (fitnessScore1 < fitnessScore2) {
-            
+
             return -1;
         } else {
             return 0;
         }
+    }
+
+    public void setVelocity(double velocity) {
+        this.velocity = velocity;
+    }
+
+    public void setAngularVelocity(double angularVelocity) {
+        this.angularVelocity = angularVelocity;
     }
 
     public double getFitnessScore() {
@@ -256,7 +264,7 @@ public class Car extends Circle implements Comparable<Car> {
 
     @Override
     public String toString() {
-        return "Car{" + "fitnessScore=" + fitnessScore + '}';
+        return "Car{" + "fitnessScore =" + fitnessScore + '}';
     }
 
 }

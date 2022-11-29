@@ -13,6 +13,7 @@ import javafx.scene.Cursor;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
 
 /**
@@ -42,9 +43,9 @@ public class Car extends Circle implements Comparable<Car> {
     private double timeElapsed;
     private double direction;
     private int moveStraightCounter;
-    final private Pane root;
+    private Pane root;
 
-    public Car(Pane root) {
+    public Car(Pane root, double xPosition, double yPosition) {
         setOnDisplay();
         this.root = root;
         this.color = Color.GREEN;
@@ -54,8 +55,8 @@ public class Car extends Circle implements Comparable<Car> {
         this.angularVelocity = MAX_ANGULAR_VELOCITY;
 
         this.setRadius(15);
-        this.setCenterX(65);
-        this.setCenterY(130);
+        this.setCenterX(xPosition);
+        this.setCenterY(yPosition);
         this.setFill(color);
         for (int i = 0; i < sensors.length; i++) {
             sensors[i] = new Sensor(i, this);
@@ -67,20 +68,18 @@ public class Car extends Circle implements Comparable<Car> {
         root.getChildren().add(this);
         this.networkDisplay = new NeuralNetworkDisplay(this);
     }
-
-    public Car(Pane root, NeuralNetwork brain) {
-
-        setOnDisplay();
+    
+    public Car(Pane root, NeuralNetwork brain, double xPosition, double yPosition) {
         this.root = root;
         this.color = Color.GREEN;
         this.sensors = new Sensor[SENSORS_NUMBER];
         this.moveStraightCounter = 0;
         this.velocity = MAX_VELOCITY;
         this.angularVelocity = MAX_ANGULAR_VELOCITY;
-
+        
+        this.setCenterX(xPosition);
+        this.setCenterY(yPosition);
         this.setRadius(15);
-        this.setCenterX(65);
-        this.setCenterY(130);
         this.setFill(color);
         for (int i = 0; i < sensors.length; i++) {
             sensors[i] = new Sensor(i, this);
@@ -92,6 +91,7 @@ public class Car extends Circle implements Comparable<Car> {
         root.getChildren().add(this);
 
         this.networkDisplay = new NeuralNetworkDisplay(this);
+        
     }
 
     public final void setOnDisplay() {
@@ -134,7 +134,7 @@ public class Car extends Circle implements Comparable<Car> {
 
     }
 
-    public void update(ArrayList<Shape> dangers) {
+    public void update(ArrayList<Line> dangers) {
         for (Sensor cSensor : this.sensors) {
             boolean touched = false;
             ArrayList<Double> intersections = new ArrayList<>();

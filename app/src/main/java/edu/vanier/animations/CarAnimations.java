@@ -10,10 +10,9 @@ import edu.vanier.objects.Sensor;
 import java.util.ArrayList;
 import java.util.Collections;
 import javafx.animation.AnimationTimer;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Shape;
 
 /**
@@ -23,23 +22,26 @@ import javafx.scene.shape.Shape;
 public class CarAnimations extends AnimationTimer {
 
     private static int NUMBER_CARS = 10;
-    private int counterTime;
+    private int timeCounter;
 
     private final Label time;
     private final ArrayList<Car> eliminatedCars;
-    private final ArrayList<Car> allCars;
-    private final ArrayList<Car> cars;
-    private final ArrayList<Shape> shapeDangers;
+    private final ArrayList<Line> shapeDangers;
+    private final Point position;
+    private ArrayList<Car> allCars;
+
+    private ArrayList<Car> aliveCars;
     private final ArrayList<Point> fitnessScores;
     private final Pane root;
 
-    public CarAnimations(Pane root) {
-        this.counterTime = 0;
+    public CarAnimations(Pane root, Point position, ArrayList<Line> dangers) {
+        this.timeCounter = 0;
+        this.position = position;
 
         //Initializing new objects
         this.time = new Label();
-        this.allCars = new ArrayList<>();
         this.eliminatedCars = new ArrayList<>();
+        this.allCars = new ArrayList<>();
         this.fitnessScores = new ArrayList<>();
 
         //Adding the label to the main Pane
@@ -47,46 +49,40 @@ public class CarAnimations extends AnimationTimer {
         this.root.getChildren().add(time);
 
         //Components in the map
-        this.shapeDangers = dangers();
+        this.shapeDangers = dangers;
+    }
 
-        //Adding the car to the the arrayList
-        this.cars = getNewCars();
-        for (Car car : cars) {
-            allCars.add(car);
-        }
+    @Override
+    public void start() {
+        super.start();
+        this.aliveCars = getNewCars();
     }
 
     @Override
     public void handle(long now) {
-        this.counterTime++;
-        this.time.setText(String.valueOf(this.counterTime));
-
-        for (Car car : cars) {
+        this.timeCounter++;
+        this.time.setText(String.valueOf(this.timeCounter));
+        for (Car car : aliveCars) {
             car.think();
-
             car.setFitnessScore(car.getFitnessScore() + 1);
 
             car.update(this.shapeDangers);
             detectCarCollisionsWithWall(car);
         }
 
-//        for (Car car : cars){
-//            if (car.isHaveIntersect() == true) {
-//                cars.remove(car); 
-//                break; 
-//            }
-//        }
-        if (this.cars.isEmpty() || this.counterTime == 10000) {
-            counterTime = 0;
+        // this.aliveCars.removeIf(Car::isHaveIntersect);
+        if (this.aliveCars.isEmpty() || this.timeCounter == 10000) {
+            timeCounter = 0;
             mutate();
             eliminatingCarsSensors();
-            this.cars.addAll(allCars);
             this.eliminatedCars.clear();
-            root.getChildren().removeAll(cars);
-            root.getChildren().addAll(cars);
+            root.getChildren().removeAll(aliveCars);
+            root.getChildren().addAll(aliveCars);
+
+            aliveCars.addAll(allCars);
         }
 
-        for (Car car : cars) {
+        for (Car car : aliveCars) {
             car.update(this.shapeDangers);
             car.think();
             car.setFitnessScore(car.getFitnessScore() + 1);
@@ -97,17 +93,17 @@ public class CarAnimations extends AnimationTimer {
     }
 
     public void removeDeadCars() {
-        this.cars.removeAll(this.eliminatedCars);
+        this.aliveCars.removeAll(this.eliminatedCars);
     }
 
     public void killAll() {
-        this.cars.forEach((car) -> {
+        this.aliveCars.forEach((car) -> {
             this.root.getChildren().removeAll(car.getSensors());
             this.root.getChildren().remove(car);
             this.eliminatedCars.add(car);
         });
 
-        this.cars.clear();
+        this.aliveCars.clear();
     }
 
     public void setFitnessScores() {
@@ -121,15 +117,15 @@ public class CarAnimations extends AnimationTimer {
         for (Car car : allCars) {
             this.root.getChildren().removeAll(car.getSensors());
         }
-        allCars.clear();
-        cars.clear();
-        eliminatedCars.clear();
-        counterTime = 0;
+        this.allCars.clear();
+        this.aliveCars.clear();
+        this.eliminatedCars.clear();
+        timeCounter = 0;
 
         allCars.addAll(getNewCars());
 
         for (Car car : allCars) {
-            cars.add(car);
+            this.aliveCars.add(car);
         }
 
     }
@@ -151,23 +147,11 @@ public class CarAnimations extends AnimationTimer {
                 currentCar.setFitnessScore(0);
             }
             currentCar.setFitnessScore(0);
-            currentCar.setCenterX(65);
-            currentCar.setCenterY(130);
+            currentCar.setCenterX(this.position.getLayoutX());
+            currentCar.setCenterY(this.position.getLayoutY());
             currentCar.setRotate(180);
         }
 
-    }
-
-    //detect all shapes that represent dangers to the car.
-    private ArrayList<Shape> dangers() {
-        ArrayList<Shape> dangers = new ArrayList<>();
-        for (int i = 0; i < this.root.getChildren().size(); i++) {
-            Node node = this.root.getChildren().get(i);
-            if (!Circle.class.isInstance(node) && !Sensor.class.isInstance(node) && Shape.class.isInstance(node)) {
-                dangers.add((Shape) this.root.getChildren().get(i));
-            }
-        }
-        return dangers;
     }
 
     /**
@@ -178,8 +162,9 @@ public class CarAnimations extends AnimationTimer {
     private ArrayList<Car> getNewCars() {
         ArrayList<Car> newCars = new ArrayList<>();
         for (int i = 0; i < NUMBER_CARS; i++) {
-            Car car = new Car(root);
+            Car car = new Car(root, this.position.getLayoutX(), this.position.getLayoutY());
             newCars.add(car);
+            allCars.add(car);
         }
         newCars.forEach((t) -> t.setRotate(180));
         return newCars;
@@ -203,6 +188,7 @@ public class CarAnimations extends AnimationTimer {
                 this.eliminatedCars.add(car);
                 for (Sensor sensor : car.getSensors()) {
                     this.root.getChildren().remove(sensor);
+
                 }
 
             }
@@ -214,11 +200,11 @@ public class CarAnimations extends AnimationTimer {
     }
 
     public int getTimeCounter() {
-        return counterTime;
+        return this.timeCounter;
     }
 
     public void setTimeCounter(int counterTime) {
-        this.counterTime = counterTime;
+        this.timeCounter = counterTime;
     }
 
     public static int getNUMBER_CARS() {

@@ -5,20 +5,16 @@
 package edu.vanier.main;
 
 import edu.vanier.animations.CarAnimations;
-import edu.vanier.neuralNetwork.NeuralNetwork;
+import edu.vanier.animations.RoadAnimation;
 import edu.vanier.objects.Car;
-import edu.vanier.objects.Point;
-import java.util.ArrayList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Shape;
 
 /**
  *
@@ -27,7 +23,8 @@ import javafx.scene.shape.Shape;
 public class FXMLController {
 
     private CarAnimations timer;
-
+    private RoadAnimation road;
+    
     @FXML
     private Pane root;
 
@@ -69,7 +66,8 @@ public class FXMLController {
 
     @FXML
     void initialize() {
-        this.timer = new CarAnimations(root);
+        this.road = new RoadAnimation(this.root);
+        this.timer = new CarAnimations(this.root, this.road.getStartPoint(), this.road.getDangers());
 
         this.choiceBoxNC.setItems(nbOfCarsElements);
         this.choiceBoxNC.setValue(10);
@@ -103,6 +101,8 @@ public class FXMLController {
         this.btnKillCars.setDisable(true);
         this.btnPause.setDisable(true);
         this.btnResetFitnessScore.setDisable(true);
+        
+        this.road.start();
 
         this.btnSaveControls.setOnAction((e) -> {
 
@@ -140,6 +140,8 @@ public class FXMLController {
 
     @FXML
     private void setFitnessScore() {
+        this.road.stop();
+        
         this.root.onMouseClickedProperty();
 
         this.btnPause.setDisable(true);
@@ -160,9 +162,10 @@ public class FXMLController {
     @FXML
     private void pauseCars() {
         this.timer.stop();
+        
         this.btnPause.setDisable(true);
         this.btnStart.setDisable(false);
-        this.btnKillCars.setDisable(true);
+        this.btnKillCars.setDisable(false);
         this.btnResetFitnessScore.setDisable(false);
         this.btnSetFitnessScore.setDisable(true);
         this.sliderAngularVelocity.setDisable(false);
@@ -176,9 +179,10 @@ public class FXMLController {
 
     @FXML
     private void resetFitnessScore() {
-
+        this.road.reset();
+        
         this.btnPause.setDisable(true);
-        this.btnStart.setDisable(true);
+        this.btnStart.setDisable(false);
         this.btnKillCars.setDisable(true);
         this.btnResetFitnessScore.setDisable(true);
         this.btnSetFitnessScore.setDisable(false);
@@ -187,6 +191,7 @@ public class FXMLController {
 
     @FXML
     private void startCars() {
+        this.timer = new CarAnimations(root, this.road.getStartPoint(), this.road.getDangers());
         this.timer.start();
 
         this.btnPause.setDisable(false);

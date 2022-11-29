@@ -30,7 +30,6 @@ public class CarAnimations extends AnimationTimer {
     private final Point position;
     private ArrayList<Car> allCars;
 
-
     private ArrayList<Car> aliveCars;
     private final ArrayList<Point> fitnessScores;
     private final Pane root;
@@ -58,7 +57,7 @@ public class CarAnimations extends AnimationTimer {
         super.start();
         this.aliveCars = getNewCars();
     }
-    
+
     @Override
     public void handle(long now) {
         this.timeCounter++;
@@ -68,11 +67,10 @@ public class CarAnimations extends AnimationTimer {
             car.setFitnessScore(car.getFitnessScore() + 1);
 
             car.update(this.shapeDangers);
-            detectCarCollisionsWithWall(car); 
+            detectCarCollisionsWithWall(car);
         }
-        
-        this.aliveCars.removeIf(Car::isHaveIntersect);
 
+        // this.aliveCars.removeIf(Car::isHaveIntersect);
         if (this.aliveCars.isEmpty() || this.timeCounter == 10000) {
             timeCounter = 0;
             mutate();
@@ -80,6 +78,8 @@ public class CarAnimations extends AnimationTimer {
             this.eliminatedCars.clear();
             root.getChildren().removeAll(aliveCars);
             root.getChildren().addAll(aliveCars);
+
+            aliveCars.addAll(allCars);
         }
 
         for (Car car : aliveCars) {
@@ -116,7 +116,7 @@ public class CarAnimations extends AnimationTimer {
 
         System.out.println(allCars);
         Collections.sort(this.allCars);
-                System.out.println(allCars);
+        System.out.println(allCars);
 
         Car mutator = this.allCars.get(this.allCars.size() - 1);
         Car secondMutator = this.allCars.get(this.allCars.size() - 2);
@@ -138,7 +138,7 @@ public class CarAnimations extends AnimationTimer {
         }
 
     }
-    
+
     /**
      * Creating a new ArrayList of cars.
      *
@@ -164,19 +164,19 @@ public class CarAnimations extends AnimationTimer {
             }
         }
     }
-    
+
     private void detectCarCollisionsWithWall(Car car) {
-        
+
         for (int j = 0; j < this.shapeDangers.size(); j++) {
             if (Shape.intersect(car, this.shapeDangers.get(j)).getBoundsInParent().getWidth() != -1) {
-               
+
                 this.eliminatedCars.add(car);
                 for (Sensor sensor : car.getSensors()) {
                     this.root.getChildren().remove(sensor);
-                    
+
                 }
             }
-        
+
         }
     }
 }

@@ -41,13 +41,13 @@ public class Car extends Circle implements Comparable<Car> {
     private Pane root;
     private boolean haveIntersect = false; 
 
-    public boolean isHaveIntersect() {
-        return haveIntersect;
-    }
-
-    public void setHaveIntersect(boolean haveIntersect) {
-        this.haveIntersect = haveIntersect;
-    }
+//    public boolean isHaveIntersect() {
+//        return haveIntersect;
+//    }
+//
+//    public void setHaveIntersect(boolean haveIntersect) {
+//        this.haveIntersect = haveIntersect;
+//    }
 
     public Car(Pane root, double xPosition, double yPosition) {
         this.root = root;

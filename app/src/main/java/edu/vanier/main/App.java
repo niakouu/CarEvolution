@@ -4,25 +4,37 @@
 package edu.vanier.main;
 
 import javafx.application.Application;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class App extends Application {
+
+    public static DoubleProperty STAGE_WIDTH = new SimpleDoubleProperty();
+    public static DoubleProperty STAGE_HEIGHT = new SimpleDoubleProperty();
+    public static Scene scene ;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/self_made_map.fxml"));
         loader.setController(new FXMLController());
-        Scene scene = new Scene(loader.load());
-        
-        //FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Map.fxml"));
-        //loader.setController(new FXMLController());
-        //Pane root = loader.load();
-        //Scene scene = new Scene(root, 1200, 700, Color.WHITE);
+        Pane root = loader.load();
+
+        scene = new Scene(root, Color.WHITE);
         primaryStage.setScene(scene);
+        primaryStage.setMinWidth(1200);
+        primaryStage.setMinHeight(800);
+   
+        STAGE_WIDTH.bind(primaryStage.widthProperty());
+        STAGE_HEIGHT.bind(primaryStage.heightProperty());
+
         primaryStage.show();
+
     }
 
     public static void main(String[] args) {

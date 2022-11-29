@@ -21,8 +21,8 @@ import javafx.scene.shape.Shape;
  */
 public class CarAnimations extends AnimationTimer {
 
-    private final static int NUMBER_CARS = 10;
-    private int timeCounter;
+    private static int NUMBER_CARS = 10;
+    private int counterTime;
 
     private final Label time;
     private final ArrayList<Car> eliminatedCars;
@@ -112,11 +112,26 @@ public class CarAnimations extends AnimationTimer {
         });
     }
 
-    private void mutate() {
+    public void restart() {
+        root.getChildren().removeAll(allCars);
+        for (Car car : allCars) {
+            this.root.getChildren().removeAll(car.getSensors());
+        }
+        allCars.clear();
+        cars.clear();
+        eliminatedCars.clear();
+        counterTime = 0;
 
-        System.out.println(allCars);
+        allCars.addAll(getNewCars());
+
+        for (Car car : allCars) {
+            cars.add(car);
+        }
+
+    }
+
+    private void mutate() {
         Collections.sort(this.allCars);
-        System.out.println(allCars);
 
         Car mutator = this.allCars.get(this.allCars.size() - 1);
         Car secondMutator = this.allCars.get(this.allCars.size() - 2);
@@ -175,8 +190,29 @@ public class CarAnimations extends AnimationTimer {
                     this.root.getChildren().remove(sensor);
 
                 }
-            }
 
+            }
         }
     }
+
+    public ArrayList<Point> getFitnessScores() {
+        return this.fitnessScores;
+    }
+
+    public int getTimeCounter() {
+        return counterTime;
+    }
+
+    public void setTimeCounter(int counterTime) {
+        this.counterTime = counterTime;
+    }
+
+    public static int getNUMBER_CARS() {
+        return NUMBER_CARS;
+    }
+
+    public static void setNUMBER_CARS(int NUMBER_CARS) {
+        CarAnimations.NUMBER_CARS = NUMBER_CARS;
+    }
+
 }

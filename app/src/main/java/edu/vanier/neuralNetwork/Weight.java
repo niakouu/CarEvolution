@@ -62,6 +62,17 @@ public class Weight extends Line {
 
     }
 
+    public void bindStart(Neuron neuron) {
+        this.startXProperty().bind(neuron.layoutXProperty());
+        this.startYProperty().bind(neuron.layoutYProperty());
+    }
+    
+    
+    public void bindEnd(Neuron neuron) {
+        this.endXProperty().bind(neuron.layoutXProperty());
+        this.endYProperty().bind(neuron.layoutYProperty());
+    }
+
     public DoubleProperty getValue() {
         return value;
     }

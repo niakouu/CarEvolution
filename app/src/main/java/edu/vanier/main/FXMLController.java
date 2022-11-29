@@ -6,20 +6,15 @@ package edu.vanier.main;
 
 import edu.vanier.animations.CarAnimations;
 import edu.vanier.animations.RoadAnimation;
-import edu.vanier.neuralNetwork.NeuralNetwork;
 import edu.vanier.objects.Car;
-import edu.vanier.objects.Point;
-import java.util.ArrayList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Shape;
 
 /**
  *
@@ -72,7 +67,7 @@ public class FXMLController {
     @FXML
     void initialize() {
         this.road = new RoadAnimation(this.root);
-        this.timer = new CarAnimations(root);
+        this.timer = new CarAnimations(this.root, this.road.getStartPoint(), this.road.getDangers());
 
         this.choiceBoxNC.setItems(nbOfCarsElements);
         this.choiceBoxNC.setValue(10);

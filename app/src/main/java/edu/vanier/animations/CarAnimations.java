@@ -22,7 +22,7 @@ import javafx.scene.shape.Shape;
 public class CarAnimations extends AnimationTimer {
 
     private static int NUMBER_CARS = 10;
-    private int counterTime;
+    private int timeCounter;
 
     private final Label time;
     private final ArrayList<Car> eliminatedCars;
@@ -117,15 +117,15 @@ public class CarAnimations extends AnimationTimer {
         for (Car car : allCars) {
             this.root.getChildren().removeAll(car.getSensors());
         }
-        allCars.clear();
-        cars.clear();
-        eliminatedCars.clear();
-        counterTime = 0;
+        this.allCars.clear();
+        this.aliveCars.clear();
+        this.eliminatedCars.clear();
+        timeCounter = 0;
 
         allCars.addAll(getNewCars());
 
         for (Car car : allCars) {
-            cars.add(car);
+            this.aliveCars.add(car);
         }
 
     }
@@ -200,11 +200,11 @@ public class CarAnimations extends AnimationTimer {
     }
 
     public int getTimeCounter() {
-        return counterTime;
+        return this.timeCounter;
     }
 
     public void setTimeCounter(int counterTime) {
-        this.counterTime = counterTime;
+        this.timeCounter = counterTime;
     }
 
     public static int getNUMBER_CARS() {

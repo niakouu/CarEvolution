@@ -9,7 +9,6 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class App extends Application {
@@ -21,18 +20,16 @@ public class App extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/self_made_map.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/Map.fxml"));
         loader.setController(new FXMLController());
         Pane root = loader.load();
 
-        scene = new Scene(root, Color.WHITE);
-        primaryStage.setScene(scene);
-        primaryStage.setMinWidth(1200);
-        primaryStage.setMinHeight(800);
+        scene = new Scene(root);
    
-        STAGE_WIDTH.bind(primaryStage.widthProperty());
-        STAGE_HEIGHT.bind(primaryStage.heightProperty());
-
+        //STAGE_WIDTH.bind(primaryStage.widthProperty());
+        //STAGE_HEIGHT.bind(primaryStage.heightProperty());
+        
+        primaryStage.setScene(scene);
         primaryStage.show();
 
     }

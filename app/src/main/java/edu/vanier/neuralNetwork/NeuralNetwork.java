@@ -79,11 +79,8 @@ public final class NeuralNetwork {
                     Neuron previousNeuron = neurons[i - 1][k];
 
                     Weight weight = new Weight(previousNeuron, currentNeuron);
-                    weight.startXProperty().bind(previousNeuron.layoutXProperty());
-                    weight.startYProperty().bind(previousNeuron.layoutYProperty());
-
-                    weight.endXProperty().bind(currentNeuron.layoutXProperty());
-                    weight.endYProperty().bind(currentNeuron.layoutYProperty());
+                    weight.bindStart(previousNeuron);
+                    weight.bindEnd(currentNeuron);
                     weight.setValue(2 * (Math.random() - 0.5));
 
                     weights[i - 1][j][k] = weight;

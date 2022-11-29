@@ -22,7 +22,7 @@ import javafx.scene.shape.Shape;
  */
 public class CarAnimations extends AnimationTimer {
 
-    private final static int NUMBER_CARS = 10;
+    private static int NUMBER_CARS = 10;
     private int counterTime;
 
     private final Label time;
@@ -116,11 +116,26 @@ public class CarAnimations extends AnimationTimer {
         });
     }
 
-    private void mutate() {
+    public void restart() {
+        root.getChildren().removeAll(allCars);
+        for (Car car : allCars) {
+            this.root.getChildren().removeAll(car.getSensors());
+        }
+        allCars.clear();
+        cars.clear();
+        eliminatedCars.clear();
+        counterTime = 0;
 
-        System.out.println(allCars);
+        allCars.addAll(getNewCars());
+
+        for (Car car : allCars) {
+            cars.add(car);
+        }
+
+    }
+
+    private void mutate() {
         Collections.sort(this.allCars);
-        System.out.println(allCars);
 
         Car mutator = this.allCars.get(this.allCars.size() - 1);
         Car secondMutator = this.allCars.get(this.allCars.size() - 2);
@@ -184,14 +199,11 @@ public class CarAnimations extends AnimationTimer {
 
         for (int j = 0; j < this.shapeDangers.size(); j++) {
             if (Shape.intersect(car, this.shapeDangers.get(j)).getBoundsInParent().getWidth() != -1) {
-                //this.cars.remove(car);
-                //car.stop();
-                //car.setHaveIntersect(true);
+
                 this.eliminatedCars.add(car);
                 for (Sensor sensor : car.getSensors()) {
                     this.root.getChildren().remove(sensor);
                 }
-                // this.root.getChildren().remove(car);
 
             }
         }
@@ -208,4 +220,13 @@ public class CarAnimations extends AnimationTimer {
     public void setTimeCounter(int counterTime) {
         this.counterTime = counterTime;
     }
+
+    public static int getNUMBER_CARS() {
+        return NUMBER_CARS;
+    }
+
+    public static void setNUMBER_CARS(int NUMBER_CARS) {
+        CarAnimations.NUMBER_CARS = NUMBER_CARS;
+    }
+
 }

@@ -18,7 +18,6 @@ public class Weight extends Line {
 
         this.opacityProperty().bind((this.value.divide(2)).add(0.5));
         this.strokeWidthProperty().bind(((this.value.divide(2)).add(0.5)).multiply(3));
-        
 
         this.setOnMouseClicked((e) -> {
             System.out.println(this.value.get());
@@ -61,6 +60,17 @@ public class Weight extends Line {
         this.neuron1 = neuron1;
         this.neuron2 = neuron2;
 
+    }
+
+    public void bindStart(Neuron neuron) {
+        this.startXProperty().bind(neuron.layoutXProperty());
+        this.startYProperty().bind(neuron.layoutYProperty());
+    }
+    
+    
+    public void bindEnd(Neuron neuron) {
+        this.endXProperty().bind(neuron.layoutXProperty());
+        this.endYProperty().bind(neuron.layoutYProperty());
     }
 
     public DoubleProperty getValue() {

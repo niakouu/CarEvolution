@@ -4,6 +4,7 @@
  */
 package edu.vanier.neuralNetwork;
 
+import edu.vanier.main.App;
 import edu.vanier.objects.Car;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
@@ -33,8 +34,8 @@ public class NeuralNetworkDisplay extends Pane {
 
         generateWeight();
         generateNeurons();
-        this.setLayoutX(1000);
-        this.setLayoutY(0);
+        this.layoutXProperty().bind(App.STAGE_WIDTH.subtract(700));
+        this.setLayoutY(-20);
 
     }
 

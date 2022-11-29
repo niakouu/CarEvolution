@@ -4,10 +4,12 @@
  */
 package edu.vanier.objects;
 
+import edu.vanier.main.App;
 import edu.vanier.neuralNetwork.NeuralNetwork;
 import edu.vanier.neuralNetwork.NeuralNetworkDisplay;
 import java.util.ArrayList;
 import java.util.Collections;
+import javafx.scene.Cursor;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -21,33 +23,26 @@ public class Car extends Circle implements Comparable<Car> {
 
     public static NeuralNetworkDisplay display;
 
-    private static double MAX_VELOCITY = 2;
-    private static double MAX_ANGULAR_VELOCITY = 2;
+    private static double MAX_VELOCITY = 3;
+    private static double MAX_ANGULAR_VELOCITY = 3;
     private static int OUTPUT_NODES_NUMBER = 3;
     private static int HIDDEN_NODES_NUMBER = 7;
     private static int SENSORS_NUMBER = 7;
-    private static float LEARNING_RATE = 0.7f;
+    private static int HIDDEN_LAYERS = 4;
+    private static int[] LAYERS = {SENSORS_NUMBER, 5, 4, OUTPUT_NODES_NUMBER};
+    private static float LEARNING_RATE = 0.5f;
 
     private final NeuralNetworkDisplay networkDisplay;
     private double velocity;
     private double angularVelocity;
-    private Sensor[] sensors;
-    private NeuralNetwork brain;
-    private Color color;
+    final private Sensor[] sensors;
+    final private NeuralNetwork brain;
+    final private Color color;
     private double fitnessScore;
     private double timeElapsed;
     private double direction;
     private int moveStraightCounter;
-    private Pane root;
-    private boolean haveIntersect = false;
-
-    public boolean isHaveIntersect() {
-        return haveIntersect;
-    }
-
-    public void setHaveIntersect(boolean haveIntersect) {
-        this.haveIntersect = haveIntersect;
-    }
+    final private Pane root;
 
     public Car(Pane root) {
         setOnDisplay();
@@ -66,7 +61,8 @@ public class Car extends Circle implements Comparable<Car> {
             sensors[i] = new Sensor(i, this);
             root.getChildren().add(sensors[i]);
         }
-        this.brain = new NeuralNetwork(new int[]{SENSORS_NUMBER, 6, 5, 4, OUTPUT_NODES_NUMBER}, LEARNING_RATE);
+
+        this.brain = new NeuralNetwork(LAYERS, LEARNING_RATE);
 
         root.getChildren().add(this);
         this.networkDisplay = new NeuralNetworkDisplay(this);
@@ -99,6 +95,14 @@ public class Car extends Circle implements Comparable<Car> {
     }
 
     public final void setOnDisplay() {
+
+        this.setOnMouseEntered((e) -> {
+            App.scene.setCursor(Cursor.HAND);
+        });
+
+        this.setOnMouseExited((e) -> {
+            App.scene.setCursor(Cursor.DEFAULT);
+        });
         this.setOnMouseClicked((e) -> {
 
             if (root.getChildren().contains(display)) {
@@ -290,4 +294,45 @@ public class Car extends Circle implements Comparable<Car> {
     public static void setLEARNING_RATE(float LEARNING_RATE) {
         Car.LEARNING_RATE = LEARNING_RATE;
     }
+
+    public static int getOUTPUT_NODES_NUMBER() {
+        return OUTPUT_NODES_NUMBER;
+    }
+
+    public static void setOUTPUT_NODES_NUMBER(int OUTPUT_NODES_NUMBER) {
+        Car.OUTPUT_NODES_NUMBER = OUTPUT_NODES_NUMBER;
+    }
+
+    public static int getHIDDEN_NODES_NUMBER() {
+        return HIDDEN_NODES_NUMBER;
+    }
+
+    public static void setHIDDEN_NODES_NUMBER(int HIDDEN_NODES_NUMBER) {
+        Car.HIDDEN_NODES_NUMBER = HIDDEN_NODES_NUMBER;
+    }
+
+    public static int getSENSORS_NUMBER() {
+        return SENSORS_NUMBER;
+    }
+
+    public static void setSENSORS_NUMBER(int SENSORS_NUMBER) {
+        Car.SENSORS_NUMBER = SENSORS_NUMBER;
+    }
+
+    public static int getHIDDEN_LAYERS() {
+        return HIDDEN_LAYERS;
+    }
+
+    public static void setHIDDEN_LAYERS(int HIDDEN_LAYERS) {
+        Car.HIDDEN_LAYERS = HIDDEN_LAYERS;
+    }
+
+    public static int[] getLAYERS() {
+        return LAYERS;
+    }
+
+    public static void setLAYERS(int[] LAYERS) {
+        Car.LAYERS = LAYERS;
+    }
+
 }

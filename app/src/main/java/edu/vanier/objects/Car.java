@@ -5,8 +5,8 @@
 package edu.vanier.objects;
 
 import edu.vanier.main.App;
-import edu.vanier.neural.network.NeuralNetwork;
-import edu.vanier.neural.network.NeuralNetworkDisplay;
+import edu.vanier.core.neural.network.NeuralNetwork;
+import edu.vanier.core.neural.network.NeuralNetworkDisplay;
 import java.util.ArrayList;
 import java.util.Collections;
 import javafx.scene.Cursor;

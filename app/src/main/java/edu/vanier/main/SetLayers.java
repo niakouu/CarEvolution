@@ -4,8 +4,8 @@
  */
 package edu.vanier.main;
 
-import edu.vanier.neuralNetwork.Neuron;
-import edu.vanier.neuralNetwork.Weight;
+import edu.vanier.neural.network.Neuron;
+import edu.vanier.neural.network.Weight;
 import edu.vanier.objects.Car;
 import java.util.ArrayList;
 import javafx.beans.property.IntegerProperty;

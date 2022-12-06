@@ -1,4 +1,4 @@
-package edu.vanier.neuralNetwork;
+package edu.vanier.neural.network;
 
 import edu.vanier.objects.Sensor;
 

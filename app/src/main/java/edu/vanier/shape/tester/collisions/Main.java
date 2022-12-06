@@ -1,4 +1,4 @@
-package edu.vanier.shapeTester.collisions;
+package edu.vanier.shape.tester.collisions;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

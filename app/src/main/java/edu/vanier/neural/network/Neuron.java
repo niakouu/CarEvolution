@@ -1,4 +1,4 @@
-package edu.vanier.neuralNetwork;
+package edu.vanier.neural.network;
 
 import java.awt.geom.NoninvertibleTransformException;
 import javafx.scene.shape.Circle;

@@ -2,9 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package edu.vanier.animations;
+package edu.vanier.core.animations;
 
-import edu.vanier.math.Equation;
+import edu.vanier.core.math.Equation;
 import edu.vanier.objects.Point;
 import java.util.ArrayList;
 import javafx.animation.AnimationTimer;

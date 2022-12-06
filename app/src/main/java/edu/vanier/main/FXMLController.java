@@ -4,8 +4,8 @@
  */
 package edu.vanier.main;
 
-import edu.vanier.animations.CarAnimations;
-import edu.vanier.animations.RoadAnimation;
+import edu.vanier.core.animations.CarAnimations;
+import edu.vanier.core.animations.RoadAnimation;
 import edu.vanier.objects.Car;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

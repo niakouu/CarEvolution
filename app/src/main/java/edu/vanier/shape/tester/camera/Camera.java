@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package edu.vanier.shapeTester.camera;
+package edu.vanier.shape.tester.camera;
 
 import com.sun.javafx.scene.shape.ShapeHelper;
 import javafx.application.Application;

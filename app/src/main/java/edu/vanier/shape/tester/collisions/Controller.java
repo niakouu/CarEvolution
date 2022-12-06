@@ -1,4 +1,4 @@
-package edu.vanier.shapeTester.collisions;
+package edu.vanier.shape.tester.collisions;
 
 import javafx.animation.AnimationTimer;
 import javafx.beans.binding.BooleanBinding;

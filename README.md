@@ -21,6 +21,7 @@ The fitness score is calculated based on the distance traveled by each car. Inst
 
 2. Configuring Neural Network
    - Users can customize the number of layers and the mutation rate.
+
 ![neural network layers customization](images/neuralNetworkView.gif)
 
 1. Configuring Cars
@@ -28,10 +29,12 @@ The fitness score is calculated based on the distance traveled by each car. Inst
 
 2. Makes Map
    - Allows users to make their own map.
+  
 ![map layers customization](images/makeMap.gif)
 
 3. Settings Customization
    - Enable the user to change the settings of the car to its preferences.
+
 ![settings customization](images/buttonChange.gif)
 
 #### Major Features
@@ -43,6 +46,7 @@ Initially implemented using linear algebra, the neural network was later separat
 ##### Car's Sensors
 
 Each car has seven sensors implemented as JavaFX Line shapes. Collision detection is performed by checking intersections with walls, and sensor distances are used as inputs for the neural network.
+
 ![cars learning](images/carsLearning.gif)
 
 ##### Fitness Score
